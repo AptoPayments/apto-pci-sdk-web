@@ -36,7 +36,17 @@ We recommend initialising the SDK once the page where it will be shown has finis
 </body>
 ```
 
-this call accept a callback function that will be invoked once the SDK has been initialised.
+this call accepts a callback function that will be invoked once the SDK has been initialised.
+
+### SDK initialisation parameters
+
+The SDK initialisation function requires the following parameters:
+
+- `apiKey`: it is the Mobile API public key shared with you.
+- `userToken`: must be obtained using the login and verification endpoints in the [Mobile API](https://www.aptopayments.com/refs/MobileAPI.html).
+- `cardId`: must be obtained from the [Mobile API](https://www.aptopayments.com/refs/MobileAPI.html) using a valid token.
+- `lastFour`: must be obtained from the [Mobile API](https://www.aptopayments.com/refs/MobileAPI.html) using a valid token.
+- `environment`: the target environment one of: staging, sandbox or production.
 
 ## Customising the SDK
 
@@ -64,7 +74,7 @@ The callback of the `aptoInitialiseSDK` is the right place to makeup the UI:
 </script>
 ```
 
-The `aptoCustomiseCardAppearance` method accept accept a valid CSS for the four customisable elements: card background (container), pan, cvv and expiration date (exp).
+The `aptoCustomiseCardAppearance` method accepts a valid CSS for the four customisable elements: card background (container), pan, cvv and expiration date (exp).
 
 ### Elements shown
 
