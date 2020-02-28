@@ -24,11 +24,11 @@ We recommend initialising the SDK once the page where it will be shown has finis
 <script>
   function onLoad() {
     const apiKey = ''
-    const userToken = ''
+    const sessionToken = ''
     const cardId = ''
     const lastFour = ''
     const environment = 'production'
-    aptoInitialiseSDK(apiKey, userToken, cardId, lastFour, environment, 'apto-pci-sdk', callbackFunction)
+    aptoInitialiseSDK(apiKey, sessionToken, cardId, lastFour, environment, 'apto-pci-sdk', callbackFunction)
   }
 </script>
 <body onload="onLoad()">
@@ -43,7 +43,7 @@ this call accepts a callback function that will be invoked once the SDK has been
 The SDK initialisation function requires the following parameters:
 
 - `apiKey`: it is the Mobile API public key shared with you.
-- `userToken`: must be obtained using the login and verification endpoints in the [Mobile API](https://www.aptopayments.com/refs/MobileAPI.html).
+- `sessionToken`: must be obtained using the login and verification endpoints in the [Mobile API](https://www.aptopayments.com/refs/MobileAPI.html) or a corporation token using the [Core API](https://www.aptopayments.com/refs/CoreAPI.html).
 - `cardId`: must be obtained from the [Mobile API](https://www.aptopayments.com/refs/MobileAPI.html) using a valid token.
 - `lastFour`: must be obtained from the [Mobile API](https://www.aptopayments.com/refs/MobileAPI.html) using a valid token.
 - `environment`: the target environment one of: staging, sandbox or production.
