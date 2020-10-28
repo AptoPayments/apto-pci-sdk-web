@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Integration Tests</title>
+	<style>
+		* {
+			box-sizing: border-box;
+		}
+
+		body {
+			margin: 0;
+			padding: 0;
+		}
+
+		#apto-pci-sdk {
+			width: 85.6mm;
+			height: 53.98mm;
+			background-color: slategray;
+			border-radius: 8px;
+			margin: 3rem auto;
+		}
+
+		main {
+			height: 100vh;
+			display: flex;
+		}
+	</style>
+</head>
+<body>
+	<main>
+		<div id="apto-pci-sdk"></div>
+		<div class="custom-selector"></div>
+		<script src="packages/pci-sdk-web/dist/umd/apto-pci-sdk.js"></script>
+	</main>
+</body>
+</html>

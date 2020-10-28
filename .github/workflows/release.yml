@@ -1,0 +1,38 @@
+name: Release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Release
+    runs-on: ubuntu-latest
+    env:
+      AWS_REGION: 'us-west-1'
+      S3_BUCKET: ${{ secrets.S3_BUCKET }}
+      S3_KEY: ${{ secrets.S3_KEY }}
+      S3_SECRET: ${{ secrets.S3_SECRET }}
+      CI: true
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+        with:
+          token: ${{ secrets.APTO_BOT_TOKEN }}
+          submodules: true
+          fetch-depth: 0 # Required by chromatic to retrieve git history
+
+      - uses: oleksiyrudenko/gha-git-credentials@v1
+        with:
+          token: '${{ secrets.GITHUB_TOKEN }}'
+
+      - run: echo //registry.npmjs.org/:_authToken=${NPM_TOKEN} > .npmrc
+
+      - name: Install
+        run: npm ci
+
+      - name: Release
+        run: npm run release
+
+      - name: Publish
+        run: npm run publish

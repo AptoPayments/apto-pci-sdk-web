@@ -1,0 +1,14 @@
+name: CI/PRD
+on:
+  push:
+    branches:
+      - prd
+
+jobs:
+  build:
+    name: Notify Jira
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify JIRA
+        run: >-
+          curl -X POST -H 'Content-type: application/json' https://automation.atlassian.com/pro/hooks/15e1659919a45c78db98c5032169343383a79c79

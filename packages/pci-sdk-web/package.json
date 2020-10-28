@@ -1,0 +1,39 @@
+{
+	"name": "@apto-payments/pci-sdk-web",
+	"version": "2.0.0",
+	"description": "PCI SDK WEB",
+	"main": "./dist/umd/apto-pci-sdk.js",
+	"browser": "./dist/umd/apto-pci-sdk.js",
+	"types": "./dist/umd/index.d.ts",
+	"scripts": {
+		"start": "webpack --watch",
+		"build": "webpack",
+		"test": "react-scripts test",
+		"prepublishOnly": "npm run build && node scripts/check-iframe-version.js"
+	},
+	"files": [
+		"dist/umd/apto-pci-sdk.js",
+		"dist/umd/index.d.ts"
+	],
+	"publishConfig": {
+		"access": "public"
+	},
+	"author": "Apto dev team",
+	"license": "ISC",
+	"dependencies": {
+		"@apto-payments/pci-sdk-iframe": "^2.0.0"
+	},
+	"devDependencies": {
+		"@testing-library/dom": "^7.26.3",
+		"@testing-library/jest-dom": "^4.2.4",
+		"@testing-library/user-event": "^7.2.1",
+		"@types/jest": "^24.9.1",
+		"@types/node": "^12.12.57",
+		"react-scripts": "^3.4.4",
+		"ts-loader": "^8.0.6",
+		"typescript": "^4.0.2",
+		"webpack": "^4.42.0",
+		"webpack-cli": "^3.3.12"
+	},
+	"gitHead": "57f483530ff4e7c18c6331510b43dd0bc841ee6d"
+}

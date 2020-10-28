@@ -1,0 +1,40 @@
+name: CI/TOPIC
+on:
+  pull_request:
+    branches:
+      - dev
+
+jobs:
+  build:
+    name: Build and Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup nodejs
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14'
+
+      - name: Checkout
+        uses: actions/checkout@master
+        with:
+          token: ${{ secrets.APTO_BOT_TOKEN }}
+          submodules: true
+          fetch-depth: 0 # Required by chromatic to retrieve git history
+
+      - name: Restore Cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install
+        run: npm ci
+
+      - name: Lint & Build
+        run: npm run build
+
+      - name: Test
+        run: npm run test

@@ -1,0 +1,11 @@
+{
+	"packages": [
+		"packages/*"
+	],
+	"version": "2.0.0",
+	"command": {
+		"version": {
+			"conventional-commits": true
+		}
+	}
+}

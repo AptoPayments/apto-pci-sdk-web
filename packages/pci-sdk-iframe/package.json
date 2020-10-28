@@ -1,0 +1,53 @@
+{
+	"name": "@apto-payments/pci-sdk-iframe",
+	"version": "2.0.0",
+	"browser": "./dist/umd/apto-pci-sdk-iframe.js",
+	"main": "./dist/esm/index.js",
+	"module": "./dist/esm/index.js",
+	"types": "./dist/esm/index.d.ts",
+	"homepage": ".",
+	"scripts": {
+		"build": "react-scripts build",
+		"create-s3-artifacts": "node scripts/create-s3-artifacts.js",
+		"deploy-to-s3": "node scripts/deploy-to-s3.js",
+		"prebuild": "webpack",
+		"prepublishOnly": "npm run build && npm run create-s3-artifacts && npm run deploy-to-s3",
+		"start": "react-scripts start",
+		"test": "react-scripts test"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"files": [
+		"lib"
+	],
+	"browserslist": {
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
+	},
+	"devDependencies": {
+		"@testing-library/jest-dom": "^4.2.4",
+		"@testing-library/react": "^9.5.0",
+		"@testing-library/user-event": "^7.2.1",
+		"@types/jest": "^24.9.1",
+		"@types/node": "^12.12.57",
+		"@types/react": "^16.9.49",
+		"@types/react-dom": "^16.9.8",
+		"aws-sdk": "^2.771.0",
+		"react": "^16.13.1",
+		"react-dom": "^16.13.1",
+		"react-scripts": "^3.4.4",
+		"typescript": "^3.7.5",
+		"webpack": "4.42.0",
+		"webpack-cli": "^4.0.0"
+	},
+	"gitHead": "57f483530ff4e7c18c6331510b43dd0bc841ee6d"
+}
