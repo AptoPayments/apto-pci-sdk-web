@@ -57,7 +57,12 @@ To install the SDK using CDN, include the following script in your HTML file.
 <script src="https://cdn.jsdelivr.net/npm/@apto-payments/pci-sdk-web@VERSION_NUMBER/dist/umd/apto-pci-sdk.min.js"></script>
 ```
 
-Ensure you replace `VERSION_NUMBER` with the SDK version you'd like to use. For example version `2.0.0`. The current version available is listed [at the top of this document](#user-content-apto-web-pci-sdk).
+Ensure you replace `VERSION_NUMBER` with the SDK version you'd like to use. The current version available is listed [at the top of this document](#user-content-apto-web-pci-sdk). For example version `2.0.0`.
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/@apto-payments/pci-sdk-web@2.0.0/dist/umd/apto-pci-sdk.min.js"></script>
+```
+
 
 **Note:** We use a [semantic versioning scheme](https://semver.org/) for the Web PCI SDK.
 
@@ -90,15 +95,15 @@ var options = {
     apiKey: 'MOBILE_API_KEY',
     environment: 'sbx',			// Accepted values: 'sbx' | 'prd'
   },
-  theme: 'light',				// (Optional) Accepted values: 'light' | 'dark'
+  theme: 'light',		// (Optional) Accepted values: 'light' | 'dark'
   element: document.getElementById('apto-pci-sdk'),	// (Optional) Default id: 'apto-pci-sdk'
-  values: {						// (Optional)
-    lastFour: '****',			// (Optional) Default: '****'
-    labelPan: 'Card Number',	// (Optional) Default: 'Card number'
-    labelCvv: 'CVV',			// (Optional) Default: 'Cvv'
-    labelExp: 'Exp Date',		// (Optional) Default: 'Exp'
-    labelName: 'Full Name',	// (Optional) Default: 'Name'
-    nameOnCard: 'Jane Doe',	// (Optional) Default: ''
+  values: {		// (Optional)
+    lastFour: '****',		// (Optional) Default: '****'
+    labelPan: 'Card Number',		// (Optional) Default: 'Card number'
+    labelCvv: 'CVV',		// (Optional) Default: 'Cvv'
+    labelExp: 'Exp Date',	// (Optional) Default: 'Exp'
+    labelName: 'Full Name',		// (Optional) Default: 'Name'
+    nameOnCard: 'Jane Doe',		// (Optional) Default: ''
   },
 }
 ```
