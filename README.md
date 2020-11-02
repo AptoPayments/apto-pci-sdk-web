@@ -135,7 +135,7 @@ To show the complete card data, use the `showPCIData` method:
 AptoPCISdk.showPCIData();
 ```
 
-**Note:** An SMS / email message will be sent to the user with a one-time code. This code must be entered into the dialog display. If the code entered is correct, the PCI data will be displayed.
+**Note:** If the client is not PCI-compliant, an SMS / email message will be sent to the user with a one-time code. This code must be entered into the dialog display. If the code entered is correct, the PCI data will be displayed.
 
 To hide the card data, use the `hidePCIData` method:
 
