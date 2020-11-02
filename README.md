@@ -226,5 +226,3 @@ If you would like to help:
 
 1. Refer to the [issues](https://github.com/AptoPayments/apto-pci-sdk-web/issues) section of the repository first, to ensure your feature or bug doesn't already exist (The request may be ongoing, or newly finished task).
 2. If your request is not in the [issues](https://github.com/AptoPayments/apto-pci-sdk-web/issues) section, please feel free to [create one](https://github.com/AptoPayments/apto-pci-sdk-web/new). We'll get back to you as soon as possible.
-
-If you want to help improve the SDK by adding a new feature or bug fix, we'd be happy to receive [pull requests](https://github.com/AptoPayments/apto-pci-sdk-web/compare)!
