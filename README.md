@@ -95,13 +95,13 @@ var options = {
     apiKey: 'MOBILE_API_KEY',
     environment: 'sbx',			// Accepted values: 'sbx' | 'prd'
   },
-  theme: 'light',		// (Optional) Accepted values: 'light' | 'dark'
+  theme: 'light',			// (Optional) Accepted values: 'light' | 'dark'
   element: document.getElementById('apto-pci-sdk'),	// (Optional) Default id: 'apto-pci-sdk'
   values: {		// (Optional)
-    lastFour: '****',		// (Optional) Default: '****'
+    lastFour: '****',				// (Optional) Default: '****'
     labelPan: 'Card Number',		// (Optional) Default: 'Card number'
-    labelCvv: 'CVV',		// (Optional) Default: 'Cvv'
-    labelExp: 'Exp Date',	// (Optional) Default: 'Exp'
+    labelCvv: 'CVV',			// (Optional) Default: 'Cvv'
+    labelExp: 'Exp Date',		// (Optional) Default: 'Exp'
     labelName: 'Full Name',		// (Optional) Default: 'Name'
     nameOnCard: 'Jane Doe',		// (Optional) Default: ''
   },
