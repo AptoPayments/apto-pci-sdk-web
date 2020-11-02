@@ -28,9 +28,7 @@ A Mobile API Key is required to run the SDK. To retrieve your Mobile API Key:
 
 1. Register for an account or login into the [Apto Developer Portal](https://developer.aptopayments.com). 
     
-2. Select **Developers** from the menu. Your **Mobile API Key** is listed on this page.
-
-    ![Mobile API Key](readme_images/devPortal_mobileApiKey.jpg)
+2. Select **Developers** from the menu. Your **Mobile API Key** is listed on [this page](https://developer.aptopayments.com/#/dashboard/developers/credentials).
 
     **Note:** `MOBILE_API_KEY` is used throughout this document to represent your Mobile API key. Ensure you replace `MOBILE_API_KEY` with the Mobile API Key in your account.
 
