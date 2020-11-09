@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import apiClient from "../../apiClient";
+import themeService from '../../services/theme.service';
 import { ITheme } from '../../types/IThemes';
 import themes, { IThemeName } from './themes/index';
-import themeService from '../../services/theme.service';
 
 
 interface IState {
@@ -40,20 +40,22 @@ export default function useApp() {
 
 	useEffect(() => {
 		function onMessage(event: MessageEvent) {
-			const data = JSON.parse(event.data);
-			switch (data.type) {
-				case 'setStyle':
-					const style = themeService.extendTheme(data.style);
-					return setState(s => ({ ...s, theme: style }));
-				case 'setTheme':
-					return setState(s => ({ ...s, theme: themes[data.theme as IThemeName] }));
-				case 'showCardData':
-					return showCardData(state.cardId);
-				case 'hideCardData':
-					return setState(s => ({ ...s, networkStatus: 'SUCCESS', pan: `•••• •••• •••• ${s.lastFour}`, cvv: '•••', exp: '••/••' }))
-				default:
-					break;
-			}
+			try {
+				const data = JSON.parse(event.data);
+				switch (data.type) {
+					case 'setStyle':
+						const style = themeService.extendTheme(data.style);
+						return setState(s => ({ ...s, theme: style }));
+					case 'setTheme':
+						return setState(s => ({ ...s, theme: themes[data.theme as IThemeName] }));
+					case 'showCardData':
+						return showCardData(state.cardId);
+					case 'hideCardData':
+						return setState(s => ({ ...s, networkStatus: 'SUCCESS', pan: `•••• •••• •••• ${s.lastFour}`, cvv: '•••', exp: '••/••' }))
+					default:
+						break;
+				}
+			} catch {}
 		}
 
 		async function showCardData(cardId: string) {
@@ -62,14 +64,18 @@ export default function useApp() {
 			// Try to get card data from the server
 			return apiClient.getCardData(cardId)
 				// If data is obtained just display it. We are done
-				.then(res => setState(s => ({ ...s, networkStatus: 'SUCCESS', ...res })))
+				.then(res => {
+					setState(s => ({ ...s, networkStatus: 'SUCCESS', ...res }))
+				})
 				.catch(err => {
 					// Otherwise we request a 2FA code
 					return apiClient.request2FACode()
 						// If request goes well we init the verify2FA code and we'll fetch card data again with this code attached
 						.then(res => _verify2FACode(res.verificationId, false))
 						// If 2fa request goes wrong we just give up
-						.catch(err => setState(s => ({ ...s, networkStatus: 'FAILED' })));
+						.catch(err => {
+							setState(s => ({ ...s, networkStatus: 'FAILED' }))
+						});
 				})
 
 		};
@@ -112,7 +118,7 @@ export default function useApp() {
 			}
 
 			function _onExpired() {
-				alert('Process expired. Start againg.')
+				alert('Process expired. Start again.')
 				return setState(s => ({ ...s, networkStatus: 'IDLE' }));
 			}
 		}

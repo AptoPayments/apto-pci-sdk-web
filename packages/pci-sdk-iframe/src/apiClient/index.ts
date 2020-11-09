@@ -24,8 +24,17 @@ export async function request2FACode(): Promise<IRequest2FACodeResponse> {
 		headers,
 		body: JSON.stringify({ show_verification_secret: true }),
 	})
-		.then(res => res.json())
-		.then(data => ({ verificationId: data.verification_id, status: data.status, verificationType: data.verification_type }));
+		.then(res => {
+			switch (res.status) {
+				case 200:
+					return res.json();
+				default:
+					throw Error(res.status.toString());;
+			}
+		})
+		.then(data => {
+			return { verificationId: data.verification_id, status: data.status, verificationType: data.verification_type }
+		});
 }
 
 interface IVerify2FACodeResponse {
