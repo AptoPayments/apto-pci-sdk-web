@@ -27,13 +27,15 @@ describe('<App />', () => {
 
 	describe('when user triggers the showCardData event', () => {
 		beforeAll(() => {
-			global.prompt = () => 'Enter the code we sent you:';
+			global.prompt = isSecondTime => isSecondTime ? 'Wrong code. try again:' : 'Enter the code we sent you:';
+		});
+
+		beforeEach(() => {
+			stubHistory();
+			render(<App />);
 		})
 
 		it('should make the data request when showCardData event is received', () => {
-			stubHistory();
-			render(<App />);
-
 			const spy = stubPendingResponse();
 			expect(spy).not.toHaveBeenCalled();
 
@@ -45,8 +47,6 @@ describe('<App />', () => {
 		});
 
 		it('should show the previous app state while the request is pending', () => {
-			stubHistory();
-			render(<App />);
 			expect(screen.queryByText('•••• •••• •••• ••••')).toBeVisible();
 
 			const spy = stubPendingResponse();
@@ -58,24 +58,21 @@ describe('<App />', () => {
 		});
 
 		it('should display the users data once the request is authenticated and response recieved', async () => {
-			stubHistory();
-			render(<App />);
 			expect(screen.queryByText('1234 1234 1234 1234')).toBeNull();
 
-			stubJSONResponse(dummyResponse);
+			stubJSONResponse(dummyGetCardDataResponse);
 			fireEvent(window, new MessageEvent('message', { data: JSON.stringify({ type: 'showCardData' }) }));
 			expect(await screen.findByText('1234 1234 1234 1234')).toBeVisible();
 		});
 
 		describe('when cardId does not return data and 2FA code is requested', () => {
+			beforeAll(() => jest.spyOn(window, 'alert').mockImplementation(() => {}));
+
 			afterEach(() => {
 				jest.clearAllMocks();
 			});
 
 			it('should display the hidden data when 2FA request fails', async () => {
-				stubHistory();
-				render(<App />);
-
 				const spy = jest.spyOn(apiClient, 'request2FACode');
 				expect(spy).not.toHaveBeenCalled();
 
@@ -87,63 +84,53 @@ describe('<App />', () => {
 			});
 
 			it('should alert "Process expired. Start againg." when 2FA is expired', async () => {
-				stubHistory();
-				render(<App />)
-				jest.spyOn(window, 'alert').mockImplementation(() => {});
+				expect(window.alert).not.toHaveBeenCalled()
 
-				const request2FACode = jest.spyOn(apiClient, 'request2FACode');
-				const verify2FACode = jest.spyOn(apiClient, 'verify2FACode');
-				expect(request2FACode).not.toHaveBeenCalled();
-				expect(verify2FACode).not.toHaveBeenCalled();
+				stubMultipleJSONRespones([
+					{ httpStatus: 400, body: {} },
+					{ httpStatus: 200, body: getDummyRequest2FACodeResponse('expired') },
+					{ httpStatus: 200, body: getDummyverify2FACodeResponse('expired') }
+				]);
 
-				stubMultipleJSONRespones([{ httpStatus: 400, body: {} }, { httpStatus: 200, body: getDummyRequest2FACodeResponse('expired') }, { httpStatus: 200, body: getDummyverify2FACodeResponse('expired') }]);
 				fireEvent(window, new MessageEvent('message', { data: JSON.stringify({ type: 'showCardData' }) }));
 
-				await wait(() => expect(request2FACode).toHaveBeenCalledTimes(1));
-				await wait(() => expect(verify2FACode).toHaveBeenCalledTimes(1));
-				expect(window.alert).toHaveBeenCalledWith('Process expired. Start again.')
+				await wait(() => expect(window.alert).toHaveBeenCalledWith('Process expired. Start again.'))
 			});
-		});
 
-		it('should alert "Too many attempts, try again." when 2FA fails', async () => {
-			stubHistory();
-			render(<App />)
-			jest.spyOn(window, 'alert').mockImplementation(() => {});
+			it('should alert "Too many attempts, try again." when 2FA fails', async () => {
+				expect(window.alert).not.toHaveBeenCalled()
 
-			const request2FACode = jest.spyOn(apiClient, 'request2FACode');
-			const verify2FACode = jest.spyOn(apiClient, 'verify2FACode');
-			expect(request2FACode).not.toHaveBeenCalled();
-			expect(verify2FACode).not.toHaveBeenCalled();
+				stubMultipleJSONRespones([
+					{ httpStatus: 400, body: {} },
+					{ httpStatus: 200, body: getDummyRequest2FACodeResponse('failed') },
+					{ httpStatus: 200, body: getDummyverify2FACodeResponse('failed') }
+				]);
 
-			stubMultipleJSONRespones([{ httpStatus: 400, body: {} }, { httpStatus: 200, body: getDummyRequest2FACodeResponse('failed') }, { httpStatus: 200, body: getDummyverify2FACodeResponse('failed') }]);
-			fireEvent(window, new MessageEvent('message', { data: JSON.stringify({ type: 'showCardData' }) }));
+				fireEvent(window, new MessageEvent('message', { data: JSON.stringify({ type: 'showCardData' }) }));
 
-			await wait(() => expect(request2FACode).toHaveBeenCalledTimes(1));
-			await wait(() => expect(verify2FACode).toHaveBeenCalledTimes(1));
-			expect(window.alert).toHaveBeenCalledWith('Too many attempts, try again.')
-		});
+				await wait(() => expect(window.alert).toHaveBeenCalledWith('Too many attempts, try again.'));
+			});
 
-		xit('should re-request the card data with a verificationId when 2FA succeeds', async () => {
-			stubHistory();
-			render(<App />)
+			it('should re-request the card data with a verificationId when 2FA succeeds', async () => {
+				const spy = jest.spyOn(apiClient, 'getCardData');
 
-			const request2FACode = jest.spyOn(apiClient, 'request2FACode');
-			const verify2FACode = jest.spyOn(apiClient, 'verify2FACode');
-			const getCardData = jest.spyOn(apiClient, 'getCardData');
-			expect(request2FACode).not.toHaveBeenCalled();
-			expect(verify2FACode).not.toHaveBeenCalled();
+				stubMultipleJSONRespones([
+					{ httpStatus: 400, body: {} },
+					{ httpStatus: 200, body: getDummyRequest2FACodeResponse('passed') },
+					{ httpStatus: 200, body: getDummyverify2FACodeResponse('passed') },
+					{ httpStatus: 200, body: dummyGetCardDataResponse },
+				]);
 
-			stubMultipleJSONRespones([{ httpStatus: 400, body: {} }, { httpStatus: 200, body: getDummyRequest2FACodeResponse('failed') }, { httpStatus: 200, body: getDummyverify2FACodeResponse('failed') }]);
-			fireEvent(window, new MessageEvent('message', { data: JSON.stringify({ type: 'showCardData' }) }));
+				fireEvent(window, new MessageEvent('message', { data: JSON.stringify({ type: 'showCardData' }) }));
 
-			await wait(() => expect(request2FACode).toHaveBeenCalledTimes(1));
-			await wait(() => expect(verify2FACode).toHaveBeenCalledTimes(1));
-			expect(getCardData).toHaveBeenCalledWith(
-				expect.stringContaining('dummy_cardId/details'),
-				{
-					body: expect.any(String), method: 'POST', headers: expect.any(Object)
-				}
-			)
+				await wait(() => expect(spy).toHaveBeenCalledWith(
+					'dummy_cardId',
+					{
+						secret: 'Wrong code. try again:',
+						verificationId: 'dummy_verification_id',
+					}
+				));
+			});
 		});
 	});
 });
@@ -163,7 +150,7 @@ function getUrl(customParams: Record<string,any>) {
 	return `?${new URLSearchParams(params).toString()}`;
 }
 
-const dummyResponse = {
+const dummyGetCardDataResponse = {
 	'card_id': 'dummy_cardId',
 	'expiration': '2023-08',
 	'cvv': '123',
