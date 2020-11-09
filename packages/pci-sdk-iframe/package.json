@@ -49,5 +49,14 @@
 		"webpack": "4.42.0",
 		"webpack-cli": "^4.0.0"
 	},
-	"gitHead": "57f483530ff4e7c18c6331510b43dd0bc841ee6d"
+	"gitHead": "57f483530ff4e7c18c6331510b43dd0bc841ee6d",
+	"dependencies": {
+		"@testing-library/jest-dom": "^5.11.5",
+		"@testing-library/react": "^11.1.1",
+		"react-scripts": "^4.0.0",
+		"webpack": "4.44.2"
+	},
+	"jest": {
+		"resetMocks": false
+	}
 }
