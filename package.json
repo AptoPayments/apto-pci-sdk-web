@@ -3,6 +3,8 @@
 	"private": true,
 	"devDependencies": {
 		"cypress": "^5.4.0",
+		"cypress-dotenv": "^1.2.2",
+		"dotenv": "^8.2.0",
 		"http-server": "^0.12.3",
 		"lerna": "^3.22.1",
 		"start-server-and-test": "^1.11.5"

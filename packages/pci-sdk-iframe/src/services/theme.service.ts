@@ -27,7 +27,7 @@ function _mergeStyles(styles: ITheme, baseTheme: ITheme) {
 		// This should be unreachable unless a theme is missing a possible selector, added for redundency
 		if (!baseTheme[key as keyof ITheme]) {
 			mergedStyles[key as keyof ITheme] = style;
-			return mergedStyles
+			return mergedStyles;
 		}
 
 		mergedStyles[key as keyof ITheme] = Object.assign(baseTheme[key as keyof ITheme], style);
@@ -37,4 +37,4 @@ function _mergeStyles(styles: ITheme, baseTheme: ITheme) {
 
 export default {
 	extendTheme,
-}
+};

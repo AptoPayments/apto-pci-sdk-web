@@ -4,4 +4,8 @@
 		"source.fixAll.stylelint": true,
 		"source.organizeImports": true,
 	},
+	"eslint.workingDirectories": [
+		"./packages/pci-sdk-iframe",
+		"./packages/pci-sdk-web"
+	],
 }

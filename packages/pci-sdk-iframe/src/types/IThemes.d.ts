@@ -16,4 +16,4 @@ export interface ITheme {
 	pan?: CSSProperties;
 	cvv?: CSSProperties;
 	exp?: CSSProperties;
-};
+}

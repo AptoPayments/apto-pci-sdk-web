@@ -1,8 +1,15 @@
 /// <reference types="Cypress" />
 
+
 describe('AptoPCISdk', () => {
+	let dummyAuthData;
 	before(() => {
-		cy.fixture('init/auth').as('dummyAuthData');
+		dummyAuthData = {
+			cardId: Cypress.env('CARD_ID'),
+			apiKey: Cypress.env('API_KEY'),
+			userToken: Cypress.env('USER_TOKEN'),
+			environment: Cypress.env('ENVIRONMENT'),
+		}
 		cy.visit('http://localhost:8080/test.html');
 	});
 
@@ -14,17 +21,17 @@ describe('AptoPCISdk', () => {
 		it('should render the card inside the iframe when init is called', () => {
 			cy.getAptoPCISdk(async function (AptoPCISdk) {
 				await AptoPCISdk.init({
-					auth: this.dummyAuthData,
+					auth: dummyAuthData,
 					values: { nameOnCard: 'Matias Calvo' }
 				});
-				cy.getAptoIframe().find('#name').should('include.text', ' Matias Calvo ');
+				cy.getAptoIframe().find('#name').should('include.text', 'Matias Calvo');
 			});
 		});
 
 		it('should set the theme when specified', () => {
 			cy.getAptoPCISdk(async function (AptoPCISdk) {
 				await AptoPCISdk.init({
-					auth: this.dummyAuthData,
+					auth: dummyAuthData,
 					theme: 'dark'
 				});
 				cy.getAptoIframe().find('#name').should('have.css', 'color', 'rgb(255, 255, 255)');
@@ -35,7 +42,7 @@ describe('AptoPCISdk', () => {
 				cy.document().then(doc => {
 					cy.getAptoPCISdk(async function (AptoPCISdk) {
 						await AptoPCISdk.init({
-							auth: this.dummyAuthData,
+							auth: dummyAuthData,
 							element: doc.querySelector('.custom-selector'),
 						});
 						cy.get('.custom-selector').find('iframe').should('be.visible');
@@ -48,7 +55,7 @@ describe('AptoPCISdk', () => {
 		it('should set text color to white if theme is dark', () => {
 			cy.getAptoPCISdk(async function (AptoPCISdk) {
 				await AptoPCISdk.init({
-					auth: this.dummyAuthData,
+					auth: dummyAuthData,
 					theme: 'light',
 				});
 				AptoPCISdk.setTheme('dark');
@@ -61,7 +68,7 @@ describe('AptoPCISdk', () => {
 		it('should set text color to black if theme is light', () => {
 			cy.getAptoPCISdk(async function (AptoPCISdk) {
 				await AptoPCISdk.init({
-					auth: this.dummyAuthData,
+					auth: dummyAuthData,
 					theme: 'dark',
 				});
 				AptoPCISdk.setTheme('light');
@@ -76,7 +83,7 @@ describe('AptoPCISdk', () => {
 		it('should set the card to custom styles when "extend" keyword is not present', () => {
 			cy.getAptoPCISdk(async function (AptoPCISdk) {
 				await AptoPCISdk.init({
-					auth: this.dummyAuthData,
+					auth: dummyAuthData,
 				});
 				AptoPCISdk.setStyle({
 					pan: { color: 'blue' }
@@ -91,7 +98,7 @@ describe('AptoPCISdk', () => {
 		it('should extend the theme with custom styles when "extend" keyword is present', () => {
 			cy.getAptoPCISdk(async function (AptoPCISdk) {
 				await AptoPCISdk.init({
-					auth: this.dummyAuthData,
+					auth: dummyAuthData,
 					theme: 'light',
 				});
 				AptoPCISdk.setStyle({

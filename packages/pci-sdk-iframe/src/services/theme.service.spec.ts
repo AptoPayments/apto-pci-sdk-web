@@ -1,6 +1,5 @@
 import { ITheme } from '../types/IThemes';
 import themeService from './theme.service';
-import themes from '../pages/app/themes';
 
 describe('themeService', () => {
 	describe('extendTheme', () => {
@@ -16,8 +15,8 @@ describe('themeService', () => {
 
 		it('should add and overwrite theme styles with custom styles', () => {
 			const actual = themeService.extendTheme(dummy_style_with_theme);
-			expect(actual).toEqual(dummy_style_default_theme_extended)
-		})
+			expect(actual).toEqual(dummy_style_default_theme_extended);
+		});
 	});
 });
 
@@ -28,7 +27,7 @@ const dummy_style_full_custom: ITheme = {
 	labelName: {
 		fontSize: '30px',
 	},
-}
+};
 
 const dummy_style_unknown_theme: any = {
 	extends: 'dummy_unknown_theme',
@@ -38,7 +37,7 @@ const dummy_style_unknown_theme: any = {
 	labelName: {
 		fontSize: '30px',
 	},
-}
+};
 
 const dummy_style_with_theme: ITheme = {
 	extends: 'light',
@@ -52,7 +51,7 @@ const dummy_style_with_theme: ITheme = {
 	cvv: {
 		fontSize: '24px',
 	}
-}
+};
 
 const dummy_style_default_theme_extended: ITheme = {
 	container: {
