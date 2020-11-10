@@ -84,7 +84,7 @@ function _initIframe(authOptions: IAuthOptions, pciElement: HTMLElement | null =
 		const $aptoIframe = document.createElement('iframe');
 
 		window.addEventListener('message', (event) => {
-			if (event.origin !== CORS_DOMAIN) {
+			if ((CORS_DOMAIN !== '*') && (event.origin !== CORS_DOMAIN)) {
 				return;
 			}
 

@@ -17,7 +17,7 @@ describe('AptoPCISdk', () => {
 					auth: this.dummyAuthData,
 					values: { nameOnCard: 'Matias Calvo' }
 				});
-				cy.getAptoIframe().find('#name').should('include.text', ' Matias Calvo ');
+				cy.getAptoIframe().find('#name').should('include.text', 'Matias Calvo');
 			});
 		});
 

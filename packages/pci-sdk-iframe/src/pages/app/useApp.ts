@@ -122,7 +122,9 @@ export default function useApp() {
 		}
 
 		window.addEventListener('message', onMessage, false);
-		window.parent.postMessage('apto-iframe-ready', '*'); // TODO: Investigate how to filter by parent CORS domain
+		if (window.self !== window.parent) {
+			window.parent.postMessage('apto-iframe-ready', '*'); // TODO: Investigate how to filter by parent CORS domain
+		}
 		return () => window.removeEventListener('message', onMessage);
 	}, [state.cardId]);
 
