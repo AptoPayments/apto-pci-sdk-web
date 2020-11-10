@@ -6,12 +6,12 @@ function formatExpirationDate(value: string): string  {
 	// We need to parse the year and month
 	if(value.length > 5) {
 		const valueSorted =  _sortAscByLength(value.split('-'));
-		const month = valueSorted[0]
-		const year = valueSorted[1]
+		const month = valueSorted[0];
+		const year = valueSorted[1];
 		return _addSlash(`${month}${year.slice(2)}`).trim();
 	}
 
-	const cleanValue = _removeNonNumericalCharacters(value)
+	const cleanValue = _removeNonNumericalCharacters(value);
 	return _addSlash(cleanValue).trim();
 }
 
@@ -20,7 +20,7 @@ function formatPan(value: string): string  {
 		return value;
 	}
 
-	const cleanValue = _removeNonNumericalCharacters(value)
+	const cleanValue = _removeNonNumericalCharacters(value);
 	return _groupIn4Characters(cleanValue).trim();
 }
 

@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import apiClient from "../../apiClient";
+import { useEffect, useState } from 'react';
+import apiClient from '../../apiClient';
 import themeService from '../../services/theme.service';
 import { ITheme } from '../../types/IThemes';
 import themes, { IThemeName } from './themes/index';
@@ -36,26 +36,24 @@ export default function useApp() {
 		networkStatus: 'IDLE',
 		pan: `•••• •••• •••• ${urlParams.get('lastFour') as string || '••••'}`,
 		theme: themes[themeParam] || themes['light' as IThemeName],
-	})
+	});
 
 	useEffect(() => {
 		function onMessage(event: MessageEvent) {
-			try {
-				const data = JSON.parse(event.data);
-				switch (data.type) {
-					case 'setStyle':
-						const style = themeService.extendTheme(data.style);
-						return setState(s => ({ ...s, theme: style }));
-					case 'setTheme':
-						return setState(s => ({ ...s, theme: themes[data.theme as IThemeName] }));
-					case 'showCardData':
-						return showCardData(state.cardId);
-					case 'hideCardData':
-						return setState(s => ({ ...s, networkStatus: 'SUCCESS', pan: `•••• •••• •••• ${s.lastFour}`, cvv: '•••', exp: '••/••' }))
-					default:
-						break;
-				}
-			} catch {}
+			const data = JSON.parse(event.data);
+			switch (data.type) {
+				case 'setStyle':
+					const style = themeService.extendTheme(data.style);
+					return setState(s => ({ ...s, theme: style }));
+				case 'setTheme':
+					return setState(s => ({ ...s, theme: themes[data.theme as IThemeName] }));
+				case 'showCardData':
+					return showCardData(state.cardId);
+				case 'hideCardData':
+					return setState(s => ({ ...s, networkStatus: 'SUCCESS', pan: `•••• •••• •••• ${s.lastFour}`, cvv: '•••', exp: '••/••' }));
+				default:
+					break;
+			}
 		}
 
 		async function showCardData(cardId: string) {
@@ -65,7 +63,7 @@ export default function useApp() {
 			return apiClient.getCardData(cardId)
 				// If data is obtained just display it. We are done
 				.then(res => {
-					setState(s => ({ ...s, networkStatus: 'SUCCESS', ...res }))
+					setState(s => ({ ...s, networkStatus: 'SUCCESS', ...res }));
 				})
 				.catch(err => {
 					// Otherwise we request a 2FA code
@@ -74,11 +72,11 @@ export default function useApp() {
 						.then(res => _verify2FACode(res.verificationId, false))
 						// If 2fa request goes wrong we just give up
 						.catch(err => {
-							setState(s => ({ ...s, networkStatus: 'FAILED' }))
+							setState(s => ({ ...s, networkStatus: 'FAILED' }));
 						});
-				})
+				});
 
-		};
+		}
 
 		async function _verify2FACode(verificationId: string, isSecondTime: boolean): Promise<void> {
 			const secret = window.prompt(isSecondTime ? 'Wrong code. try again:' : 'Enter the code we sent you:');
@@ -99,17 +97,17 @@ export default function useApp() {
 						case 'pending':
 							return _verify2FACode(verificationId, true);
 					}
-				})
+				});
 
 
 			function _getCardDataWithSecret(verificationId: string, secret: string) {
 				return apiClient.getCardData(state.cardId, { verificationId, secret })
 					.then(cardData => {
-						return setState(s => ({ ...s, networkStatus: 'SUCCESS', ...cardData }))
+						return setState(s => ({ ...s, networkStatus: 'SUCCESS', ...cardData }));
 					})
 					.catch(() => {
-						return setState(s => ({ ...s, networkStatus: 'FAILED' }))
-					})
+						return setState(s => ({ ...s, networkStatus: 'FAILED' }));
+					});
 			}
 
 			function _tooManyAttempts() {
@@ -118,19 +116,19 @@ export default function useApp() {
 			}
 
 			function _onExpired() {
-				alert('Process expired. Start again.')
+				alert('Process expired. Start again.');
 				return setState(s => ({ ...s, networkStatus: 'IDLE' }));
 			}
 		}
 
-		window.addEventListener("message", onMessage, false);
+		window.addEventListener('message', onMessage, false);
 		window.parent.postMessage('apto-iframe-ready', '*'); // TODO: Investigate how to filter by parent CORS domain
-		return () => window.removeEventListener("message", onMessage);
+		return () => window.removeEventListener('message', onMessage);
 	}, [state.cardId]);
 
 
 	return {
 		state,
 		isLoading: state.networkStatus === 'PENDING',
-	}
+	};
 }

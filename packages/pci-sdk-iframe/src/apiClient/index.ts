@@ -6,11 +6,11 @@ const headers = {
 	'Api-Key': `Bearer ${urlParams.get('apiKey')}`,
 	'Content-Type': 'application/json',
 	'Accept': 'application/json',
-}
+};
 
 
-export var BASE_URL = _getBaseUrl();
-export var VAULT_BASE_URL = _getVaultBaseUrl();
+export const BASE_URL = _getBaseUrl();
+export const VAULT_BASE_URL = _getVaultBaseUrl();
 
 interface IRequest2FACodeResponse {
 	verificationId: string;
@@ -29,11 +29,11 @@ export async function request2FACode(): Promise<IRequest2FACodeResponse> {
 				case 200:
 					return res.json();
 				default:
-					throw Error(res.status.toString());;
+					throw Error(res.status.toString());
 			}
 		})
 		.then(data => {
-			return { verificationId: data.verification_id, status: data.status, verificationType: data.verification_type }
+			return { verificationId: data.verification_id, status: data.status, verificationType: data.verification_type };
 		});
 }
 
@@ -60,8 +60,8 @@ export async function verify2FACode(secret: string, verificationId: string): Pro
 			return {
 				verificationId: res.verification_id,
 				status: res.status,
-			}
-		})
+			};
+		});
 }
 
 interface IGetCardDataResponse {
@@ -82,7 +82,7 @@ export async function getCardData(cardId: string, auth?: { secret: string, verif
 				case 200:
 					return res.json();
 				default:
-					throw Error(res.status.toString());;
+					throw Error(res.status.toString());
 			}
 		})
 		.then(data => ({
@@ -90,7 +90,7 @@ export async function getCardData(cardId: string, auth?: { secret: string, verif
 			exp: formatterService.formatExpirationDate(data.expiration),
 			cvv: data.cvv,
 			pan: formatterService.formatPan(data.pan),
-		}))
+		}));
 }
 
 
@@ -121,4 +121,4 @@ export default {
 	verify2FACode,
 	getCardData,
 	request2FACode,
-}
+};

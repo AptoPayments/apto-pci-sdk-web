@@ -7,7 +7,7 @@ import App from './App';
 
 describe('<App />', () => {
 	beforeAll(() => {
-		jest.spyOn(window, 'alert').mockImplementation(() => {})
+		jest.spyOn(window, 'alert').mockImplementation(jest.fn());
 		global.prompt = isSecondTime => isSecondTime ? 'Wrong code. try again:' : 'Enter the code we sent you:';
 	});
 
@@ -32,7 +32,7 @@ describe('<App />', () => {
 			addUrlParams({ nameOnCard: 'Matias Calvo' });
 			render(<App />);
 
-			expect(screen.queryByRole('cardholder-name')).not.toBeEmptyDOMElement();
+			expect(screen.queryByTestId('cardholder-name')).not.toBeEmptyDOMElement();
 			expect(screen.queryByText('Matias Calvo')).toBeVisible();
 		});
 
@@ -40,7 +40,7 @@ describe('<App />', () => {
 			addUrlParams();
 			render(<App />);
 
-			expect(screen.queryByRole('cardholder-name')).toBeEmptyDOMElement();
+			expect(screen.queryByTestId('cardholder-name')).toBeEmptyDOMElement();
 		});
 
 		it('should show custom labelCvv when provided', () => {
@@ -150,7 +150,7 @@ describe('<App />', () => {
 		beforeEach(() => {
 			addUrlParams();
 			render(<App />);
-		})
+		});
 
 		it('should make the data request when showCardData event is received', () => {
 			const spy = stubPendingResponse();
@@ -160,7 +160,7 @@ describe('<App />', () => {
 			expect(spy).toHaveBeenCalledWith(
 				expect.stringContaining('dummy_cardId/details'),
 				expect.any(Object)
-			)
+			);
 		});
 
 		it('should show the previous app state while the request is pending', () => {
@@ -196,7 +196,7 @@ describe('<App />', () => {
 			});
 
 			it('should alert "Process expired. Start againg." when 2FA is expired', async () => {
-				expect(window.alert).not.toHaveBeenCalled()
+				expect(window.alert).not.toHaveBeenCalled();
 
 				stubMultipleJSONRespones([
 					{ httpStatus: 400, body: {} },
@@ -206,11 +206,11 @@ describe('<App />', () => {
 
 				fireEvent(window, new MessageEvent('message', { data: JSON.stringify({ type: 'showCardData' }) }));
 
-				await waitFor(() => expect(window.alert).toHaveBeenCalledWith('Process expired. Start again.'))
+				await waitFor(() => expect(window.alert).toHaveBeenCalledWith('Process expired. Start again.'));
 			});
 
 			it('should alert "Too many attempts, try again." when 2FA fails', async () => {
-				expect(window.alert).not.toHaveBeenCalled()
+				expect(window.alert).not.toHaveBeenCalled();
 
 				stubMultipleJSONRespones([
 					{ httpStatus: 400, body: {} },
@@ -301,7 +301,7 @@ describe('<App />', () => {
 			addUrlParams({ nameOnCard: 'Matias Calvo' });
 			const { container } = render(<App />);
 
-			expect(container.firstChild).toHaveStyle('color: black')
+			expect(container.firstChild).toHaveStyle('color: black');
 
 			fireEvent(window, new MessageEvent('message', {
 				data: JSON.stringify({ type: 'setTheme', theme: 'dark' })
@@ -314,7 +314,7 @@ describe('<App />', () => {
 
 const defaultParams = {
 	cardId: 'dummy_cardId',
-}
+};
 
 function addUrlParams(customParams: Record<string,any> = {}) {
 	const url = getUrl(customParams);
@@ -331,7 +331,7 @@ const dummyGetCardDataResponse = {
 	'expiration': '2023-08',
 	'cvv': '123',
 	'pan': '1234123412341234'
-}
+};
 
 function getDummyRequest2FACodeResponse (status: string) {
 	return {

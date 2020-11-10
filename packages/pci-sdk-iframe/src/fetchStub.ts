@@ -16,7 +16,7 @@ export function stubMultipleJSONRespones(responses: Array<{ httpStatus: 200 | 40
 	_resetMocks();
 	return responses.reduce((spy: any, response: { httpStatus: 200 | 400, body: unknown }) => { // TODO: set Spy type
 		const { httpStatus, body } = response;
-		return spy.mockResolvedValueOnce(new Response(JSON.stringify(body), { status: httpStatus }))
+		return spy.mockResolvedValueOnce(new Response(JSON.stringify(body), { status: httpStatus }));
 	}, mock.spyOn(global as any, 'fetch'));
 }
 

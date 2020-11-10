@@ -26,7 +26,7 @@ export default function App() {
 
 			<div id="group-name" style={{ ...theme.groups, ...theme.groupName }}>
 				<label id="label-name" style={{ ...theme.labels, ...theme.labelName }}>{labelName}</label>
-				<span id="name" role="cardholder-name" style={{ ...theme.shared, ...theme.name }}>{nameOnCard}</span>
+				<span id="name" data-testid="cardholder-name" style={{ ...theme.shared, ...theme.name }}>{nameOnCard}</span>
 			</div>
 
 			<div id="group-pan" style={{ ...theme.groups, ...theme.groupPan }}>

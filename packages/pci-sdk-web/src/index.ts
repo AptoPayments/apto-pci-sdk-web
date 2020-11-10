@@ -34,7 +34,7 @@ export interface Values {
 }
 
 let $aptoIframe: Promise<HTMLIFrameElement>;
-const CORS_DOMAIN = process.env.NODE_ENV === 'development' ? '*' : `https://apto-pci-sdk-iframe.aptopayments.com`;
+const CORS_DOMAIN = process.env.NODE_ENV === 'development' ? '*' : 'https://apto-pci-sdk-iframe.aptopayments.com';
 const IFRAME_URL = process.env.NODE_ENV === 'development' ? 'http://localhost:3000/' : `https://apto-pci-sdk-iframe.aptopayments.com/${version}/index.html`;
 
 export function init(initOptions: InitOptions) {
@@ -74,7 +74,7 @@ function _checkInitOptions(initOptions: InitOptions) {
 	}
 }
 
-function _initIframe(authOptions: IAuthOptions, pciElement: HTMLElement | null = document.getElementById('apto-pci-sdk'), size?: Size, values?: Values, theme: string = '1'): Promise<HTMLIFrameElement> {
+function _initIframe(authOptions: IAuthOptions, pciElement: HTMLElement | null = document.getElementById('apto-pci-sdk'), size?: Size, values?: Values, theme = '1'): Promise<HTMLIFrameElement> {
 	if (!pciElement) {
 		throw new Error('You need to provide an HTML element to init the PCI SDK');
 	}
@@ -83,13 +83,13 @@ function _initIframe(authOptions: IAuthOptions, pciElement: HTMLElement | null =
 
 		const $aptoIframe = document.createElement('iframe');
 
-		window.addEventListener("message", (event) => {
+		window.addEventListener('message', (event) => {
 			if (event.origin !== CORS_DOMAIN) {
 				return;
 			}
 
 			if (event.data === 'apto-iframe-ready') {
-				resolve($aptoIframe)
+				resolve($aptoIframe);
 			}
 
 		}, false);
@@ -97,7 +97,7 @@ function _initIframe(authOptions: IAuthOptions, pciElement: HTMLElement | null =
 		const params = new URLSearchParams(authOptions as any);
 
 		if (values) {
-			Object.keys(values).forEach(key => params.set(key, (values as any)[key]))
+			Object.keys(values).forEach(key => params.set(key, (values as any)[key]));
 		}
 
 		params.set('theme', theme.toString());
@@ -109,14 +109,14 @@ function _initIframe(authOptions: IAuthOptions, pciElement: HTMLElement | null =
 		$aptoIframe.setAttribute('data-cy', 'pci-sdk-web');
 
 		pciElement.appendChild($aptoIframe);
-	})
+	});
 }
 
 function _sendMessage(data: object) {
 	$aptoIframe.then(frame => {
 		const messageEvent = JSON.stringify(data);
 		frame.contentWindow?.postMessage(messageEvent, CORS_DOMAIN);
-	})
+	});
 }
 
-export default { init, showPCIData, hidePCIData, setStyle, setTheme, version }
+export default { init, showPCIData, hidePCIData, setStyle, setTheme, version };
