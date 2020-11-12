@@ -3,95 +3,197 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>APTO PCI SDK Interactive example</title>
+	<title>Apto PCI SDK interactive example</title>
 	<script src="https://cdn.jsdelivr.net/npm/@apto-payments/pci-sdk-web@2/dist/umd/apto-pci-sdk.min.js"></script>
 
 	<style>
-		* {
-			box-sizing: border-box;
-		}
+* {
+  box-sizing: border-box;
+}
 
-		body {
-			font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-		}
+body {
+  background-color: #f6f6f6;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
 
-		main {
-			border: 1px solid gray;
-			width: 400px;
-			height: 400px;
-			display: flex;
-			justify-content: center;
-			align-items:center;
-			background-color: cadetblue;
-		}
+.card {
+  max-width: 550px;
+  margin: 50px auto;
+  padding: 20px;
+  border-radius: 16px;
+  background-color: #ffffff;
+  box-shadow: 0 3px 24px rgba(0, 0, 0, 0.08), 0 0 4px rgba(0, 0, 0, 0.03);
+}
+
+h1 {
+  text-align: center;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #e2e2e2;
+}
+
+label {
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 16px;
+}
+
+input,
+select {
+  margin-bottom: 16px;
+  padding: 12px 16px;
+  border: 1px solid #e2e2e2;
+  border: 0;
+  border-radius: 8px;
+  outline: 0;
+  background-color: #f6f6f6;
+}
+
+select {
+  appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18.5269 10.8383L14.0002 15.365L9.47355 10.8383C9.01855 10.3833 8.28355 10.3833 7.82855 10.8383C7.37355 11.2933 7.37355 12.0283 7.82855 12.4833L13.1836 17.8383C13.6386 18.2933 14.3736 18.2933 14.8286 17.8383L20.1836 12.4833C20.6386 12.0283 20.6386 11.2933 20.1836 10.8383C19.7286 10.395 18.9819 10.3833 18.5269 10.8383Z" fill="black"/></svg>');
+  background-repeat: no-repeat;
+  background-position: calc(100% - 8px) center;
+}
+
+button {
+  display: inline-block;
+  height: 36px;
+  padding: 9px 15px;
+  border-radius: 100px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-size: 14px;
+  line-height: 16px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+button[type="submit"] {
+  border: 1px solid #0055ff;
+  background: #0055ff;
+  color: #ffffff;
+}
+
+button[type="submit"]:focus,
+button[type="submit"]:hover {
+  border-color: black;
+  outline: none;
+  background-color: black;
+}
+
+button[type="button"] {
+  border: 1px solid #cbcbcb;
+  background: #ffffff;
+  color: #000000;
+}
+
+button[type="button"]:focus,
+button[type="button"]:hover {
+  border-color: black;
+  outline: none;
+  background-color: white;
+  box-shadow: inset 0 0 0 1px black;
+  color: black;
+}
+
+.area {
+  width: 400px;
+  max-width: 100%;
+  height: 250px;
+  margin: 24px auto;
+  border: 2px dotted gray;
+  border-radius: 16px;
+  background-color: #f6f6f6;
+}
+
+#apto-pci-sdk {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.button-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
 	</style>
 </head>
 <body>
-<aside>
-	<form id="init_form">
-		<label for="userToken">User token:</label>
-		<input name="userToken" type="text" />
+	<main class="card">
+		<h1>Test the Apto PCI SDK</h1>
 
-		<label for="cardId">Card ID:</label>
-		<input name="cardId" type="text" />
+		<form id="init_form">
+			<label for="userToken">User token</label>
+			<input id="userToken" name="userToken" type="text" />
 
-		<label for="apiKey">Api Key:</label>
-		<input name="apiKey" type="text" />
+			<label for="cardId">Card ID</label>
+			<input id="cardId" name="cardId" type="text" />
 
-		<label for="environment">User token:</label>
-		<select name="environment">
-			<option value="sbx">sbx</option>
-			<option value="prd">prd</option>
-		</select>
+			<label for="apiKey">Api Key</label>
+			<input id="apiKey" name="apiKey" type="text" />
 
-		<button type="submit"> Init </button>
+			<label for="environment">User token</label>
+			<select id="environment" name="environment">
+				<option value="sbx">sbx</option>
+				<option value="prd">prd</option>
+			</select>
+
+			<button type="submit"> Init </button>
+		</form>
+
+		<div class="area">
+			<div id="apto-pci-sdk">
+				Card data will appear here
+			</div>
+		</div>
+
+		<div class="button-bar">
+			<button type="button" id="btnShow"> Show PCI Data </button>
+			<button type="button" id="btnHide"> Hide PCI Data </button>
+			<button type="button" id="btnThemeLight" > Light Theme </button>
+			<button type="button" id="btnThemeDark" > Dark Theme </button>
+		</div>
+
+	</main>
+
+	<script>
+		// Prepopulate fields based on query parameters
+		new URLSearchParams(window.location.search)
+		.forEach((value, key) => document.getElementsByName(key)[0].setAttribute('value', value));
+
+		// Set listeners
+		document.getElementById('init_form').addEventListener('submit', init);
+		document.getElementById('btnShow').addEventListener('click', () => AptoPCISdk.showPCIData());
+		document.getElementById('btnHide').addEventListener('click', () => AptoPCISdk.hidePCIData());
+		document.getElementById('btnThemeLight').addEventListener('click', () => AptoPCISdk.setTheme('light'));
+		document.getElementById('btnThemeDark').addEventListener('click', () => AptoPCISdk.setTheme('dark'));
 
 
+		/**
+		 *
+		 */
+		function init(event) {
+			event.preventDefault();
 
-	</form>
-
-	<button type="button" id="btnShow"> Show PCI Data </button>
-	<button type="button" id="btnHide"> Hide PCI Data </button>
-
-	<button type="button" id="btnThemeLight" > Light Theme </button>
-	<button type="button" id="btnThemeDark" > Dark Theme </button>
-
-</aside>
-<main>
-	<div id="apto-pci-sdk">
-		Card data will appear here
-	</div>
-</main>
-
-<script>
-	// Prepopulate fields based on query parameters
-	new URLSearchParams(window.location.search)
-	.forEach((value, key) => document.getElementsByName(key)[0].setAttribute('value', value));
-
-	// Set listeners
-	document.getElementById('init_form').addEventListener('submit', init);
-	document.getElementById('btnShow').addEventListener('click', () => AptoPCISdk.showPCIData());
-	document.getElementById('btnHide').addEventListener('click', () => AptoPCISdk.hidePCIData());
-	document.getElementById('btnThemeLight').addEventListener('click', () => AptoPCISdk.setTheme('light'));
-	document.getElementById('btnThemeDark').addEventListener('click', () => AptoPCISdk.setTheme('dark'));
-
-
-	/**
-	 *
-	 */
-	function init(event) {
-		event.preventDefault();
-
-		AptoPCISdk
-			.init({
-				auth: {
-					cardId: event.target.elements.cardId.value,
-					apiKey: event.target.elements.apiKey.value,
-					userToken: event.target.elements.userToken.value,
-					environment: event.target.elements.environment.value,
-			}
-		});
-	}
-</script>
+			AptoPCISdk
+				.init({
+					auth: {
+						cardId: event.target.elements.cardId.value,
+						apiKey: event.target.elements.apiKey.value,
+						userToken: event.target.elements.userToken.value,
+						environment: event.target.elements.environment.value,
+				}
+			});
+		}
+	</script>
 </body>
 </html>
