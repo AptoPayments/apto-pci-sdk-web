@@ -8,7 +8,7 @@ import App from './App';
 describe('<App />', () => {
 	beforeAll(() => {
 		jest.spyOn(window, 'alert').mockImplementation(jest.fn());
-		global.prompt = isSecondTime => isSecondTime ? 'Wrong code. try again:' : 'Enter the code we sent you:';
+		global.prompt = isSecondTime => isSecondTime ? '123456' : '654321';
 	});
 
 	afterEach(jest.clearAllMocks);
@@ -238,7 +238,7 @@ describe('<App />', () => {
 				await waitFor(() => expect(spy).toHaveBeenCalledWith(
 					'dummy_cardId',
 					{
-						secret: 'Wrong code. try again:',
+						secret: '123456',
 						verificationId: 'dummy_verification_id',
 					}
 				));

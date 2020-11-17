@@ -1,3 +1,11 @@
+function sanitize2FACode(code: string | null) {
+	if (code) {
+		return _removeNonNumericalCharacters(code);
+	}
+
+	return null;
+}
+
 function formatExpirationDate(value: string): string  {
 	if (value === '') {
 		return value;
@@ -48,4 +56,5 @@ function _addSlash(value: string): string  {
 export default {
 	formatExpirationDate,
 	formatPan,
+	sanitize2FACode,
 };

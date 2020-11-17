@@ -44,4 +44,27 @@ describe('formatterService', () => {
 			expect(actual).toBe('4242 4242 4242 4242');
 		});
 	});
+
+	describe('sanitize2FACode', () => {
+		it('should return null if passed "code" is null', () => {
+			const actual = formatterService.sanitize2FACode(null);
+			expect(actual).toBeNull();
+		});
+
+		it('should return null if passed "code" is blank string', () => {
+			const actual = formatterService.sanitize2FACode('');
+			expect(actual).toBeNull();
+		});
+
+		it('should remove dashes and other non-numerical characters from the string', () => {
+			let actual = formatterService.sanitize2FACode('123-456');
+			expect(actual).toBe('123456');
+
+			actual = formatterService.sanitize2FACode('123    456');
+			expect(actual).toBe('123456');
+
+			actual = formatterService.sanitize2FACode('Gh&$12  3! 456');
+			expect(actual).toBe('123456');
+		});
+	});
 });

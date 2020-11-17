@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import apiClient from '../../apiClient';
+import formatterService from '../../services/formatter.service';
 import themeService from '../../services/theme.service';
 import { ITheme } from '../../types/IThemes';
 import themes, { IThemeName } from './themes/index';
@@ -79,7 +80,8 @@ export default function useApp() {
 		}
 
 		async function _verify2FACode(verificationId: string, isSecondTime: boolean): Promise<void> {
-			const secret = window.prompt(isSecondTime ? 'Wrong code. try again:' : 'Enter the code we sent you:');
+			const codeEntered = window.prompt(isSecondTime ? 'Wrong code. try again:' : 'Enter the code we sent you (numbers only):');
+			const secret = formatterService.sanitize2FACode(codeEntered);
 
 			if (!secret) {
 				return setState(s => ({ ...s, networkStatus: 'IDLE' }));
