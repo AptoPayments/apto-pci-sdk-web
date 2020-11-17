@@ -46,14 +46,14 @@ describe('formatterService', () => {
 	});
 
 	describe('sanitize2FACode', () => {
-		it('should return null if passed "code" is null', () => {
+		it('should return empty string if passed code is null', () => {
 			const actual = formatterService.sanitize2FACode(null);
-			expect(actual).toBeNull();
+			expect(actual).toBe('');
 		});
 
-		it('should return null if passed "code" is blank string', () => {
+		it('should return empty string if passed code is empty string', () => {
 			const actual = formatterService.sanitize2FACode('');
-			expect(actual).toBeNull();
+			expect(actual).toBe('');
 		});
 
 		it('should remove dashes and other non-numerical characters from the string', () => {

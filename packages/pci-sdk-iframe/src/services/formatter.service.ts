@@ -1,9 +1,5 @@
-function sanitize2FACode(code: string | null) {
-	if (code) {
-		return _removeNonNumericalCharacters(code);
-	}
-
-	return null;
+function sanitize2FACode(code: string | null): string {
+	return code ? _removeNonNumericalCharacters(code) : '';
 }
 
 function formatExpirationDate(value: string): string  {
