@@ -5,9 +5,10 @@
 
 The Apto Web PCI SDK enables developers to display protected PCI data using an iFrame.
 
+For more information about the SDK and deployment, see the [Web PCI SDK docs](http://docs.aptopayments.com/docs/pci-sdk-web)
 
-To get started, see the [Web PCI SDK docs](http://docs.aptopayments.com/docs/pci-sdk-web)
+## Contributions & Development
 
-For more information, see the [Apto Developer Guides](http://docs.aptopayments.com).
+We look forward to receiving your feedback, including new feature requests, bug fixes and documentation improvements.
 
-To contribute to the SDK development, see [Contributions & Development](http://docs.aptopayments.com/docs/pci-sdk-web#contributions--development)
+If you would like to contribute to the SDK development, see [Contributions & Development](http://docs.aptopayments.com/docs/pci-sdk-web#contributions--development).
