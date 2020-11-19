@@ -43,6 +43,8 @@ interface IVerify2FACodeResponse {
 }
 
 export async function verify2FACode(secret: string, verificationId: string): Promise<IVerify2FACodeResponse> {
+	secret = formatterService.sanitize2FACode(secret);
+
 	return fetch(`${BASE_URL}v1/verifications/${verificationId}/finish`, {
 		method: 'POST',
 		headers,

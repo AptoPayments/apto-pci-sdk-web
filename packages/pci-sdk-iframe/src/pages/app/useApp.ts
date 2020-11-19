@@ -79,7 +79,7 @@ export default function useApp() {
 		}
 
 		async function _verify2FACode(verificationId: string, isSecondTime: boolean): Promise<void> {
-			const secret = window.prompt(isSecondTime ? 'Wrong code. try again:' : 'Enter the code we sent you:');
+			const secret = window.prompt(isSecondTime ? 'Wrong code. try again:' : 'Enter the code we sent you (numbers only):');
 
 			if (!secret) {
 				return setState(s => ({ ...s, networkStatus: 'IDLE' }));
@@ -96,7 +96,12 @@ export default function useApp() {
 							return _tooManyAttempts();
 						case 'pending':
 							return _verify2FACode(verificationId, true);
+						default:
+							return setState(s => ({ ...s, networkStatus: 'FAILED' }));
 					}
+				})
+				.catch(() => {
+					return setState(s => ({ ...s, networkStatus: 'FAILED' }));
 				});
 
 
