@@ -12,7 +12,7 @@
 		"deploy-to-s3": "node scripts/deploy-to-s3.js",
 		"prebuild": "webpack",
 		"prepublishOnly": "npm run build && npm run create-s3-artifacts && npm run deploy-to-s3",
-		"start": "BROWSER=none react-scripts start",
+		"start": "react-scripts start",
 		"test": "react-scripts test"
 	},
 	"publishConfig": {
