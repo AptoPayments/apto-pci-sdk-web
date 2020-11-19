@@ -96,7 +96,12 @@ export default function useApp() {
 							return _tooManyAttempts();
 						case 'pending':
 							return _verify2FACode(verificationId, true);
+						default:
+							return setState(s => ({ ...s, networkStatus: 'FAILED' }));
 					}
+				})
+				.catch(() => {
+					return setState(s => ({ ...s, networkStatus: 'FAILED' }));
 				});
 
 
