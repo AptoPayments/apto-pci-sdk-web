@@ -142,6 +142,36 @@ describe('<App />', () => {
 
 				expect(await screen.findByText('Card number')).toBeVisible();
 			});
+
+			it('should show custom expiredMessage for 2FA when provided', async () => {
+				addUrlParams({ expiredMessage: 'custom_expiredMessage' });
+				render(<App />);
+
+				stubMultipleJSONRespones([
+					{ httpStatus: 400, body: {} },
+					{ httpStatus: 200, body: dummyRequest2FACodeResponse },
+					{ httpStatus: 200, body: getDummyverify2FACodeResponse('expired') }
+				]);
+
+				fireEvent(window, new MessageEvent('message', { data: JSON.stringify({ type: 'showCardData' }) }));
+
+				await waitFor(() => expect(window.alert).toHaveBeenCalledWith('custom_expiredMessage'));
+			});
+
+			it('should show custom tooManyAttemptsMessage for 2FA when provided', async () => {
+				addUrlParams({ tooManyAttemptsMessage: 'custom_tooManyAttemptsMessage' });
+				render(<App />);
+
+				stubMultipleJSONRespones([
+					{ httpStatus: 400, body: {} },
+					{ httpStatus: 200, body: dummyRequest2FACodeResponse },
+					{ httpStatus: 200, body: getDummyverify2FACodeResponse('failed') }
+				]);
+
+				fireEvent(window, new MessageEvent('message', { data: JSON.stringify({ type: 'showCardData' }) }));
+
+				await waitFor(() => expect(window.alert).toHaveBeenCalledWith('custom_tooManyAttemptsMessage'));
+			});
 		});
 	});
 

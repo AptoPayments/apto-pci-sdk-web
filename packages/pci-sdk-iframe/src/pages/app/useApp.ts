@@ -17,6 +17,10 @@ export default function useApp() {
 		labelName: urlParams.get('labelName') as string || 'Name',
 		labelPan: urlParams.get('labelPan') as string || 'Card number',
 		nameOnCard: urlParams.get('nameOnCard') as string || '',
+		expiredMessage: urlParams.get('expiredMessage') as string || 'Process expired. Start again.',
+		tooManyAttemptsMessage: urlParams.get('tooManyAttemptsMessage') as string || 'Too many attempts, try again.',
+		enter2FAPrompt: urlParams.get('enter2FAPrompt') as string || 'Enter the code we sent you:',
+		failed2FAPrompt: urlParams.get('failed2FAPrompt') as string || 'Wrong code. try again:',
 		lastFour: urlParams.get('lastFour') as string || '••••',
 	}));
 
