@@ -39,15 +39,15 @@ describe('AptoPCISdk', () => {
 		});
 
 		it('should allow user to specify target element for iframe', () => {
-				cy.document().then(doc => {
-					cy.getAptoPCISdk(async function (AptoPCISdk) {
-						await AptoPCISdk.init({
-							auth: dummyAuthData,
-							element: doc.querySelector('.custom-selector'),
-						});
-						cy.get('.custom-selector').find('iframe').should('be.visible');
+			cy.document().then(doc => {
+				cy.getAptoPCISdk(async function (AptoPCISdk) {
+					await AptoPCISdk.init({
+						auth: dummyAuthData,
+						element: doc.querySelector('.custom-selector'),
 					});
+					cy.get('.custom-selector').find('iframe').should('be.visible');
 				});
+			});
 		});
 	});
 
@@ -111,5 +111,11 @@ describe('AptoPCISdk', () => {
 				});
 			});
 		});
+	});
+
+	describe('AptoPCISdk.getVisibility', () => {
+		it('should return false when the data is not visible', async () => {
+
+		})
 	});
 });

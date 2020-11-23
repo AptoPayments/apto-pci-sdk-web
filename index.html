@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Apto PCI SDK interactive example</title>
-	<script src="https://cdn.jsdelivr.net/npm/@apto-payments/pci-sdk-web@2/dist/umd/apto-pci-sdk.min.js"></script>
+	<script src="packages/pci-sdk-web/dist/umd/apto-pci-sdk.js"></script>
 
 	<style>
 * {
@@ -161,6 +161,7 @@ button[type="button"]:hover {
 			<button type="button" id="btnHide"> Hide PCI Data </button>
 			<button type="button" id="btnThemeLight" > Light Theme </button>
 			<button type="button" id="btnThemeDark" > Dark Theme </button>
+			<button type="button" id="btnVisibility" > GetVisibility </button>
 		</div>
 
 	</main>
@@ -168,7 +169,7 @@ button[type="button"]:hover {
 	<script>
 		// Prepopulate fields based on query parameters
 		new URLSearchParams(window.location.search)
-		.forEach((value, key) => document.getElementsByName(key)[0].setAttribute('value', value));
+		.forEach((value, key) => document.getElementsByName(key)[0].setAttribute('value', decodeURI(value)));
 
 		// Set listeners
 		document.getElementById('init_form').addEventListener('submit', init);
@@ -176,6 +177,7 @@ button[type="button"]:hover {
 		document.getElementById('btnHide').addEventListener('click', () => AptoPCISdk.hidePCIData());
 		document.getElementById('btnThemeLight').addEventListener('click', () => AptoPCISdk.setTheme('light'));
 		document.getElementById('btnThemeDark').addEventListener('click', () => AptoPCISdk.setTheme('dark'));
+		document.getElementById('btnVisibility').addEventListener('click', () => AptoPCISdk.getIsDataVisible().then(console.info));
 
 
 		/**

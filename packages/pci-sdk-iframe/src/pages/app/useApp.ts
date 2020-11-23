@@ -18,6 +18,12 @@ interface IState {
 	networkStatus: 'IDLE' | 'PENDING' | 'SUCCESS' | 'FAILED',
 	pan: string;
 	theme: ITheme;
+	isDataVisible: boolean;
+}
+
+interface IMessage {
+	type: 'apto-iframe-ready' | 'apto-iframe-visibility-change';
+	data?: Record<string, unknown>;
 }
 
 export default function useApp() {
@@ -27,6 +33,7 @@ export default function useApp() {
 		cardId: urlParams.get('cardId') as string || '',
 		cvv: '•••',
 		exp: '••/••',
+		isDataVisible: false,
 		labelCvv: urlParams.get('labelCvv') as string || 'Cvv',
 		labelExp: urlParams.get('labelExp') as string || 'Exp',
 		labelName: urlParams.get('labelName') as string || 'Name',
@@ -38,8 +45,10 @@ export default function useApp() {
 		theme: themes[themeParam] || themes['light' as IThemeName],
 	});
 
+
+
 	useEffect(() => {
-		function onMessage(event: MessageEvent) {
+		function _onMessage(event: MessageEvent) {
 			const data = JSON.parse(event.data);
 			switch (data.type) {
 				case 'setStyle':
@@ -48,22 +57,24 @@ export default function useApp() {
 				case 'setTheme':
 					return setState(s => ({ ...s, theme: themes[data.theme as IThemeName] }));
 				case 'showCardData':
-					return showCardData(state.cardId);
+					return showCardData();
 				case 'hideCardData':
-					return setState(s => ({ ...s, networkStatus: 'SUCCESS', pan: `•••• •••• •••• ${s.lastFour}`, cvv: '•••', exp: '••/••' }));
+					return setState(s => ({ ...s, isDataVisible: false, networkStatus: 'SUCCESS', pan: `•••• •••• •••• ${s.lastFour}`, cvv: '•••', exp: '••/••' }));
+				case 'isDataVisible':
+					return _emitMessage({ type: 'apto-iframe-visibility-change', data: { isVisible: state.isDataVisible } });
 				default:
 					break;
 			}
 		}
 
-		async function showCardData(cardId: string) {
-			setState(s => ({ ...s, networkStatus: 'PENDING' }));
+		async function showCardData() {
+			setState(s => ({ ...s, isDataVisible: false, networkStatus: 'PENDING' }));
 
 			// Try to get card data from the server
-			return apiClient.getCardData(cardId)
+			return apiClient.getCardData(state.cardId)
 				// If data is obtained just display it. We are done
 				.then(res => {
-					setState(s => ({ ...s, networkStatus: 'SUCCESS', ...res }));
+					setState(s => ({ ...s, networkStatus: 'SUCCESS', isDataVisible: true, ...res }));
 				})
 				.catch(err => {
 					// Otherwise we request a 2FA code
@@ -108,7 +119,7 @@ export default function useApp() {
 			function _getCardDataWithSecret(verificationId: string, secret: string) {
 				return apiClient.getCardData(state.cardId, { verificationId, secret })
 					.then(cardData => {
-						return setState(s => ({ ...s, networkStatus: 'SUCCESS', ...cardData }));
+						return setState(s => ({ ...s, isDataVisible: true, networkStatus: 'SUCCESS', ...cardData }));
 					})
 					.catch(() => {
 						return setState(s => ({ ...s, networkStatus: 'FAILED' }));
@@ -126,12 +137,17 @@ export default function useApp() {
 			}
 		}
 
-		window.addEventListener('message', onMessage, false);
+		window.addEventListener('message', _onMessage, false);
+		_emitMessage({ type: 'apto-iframe-ready' });
+		return () => window.removeEventListener('message', _onMessage);
+	}, [state.cardId, state.isDataVisible]);
+
+
+	function _emitMessage(message: IMessage) {
 		if (window.self !== window.parent) {
-			window.parent.postMessage('apto-iframe-ready', '*'); // TODO: Investigate how to filter by parent CORS domain
+			window.parent.postMessage(JSON.stringify(message), '*'); // TODO: Investigate how to filter by parent CORS domain
 		}
-		return () => window.removeEventListener('message', onMessage);
-	}, [state.cardId]);
+	}
 
 
 	return {

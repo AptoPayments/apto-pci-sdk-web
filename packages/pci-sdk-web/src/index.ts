@@ -59,6 +59,29 @@ export function setTheme(theme: string) {
 	_sendMessage({ type: 'setTheme', theme });
 }
 
+export function getIsDataVisible(): Promise<boolean> {
+	return new Promise(resolve => {
+
+		window.addEventListener('message', function onVisibilityChanged(event) {
+			if ((CORS_DOMAIN !== '*') && (event.origin !== CORS_DOMAIN)) {
+				return;
+			}
+
+			const message = JSON.parse(event.data);
+
+			if (message.type === 'apto-iframe-visibility-change') {
+				// Self remove listener once resolved
+				window.removeEventListener('message', onVisibilityChanged);
+				resolve(JSON.parse(message.data.isVisible));
+			}
+
+		}, false);
+
+		_sendMessage({ type: 'isDataVisible' });
+	});
+
+}
+
 function _checkInitOptions(initOptions: InitOptions) {
 	if (!initOptions.auth.apiKey) {
 		throw new Error('You need to provide an API token to init the PCI SDK');
@@ -88,7 +111,9 @@ function _initIframe(authOptions: IAuthOptions, pciElement: HTMLElement | null =
 				return;
 			}
 
-			if (event.data === 'apto-iframe-ready') {
+			const message = JSON.parse(event.data);
+
+			if (message.type === 'apto-iframe-ready') {
 				resolve($aptoIframe);
 			}
 
@@ -113,10 +138,10 @@ function _initIframe(authOptions: IAuthOptions, pciElement: HTMLElement | null =
 }
 
 function _sendMessage(data: object) {
-	$aptoIframe.then(frame => {
+	return $aptoIframe.then(frame => {
 		const messageEvent = JSON.stringify(data);
 		frame.contentWindow?.postMessage(messageEvent, CORS_DOMAIN);
 	});
 }
 
-export default { init, showPCIData, hidePCIData, setStyle, setTheme, version };
+export default { init, showPCIData, hidePCIData, setStyle, setTheme, getIsDataVisible, version };
