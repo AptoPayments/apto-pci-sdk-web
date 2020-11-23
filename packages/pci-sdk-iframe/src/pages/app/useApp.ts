@@ -1,14 +1,18 @@
-import { useEffect, useState } from 'react';
-import apiClient from '../../apiClient';
+import { useEffect, useReducer } from 'react';
 import themeService from '../../services/theme.service';
 import { ITheme } from '../../types/IThemes';
+import appService from './app.service';
 import themes, { IThemeName } from './themes/index';
 
 
-interface IState {
+
+export interface ICardData {
 	cardId: string;
 	cvv: string;
 	exp: string;
+	pan: string;
+}
+interface IState extends ICardData {
 	labelCvv: string;
 	labelExp: string;
 	labelName: string;
@@ -16,7 +20,6 @@ interface IState {
 	lastFour: string;
 	nameOnCard: string;
 	networkStatus: 'IDLE' | 'PENDING' | 'SUCCESS' | 'FAILED',
-	pan: string;
 	theme: ITheme;
 	isDataVisible: boolean;
 }
@@ -26,10 +29,13 @@ interface IMessage {
 	data?: Record<string, unknown>;
 }
 
+type IAction = 'HIDE_DATA' | 'EMIT_VISIBILITY_MESSAGE' | 'ERROR';
+
+
 export default function useApp() {
 	const urlParams = new URLSearchParams(window.location.search);
 	const themeParam = urlParams.get('theme') as IThemeName;
-	const [state, setState] = useState<IState>({
+	const [state, dispatch] = useReducer(reducer, {
 		cardId: urlParams.get('cardId') as string || '',
 		cvv: '•••',
 		exp: '••/••',
@@ -45,113 +51,60 @@ export default function useApp() {
 		theme: themes[themeParam] || themes['light' as IThemeName],
 	});
 
-
-
 	useEffect(() => {
 		function _onMessage(event: MessageEvent) {
 			const data = JSON.parse(event.data);
 			switch (data.type) {
 				case 'setStyle':
 					const style = themeService.extendTheme(data.style);
-					return setState(s => ({ ...s, theme: style }));
+					return dispatch({ theme: style });
 				case 'setTheme':
-					return setState(s => ({ ...s, theme: themes[data.theme as IThemeName] }));
+					return dispatch({ theme: themes[data.theme as IThemeName] });
 				case 'showCardData':
-					return showCardData();
+					return appService.showCardData(state.cardId)
+						.then(cardData => dispatch(cardData))
+						.catch(() => dispatch('ERROR'));
 				case 'hideCardData':
-					return setState(s => ({ ...s, isDataVisible: false, networkStatus: 'SUCCESS', pan: `•••• •••• •••• ${s.lastFour}`, cvv: '•••', exp: '••/••' }));
+					return dispatch('HIDE_DATA');
 				case 'isDataVisible':
-					return _emitMessage({ type: 'apto-iframe-visibility-change', data: { isVisible: state.isDataVisible } });
+					return dispatch('EMIT_VISIBILITY_MESSAGE');
 				default:
 					break;
-			}
-		}
-
-		async function showCardData() {
-			setState(s => ({ ...s, isDataVisible: false, networkStatus: 'PENDING' }));
-
-			// Try to get card data from the server
-			return apiClient.getCardData(state.cardId)
-				// If data is obtained just display it. We are done
-				.then(res => {
-					setState(s => ({ ...s, networkStatus: 'SUCCESS', isDataVisible: true, ...res }));
-				})
-				.catch(err => {
-					// Otherwise we request a 2FA code
-					return apiClient.request2FACode()
-						// If request goes well we init the verify2FA code and we'll fetch card data again with this code attached
-						.then(res => _verify2FACode(res.verificationId, false))
-						// If 2fa request goes wrong we just give up
-						.catch(err => {
-							setState(s => ({ ...s, networkStatus: 'FAILED' }));
-						});
-				});
-
-		}
-
-		async function _verify2FACode(verificationId: string, isSecondTime: boolean): Promise<void> {
-			const secret = window.prompt(isSecondTime ? 'Wrong code. try again:' : 'Enter the code we sent you (numbers only):');
-
-			if (!secret) {
-				return setState(s => ({ ...s, networkStatus: 'IDLE' }));
-			}
-
-			return apiClient.verify2FACode(secret, verificationId)
-				.then(res => {
-					switch (res.status) {
-						case 'passed':
-							return _getCardDataWithSecret(verificationId, secret);
-						case 'expired':
-							return _onExpired();
-						case 'failed':
-							return _tooManyAttempts();
-						case 'pending':
-							return _verify2FACode(verificationId, true);
-						default:
-							return setState(s => ({ ...s, networkStatus: 'FAILED' }));
-					}
-				})
-				.catch(() => {
-					return setState(s => ({ ...s, networkStatus: 'FAILED' }));
-				});
-
-
-			function _getCardDataWithSecret(verificationId: string, secret: string) {
-				return apiClient.getCardData(state.cardId, { verificationId, secret })
-					.then(cardData => {
-						return setState(s => ({ ...s, isDataVisible: true, networkStatus: 'SUCCESS', ...cardData }));
-					})
-					.catch(() => {
-						return setState(s => ({ ...s, networkStatus: 'FAILED' }));
-					});
-			}
-
-			function _tooManyAttempts() {
-				alert('Too many attempts, try again.');
-				return setState(s => ({ ...s, networkStatus: 'IDLE' }));
-			}
-
-			function _onExpired() {
-				alert('Process expired. Start again.');
-				return setState(s => ({ ...s, networkStatus: 'IDLE' }));
 			}
 		}
 
 		window.addEventListener('message', _onMessage, false);
 		_emitMessage({ type: 'apto-iframe-ready' });
 		return () => window.removeEventListener('message', _onMessage);
-	}, [state.cardId, state.isDataVisible]);
-
-
-	function _emitMessage(message: IMessage) {
-		if (window.self !== window.parent) {
-			window.parent.postMessage(JSON.stringify(message), '*'); // TODO: Investigate how to filter by parent CORS domain
-		}
-	}
+	}, [state.cardId]);
 
 
 	return {
 		state,
 		isLoading: state.networkStatus === 'PENDING',
 	};
+}
+
+
+function reducer(state: IState, action: Partial<IState> | IAction): IState {
+	if (typeof action === 'string') {
+		switch (action) {
+			case 'HIDE_DATA':
+				return { ...state, pan: `•••• •••• •••• ${state.lastFour}` };
+			case 'EMIT_VISIBILITY_MESSAGE':
+				_emitMessage({ type: 'apto-iframe-visibility-change', data: { isVisible: state.isDataVisible } });
+				return state;
+			case 'ERROR':
+				return { ...state, networkStatus: 'FAILED', isDataVisible: false, };
+			default:
+				throw new Error(`Unexpected action ${action}`);
+		}
+	}
+	return { ...state, ...action };
+}
+
+function _emitMessage(message: IMessage) {
+	if (window.self !== window.parent) {
+		window.parent.postMessage(JSON.stringify(message), '*'); // TODO: Investigate how to filter by parent CORS domain
+	}
 }
