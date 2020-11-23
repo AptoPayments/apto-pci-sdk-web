@@ -183,7 +183,11 @@ describe('<App />', () => {
 
 			stubJSONResponse(dummyGetCardDataResponse);
 			fireEvent(window, new MessageEvent('message', { data: JSON.stringify({ type: 'showCardData' }) }));
+
 			expect(await screen.findByText('1234 1234 1234 1234')).toBeVisible();
+			expect(await screen.findByText('08/23')).toBeVisible();
+			expect(await screen.findByText('123')).toBeVisible();
+
 			expect(await screen.queryByText('•••• •••• •••• ••••')).toBeNull();
 		});
 

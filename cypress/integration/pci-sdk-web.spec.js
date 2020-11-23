@@ -113,30 +113,36 @@ describe('AptoPCISdk', () => {
 		});
 	});
 
-	xdescribe('AptoPCISdk.getVisibility', () => {
-		it.skip('should return false when the data is not visible', () => {
-			// // TODO
+	// xdescribe('AptoPCISdk.getVisibility', () => {
+	// 	it.skip('should return false when the data is not visible', () => {
+	// 		// TODO
 
-			// // We might want to stub server responses to aboid 2FA logic (we assume it's unit tested at iframe-level)
-			// // https://docs.cypress.io/guides/guides/network-requests.html#Stub-Responses
+	// 		// We might want to stub server responses to aboid 2FA logic (we assume it's unit tested at iframe-level)
+	// 		// https://docs.cypress.io/guides/guides/network-requests.html#Stub-Responses
 
-			// // This would be nice to avoid the extra level of indentantion due the callback.
-			// const AptoPCISdk = await cy.getAptoPCISdk();
-			// // Just call the sdk as usual
-			// AptoPCISdk.init({ auth: dummyAuthData });
-			// // By default we expect the visibility to be false
-			// const initial = await AptoPCISdk.getIsDataVisible();
-			// expect(initial).toBe(false);
-			// // Try to get our pci-data
-			// AptoPCISdk.showPCISdkData();
-			// // https://github.com/cypress-io/cypress/issues/5316
-			// // This might not work because the prompt is triggered by the iframe!
-			// cy.stubPrompt(Cypress.env('2FA_CODE_CORRECT'))
-			// // This might be very hard to do, but will be required for the tests
-			// await waitForCardDataToBeVisible();
-			// // Finally we expect the visibility to be true
-			// const actual = await AptoPCISdk.getIsDataVisible();
-			// expect(actual).toBe(true);
-		});
-	})
+	// 		// This would be nice to avoid the extra level of indentantion due the callback.
+	// 		const AptoPCISdk = await cy.getAptoPCISdk();
+
+	// 		// Just call the sdk as usual
+	// 		AptoPCISdk.init({ auth: dummyAuthData });
+
+	// 		// By default we expect the visibility to be false
+	// 		const initial = await AptoPCISdk.getIsDataVisible();
+	// 		expect(initial).toBe(false);
+
+	// 		// Try to get our pci-data
+	// 		AptoPCISdk.showPCISdkData();
+
+	// 		// https://github.com/cypress-io/cypress/issues/5316
+	// 		// This might not work because the prompt is triggered by the iframe!
+	// 		cy.stubPrompt(Cypress.env('2FA_CODE_CORRECT'))
+
+	// 		// This might be very hard to do, but will be required for the tests
+	// 		await waitForCardDataToBeVisible();
+
+	// 		// Finally we expect the visibility to be true
+	// 		const actual = await AptoPCISdk.getIsDataVisible();
+	// 		expect(actual).toBe(true);
+	// 	});
+	// })
 });

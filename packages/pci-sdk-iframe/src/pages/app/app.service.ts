@@ -1,5 +1,5 @@
 import apiClient from '../../apiClient';
-import { ICardData } from './useApp';
+import ICardData from '../../types/ICardData';
 
 /**
  * Try to display PCI SDK Data.

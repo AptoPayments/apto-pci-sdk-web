@@ -72,7 +72,7 @@ export function getIsDataVisible(): Promise<boolean> {
 			if (message.type === 'apto-iframe-visibility-change') {
 				// Self remove listener once resolved
 				window.removeEventListener('message', onVisibilityChanged);
-				resolve(JSON.parse(message.data.isVisible));
+				resolve(JSON.parse(message.payload.isVisible));
 			}
 
 		}, false);
