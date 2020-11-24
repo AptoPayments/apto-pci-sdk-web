@@ -6,7 +6,6 @@ import reducer from './reducer';
 import themes, { IThemeName } from './themes/index';
 
 
-
 export default function useApp() {
 	const urlParams = new URLSearchParams(window.location.search);
 
@@ -17,6 +16,10 @@ export default function useApp() {
 		labelName: urlParams.get('labelName') as string || 'Name',
 		labelPan: urlParams.get('labelPan') as string || 'Card number',
 		nameOnCard: urlParams.get('nameOnCard') as string || '',
+		expiredMessage: urlParams.get('expiredMessage') as string || 'Process expired. Start again.',
+		tooManyAttemptsMessage: urlParams.get('tooManyAttemptsMessage') as string || 'Too many attempts, try again.',
+		enter2FAPrompt: urlParams.get('enter2FAPrompt') as string || 'Enter the code we sent you (numbers only):',
+		failed2FAPrompt: urlParams.get('failed2FAPrompt') as string || 'Wrong code. try again:',
 		lastFour: urlParams.get('lastFour') as string || '••••',
 	}));
 
@@ -40,7 +43,7 @@ export default function useApp() {
 					return dispatch({ type: 'SET_THEME', payload: { theme: themes[data.theme as IThemeName] } });
 				case 'showCardData':
 					dispatch({ type: 'SET_LOADING' });
-					return appService.showCardData(staticState.cardId)
+					return appService.showCardData(staticState.cardId, { messages: { ...staticState } })
 						.then(cardData => dispatch({ type: 'SET_CARD_DATA', payload: cardData }))
 						.catch(() => dispatch({ type: 'SET_ERROR' }));
 				case 'hideCardData':
@@ -55,7 +58,7 @@ export default function useApp() {
 		window.addEventListener('message', _onMessage, false);
 		messageService.emitMessage({ type: 'apto-iframe-ready' });
 		return () => window.removeEventListener('message', _onMessage);
-	}, [staticState.cardId, staticState.lastFour]);
+	}, [staticState]);
 
 
 	return {

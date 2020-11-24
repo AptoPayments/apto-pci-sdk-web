@@ -33,6 +33,10 @@ export interface Values {
 	labelExp?: string;
 	lastFour?: string;
 	nameOnCard?: string;
+	expiredMessage?: string;
+  tooManyAttemptsMessage?: string;
+  enter2FAPrompt?: string;
+  failed2FAPrompt?: string;
 }
 
 let $aptoIframe: Promise<HTMLIFrameElement>;
