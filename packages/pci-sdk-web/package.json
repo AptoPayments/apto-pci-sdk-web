@@ -24,15 +24,15 @@
 		"@apto-payments/pci-sdk-iframe": "^2.0.0"
 	},
 	"devDependencies": {
-		"@testing-library/dom": "^7.26.3",
-		"@testing-library/jest-dom": "^5.11.5",
+		"@testing-library/dom": "^7.28.1",
+		"@testing-library/jest-dom": "^5.11.6",
 		"@testing-library/user-event": "^7.2.1",
 		"@types/jest": "^24.9.1",
-		"@types/node": "^12.12.57",
+		"@types/node": "^12.19.6",
 		"eslint-config-typescript": "^3.0.0",
-		"react-scripts": "^4.0.0",
+		"react-scripts": "^4.0.1",
 		"ts-loader": "^8.0.6",
-		"typescript": "^4.0.2",
+		"typescript": "^4.1.2",
 		"webpack": "^4.44.2",
 		"webpack-cli": "^3.3.12"
 	},
