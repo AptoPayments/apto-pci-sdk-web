@@ -7,7 +7,7 @@
 		"dotenv": "^8.2.0",
 		"http-server": "^0.12.3",
 		"lerna": "^3.22.1",
-		"start-server-and-test": "^1.11.5"
+		"start-server-and-test": "^1.11.6"
 	},
 	"scripts": {
 		"build": "lerna run build --parallel",
@@ -16,8 +16,7 @@
 		"postinstall": "lerna bootstrap",
 		"publish": "git push --follow-tags origin dev &&  git checkout prd && git merge dev && git push origin prd",
 		"release": "lerna publish --conventional-commits --force-publish --yes --no-verify-access",
-		"start:iframe": "lerna run --scope @apto-payments/pci-sdk-iframe start",
-		"start": "npm run start:iframe & http-server",
+		"start": "lerna run start & http-server",
 		"test:e2e:watch": "start-server-and-test start http://localhost:8080 cy:watch",
 		"test:e2e": "start-server-and-test start http://localhost:8080 cy:run",
 		"test": "lerna run test --parallel"

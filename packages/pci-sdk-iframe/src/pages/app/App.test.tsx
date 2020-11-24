@@ -161,7 +161,7 @@ describe('<App />', () => {
 				expect.stringContaining('dummy_cardId/details'),
 				{
 					'body': null,
-					'headers': {'Accept': 'application/json', 'Api-Key': 'Bearer null', 'Authorization': 'Bearer null', 'Content-Type': 'application/json'},
+					'headers': { 'Accept': 'application/json', 'Api-Key': 'Bearer null', 'Authorization': 'Bearer null', 'Content-Type': 'application/json' },
 					'method': 'GET'
 				}
 			);
@@ -183,7 +183,11 @@ describe('<App />', () => {
 
 			stubJSONResponse(dummyGetCardDataResponse);
 			fireEvent(window, new MessageEvent('message', { data: JSON.stringify({ type: 'showCardData' }) }));
+
 			expect(await screen.findByText('1234 1234 1234 1234')).toBeVisible();
+			expect(await screen.findByText('08/23')).toBeVisible();
+			expect(await screen.findByText('123')).toBeVisible();
+
 			expect(await screen.queryByText('•••• •••• •••• ••••')).toBeNull();
 		});
 
@@ -212,7 +216,7 @@ describe('<App />', () => {
 					expect.stringContaining('verifications/primary/start'),
 					{
 						'body': JSON.stringify({ show_verification_secret: true }),
-						'headers': {'Accept': 'application/json', 'Api-Key': 'Bearer null', 'Authorization': 'Bearer null', 'Content-Type': 'application/json'},
+						'headers': { 'Accept': 'application/json', 'Api-Key': 'Bearer null', 'Authorization': 'Bearer null', 'Content-Type': 'application/json' },
 						'method': 'POST'
 					}
 				));
@@ -249,7 +253,7 @@ describe('<App />', () => {
 						expect.stringContaining('verifications/dummy_verification_id/finish'),
 						{
 							'body': JSON.stringify({ secret: '123456' }),
-							'headers': {'Accept': 'application/json', 'Api-Key': 'Bearer null', 'Authorization': 'Bearer null', 'Content-Type': 'application/json'},
+							'headers': { 'Accept': 'application/json', 'Api-Key': 'Bearer null', 'Authorization': 'Bearer null', 'Content-Type': 'application/json' },
 							'method': 'POST'
 						}
 					));
@@ -316,7 +320,7 @@ describe('<App />', () => {
 						expect.stringContaining('verifications/dummy_verification_id/finish'),
 						{
 							'body': JSON.stringify({ secret: '123456' }),
-							'headers': {'Accept': 'application/json', 'Api-Key': 'Bearer null', 'Authorization': 'Bearer null', 'Content-Type': 'application/json'},
+							'headers': { 'Accept': 'application/json', 'Api-Key': 'Bearer null', 'Authorization': 'Bearer null', 'Content-Type': 'application/json' },
 							'method': 'POST'
 						}
 					));
@@ -340,7 +344,7 @@ describe('<App />', () => {
 							expect.stringContaining('dummy_cardId/details'),
 							{
 								'body': JSON.stringify({ secret: '123456', verification_id: 'dummy_verification_id' }),
-								'headers': {'Accept': 'application/json', 'Api-Key': 'Bearer null', 'Authorization': 'Bearer null', 'Content-Type': 'application/json'},
+								'headers': { 'Accept': 'application/json', 'Api-Key': 'Bearer null', 'Authorization': 'Bearer null', 'Content-Type': 'application/json' },
 								'method': 'POST'
 							}
 						));
@@ -437,12 +441,12 @@ const defaultParams = {
 	cardId: 'dummy_cardId',
 };
 
-function addUrlParams(customParams: Record<string,any> = {}) {
+function addUrlParams(customParams: Record<string, any> = {}) {
 	const url = getUrl(customParams);
 	window.history.pushState({}, 'PCI SDK', url);
 }
 
-function getUrl(customParams: Record<string,any>) {
+function getUrl(customParams: Record<string, any>) {
 	const params = Object.assign({}, defaultParams, customParams);
 	return `?${new URLSearchParams(params).toString()}`;
 }
@@ -460,7 +464,7 @@ const dummyRequest2FACodeResponse = {
 	'verification_type': 'dummy_verification_type',
 };
 
-function getDummyverify2FACodeResponse (status: string) {
+function getDummyverify2FACodeResponse(status: string) {
 	return {
 		'verification_id': 'dummy_verification_id',
 		'status': status,

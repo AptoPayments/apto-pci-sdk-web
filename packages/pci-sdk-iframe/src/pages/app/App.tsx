@@ -5,10 +5,6 @@ import useApp from './useApp';
 export default function App() {
 	const {
 		isLoading,
-		state,
-	} = useApp();
-
-	const {
 		cvv,
 		exp,
 		labelCvv,
@@ -18,7 +14,7 @@ export default function App() {
 		nameOnCard,
 		pan,
 		theme,
-	} = state;
+	} = useApp();
 
 
 	return (
