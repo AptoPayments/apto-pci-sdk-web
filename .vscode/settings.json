@@ -8,4 +8,5 @@
 		"./packages/pci-sdk-iframe",
 		"./packages/pci-sdk-web"
 	],
+	"typescript.tsdk": "./packages/pci-sdk-iframe/node_modules/typescript/lib"
 }

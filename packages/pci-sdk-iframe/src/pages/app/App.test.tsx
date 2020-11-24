@@ -7,7 +7,7 @@ import App from './App';
 describe('<App />', () => {
 	beforeAll(() => {
 		jest.spyOn(window, 'alert').mockImplementation(jest.fn());
-		global.prompt = jest.fn().mockImplementation(isSecondTime => isSecondTime ? '123456' : '654321');
+		global.prompt = jest.fn().mockImplementation(isFirstAttempt => isFirstAttempt ? '123456' : '654321');
 	});
 
 	afterEach(jest.clearAllMocks);
