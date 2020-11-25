@@ -1,8 +1,6 @@
 const { version } = require('../../pci-sdk-iframe/package.json');
 const aptoPciSdk = require('../dist/umd/apto-pci-sdk');
 
-
-
 if (aptoPciSdk.version === version) {
 	console.info(`Version check: ${version}`);
 	process.exit(0);
@@ -20,7 +18,4 @@ Iframe version:		${version}
 \x1b[0m
 `;
 
-throw Error(ERR_INVALID_VERSIONS)
-
-
-
+throw Error(ERR_INVALID_VERSIONS);

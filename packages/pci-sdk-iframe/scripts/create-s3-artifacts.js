@@ -11,8 +11,8 @@ try {
 		fs.mkdirSync(TEMP_DIR);
 	}
 	fs.renameSync(INPATH, OUTPATH);
-} catch(err) {
-	switch(err.code) {
+} catch (err) {
+	switch (err.code) {
 		case 'ENOENT':
 			_throwDirectoryNotExistError();
 		case 'ENOTEMPTY':
@@ -31,7 +31,7 @@ function _throwDirectoryNotExistError() {
 
 	\x1b[0m`;
 
-	throw Error(ERR_FILE_NOT_FOUND)
+	throw Error(ERR_FILE_NOT_FOUND);
 }
 
 function _throwDirectoryNotEmptyError() {
@@ -43,6 +43,5 @@ function _throwDirectoryNotEmptyError() {
 
 	\x1b[0m`;
 
-	throw Error(ERR_DIRECTORY_ALREADY_EXISTS)
+	throw Error(ERR_DIRECTORY_ALREADY_EXISTS);
 }
-

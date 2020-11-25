@@ -15,7 +15,7 @@ export default {
 		opacity: 1,
 	},
 	groups: {
-		marginTop: '3.53vw' //'12px'
+		marginTop: '3.53vw', //'12px'
 	},
 	groupName: {
 		order: 2,
@@ -25,7 +25,7 @@ export default {
 	groupPan: {
 		order: 1,
 		width: '100%',
-		marginBottom: '3.53vw' //'12px'
+		marginBottom: '3.53vw', //'12px'
 	},
 	groupCvv: {
 		order: 4,

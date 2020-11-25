@@ -22,9 +22,18 @@ export default function reducer(state: IState, action: IAction): IState {
 				theme: action.payload.theme as ITheme,
 			};
 		case 'HIDE_DATA':
-			return { ...state, cvv: '•••', exp: '••/••', pan: `•••• •••• •••• ${action.payload.lastFour}`, isDataVisible: false };
+			return {
+				...state,
+				cvv: '•••',
+				exp: '••/••',
+				pan: `•••• •••• •••• ${action.payload.lastFour}`,
+				isDataVisible: false,
+			};
 		case 'EMIT_VISIBILITY_MESSAGE':
-			messageService.emitMessage({ type: 'apto-iframe-visibility-change', payload: { isVisible: state.isDataVisible } });
+			messageService.emitMessage({
+				type: 'apto-iframe-visibility-change',
+				payload: { isVisible: state.isDataVisible },
+			});
 			return state;
 		case 'SET_ERROR':
 			return { ...state, networkStatus: 'FAILED', isDataVisible: false };
@@ -32,5 +41,3 @@ export default function reducer(state: IState, action: IAction): IState {
 			throw new Error(`Unexpected action ${action}`);
 	}
 }
-
-

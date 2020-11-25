@@ -1,7 +1,6 @@
 ---
 name: Bug report
 about: Create a bug report to help us improve
-
 ---
 
 **What is happening?**
@@ -17,5 +16,6 @@ about: Create a bug report to help us improve
 ...
 
 **Extra information**
+
 - Device:
 - Browser:

@@ -2,11 +2,12 @@
 	"editor.codeActionsOnSave": {
 		"source.fixAll.eslint": true,
 		"source.fixAll.stylelint": true,
-		"source.organizeImports": true,
+		"source.organizeImports": true
 	},
 	"eslint.workingDirectories": [
 		"./packages/pci-sdk-iframe",
 		"./packages/pci-sdk-web"
 	],
-	"typescript.tsdk": "./packages/pci-sdk-iframe/node_modules/typescript/lib"
+	"typescript.tsdk": "./packages/pci-sdk-iframe/node_modules/typescript/lib",
+	"editor.formatOnSave": true
 }

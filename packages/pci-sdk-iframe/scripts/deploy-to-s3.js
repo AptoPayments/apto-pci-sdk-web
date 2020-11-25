@@ -15,16 +15,12 @@ const s3 = new AWS.S3({
 	secretAccessKey: S3_SECRET,
 });
 
-
 const UPLOAD_DIR = path.join(__dirname, `../tmp/${version}`);
 
 _uploadFilesInDirectory(UPLOAD_DIR, version);
 
-
-
 function _uploadFilesInDirectory(directoryPath, relativePath) {
-	const filesInDirectory = fs.readdirSync(directoryPath)
-
+	const filesInDirectory = fs.readdirSync(directoryPath);
 
 	filesInDirectory.forEach(function (fileName) {
 		// local path to file or directory
@@ -44,7 +40,6 @@ function _uploadFilesInDirectory(directoryPath, relativePath) {
 
 function _uploadFile(filePath, remoteFilePath) {
 	fs.readFile(filePath, (error, fileContent) => {
-
 		if (error) {
 			return _throwReadFileError(filePath);
 		}
@@ -54,7 +49,7 @@ function _uploadFile(filePath, remoteFilePath) {
 			Bucket: S3_BUCKET,
 			Body: fileContent,
 			ACL: 'public-read',
-			ContentType: _getContentType(filePath)
+			ContentType: _getContentType(filePath),
 		};
 
 		s3.upload(params, function (err, data) {
@@ -65,8 +60,6 @@ function _uploadFile(filePath, remoteFilePath) {
 		});
 	});
 }
-
-
 
 function _throwMissingEnvVariablesError() {
 	throw new Error('You must provide env. variables: [S3_BUCKET, S3_KEY, S3_SECRET]');
@@ -81,7 +74,7 @@ function _throwReadFileError(filePath) {
 
 	\x1b[0m`;
 
-	throw Error(ERR_FILE_NOT_FOUND)
+	throw Error(ERR_FILE_NOT_FOUND);
 }
 
 function _throwUploadError(err, fileName) {
@@ -93,9 +86,8 @@ function _throwUploadError(err, fileName) {
 
 		\x1b[0m`;
 
-	throw Error(ERR_UPLOAD_FILE_FAILED)
+	throw Error(ERR_UPLOAD_FILE_FAILED);
 }
-
 
 function _getContentType(filename) {
 	switch (filename.split('.').pop()) {
@@ -114,7 +106,6 @@ function _getContentType(filename) {
 		case 'icon':
 			return 'image/x-icon';
 		default:
-			return 'application/octet-stream'
+			return 'application/octet-stream';
 	}
-
 }
