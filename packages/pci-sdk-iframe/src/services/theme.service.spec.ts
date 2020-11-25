@@ -50,7 +50,7 @@ const dummy_style_with_theme: ITheme = {
 	},
 	cvv: {
 		fontSize: '24px',
-	}
+	},
 };
 
 const dummy_style_default_theme_extended: ITheme = {
@@ -70,7 +70,7 @@ const dummy_style_default_theme_extended: ITheme = {
 		opacity: 1,
 	},
 	groups: {
-		marginTop: '3.53vw' //'12px'
+		marginTop: '3.53vw', //'12px'
 	},
 	groupName: {
 		order: 2,
@@ -80,7 +80,7 @@ const dummy_style_default_theme_extended: ITheme = {
 	groupPan: {
 		order: 1,
 		width: '100%',
-		marginBottom: '3.53vw' //'12px'
+		marginBottom: '3.53vw', //'12px'
 	},
 	groupCvv: {
 		order: 4,
@@ -112,6 +112,5 @@ const dummy_style_default_theme_extended: ITheme = {
 	},
 	cvv: {
 		fontSize: '24px',
-	}
+	},
 };
-

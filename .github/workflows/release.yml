@@ -8,7 +8,7 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     env:
-      AWS_REGION: 'us-west-1'
+      AWS_REGION: "us-west-1"
       S3_BUCKET: ${{ secrets.S3_BUCKET }}
       S3_KEY: ${{ secrets.S3_KEY }}
       S3_SECRET: ${{ secrets.S3_SECRET }}
@@ -24,7 +24,7 @@ jobs:
 
       - uses: oleksiyrudenko/gha-git-credentials@v1
         with:
-          token: '${{ secrets.GITHUB_TOKEN }}'
+          token: "${{ secrets.GITHUB_TOKEN }}"
 
       - run: echo //registry.npmjs.org/:_authToken=${NPM_TOKEN} > .npmrc
 

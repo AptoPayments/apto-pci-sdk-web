@@ -3,11 +3,10 @@ import React from 'react';
 import { stubJSONResponse, stubMultipleJSONRespones, stubPendingResponse } from '../../fetchStub';
 import App from './App';
 
-
 describe('<App />', () => {
 	beforeAll(() => {
 		jest.spyOn(window, 'alert').mockImplementation(jest.fn());
-		global.prompt = jest.fn().mockImplementation(isFirstAttempt => isFirstAttempt ? '123456' : '654321');
+		global.prompt = jest.fn().mockImplementation((isFirstAttempt) => (isFirstAttempt ? '123456' : '654321'));
 	});
 
 	afterEach(jest.clearAllMocks);
@@ -77,14 +76,17 @@ describe('<App />', () => {
 
 				expect(screen.queryByText('custom_labelName')).not.toBeVisible();
 
-				fireEvent(window, new MessageEvent('message', {
-					data: JSON.stringify({
-						type: 'setStyle',
-						style: {
-							labels: { display: 'block' }
-						}
+				fireEvent(
+					window,
+					new MessageEvent('message', {
+						data: JSON.stringify({
+							type: 'setStyle',
+							style: {
+								labels: { display: 'block' },
+							},
+						}),
 					})
-				}));
+				);
 
 				expect(await screen.findByText('custom_labelName')).toBeVisible();
 			});
@@ -95,14 +97,17 @@ describe('<App />', () => {
 
 				expect(screen.queryByText('Name')).not.toBeVisible();
 
-				fireEvent(window, new MessageEvent('message', {
-					data: JSON.stringify({
-						type: 'setStyle',
-						style: {
-							labels: { display: 'block' }
-						}
+				fireEvent(
+					window,
+					new MessageEvent('message', {
+						data: JSON.stringify({
+							type: 'setStyle',
+							style: {
+								labels: { display: 'block' },
+							},
+						}),
 					})
-				}));
+				);
 
 				expect(await screen.findByText('Name')).toBeVisible();
 			});
@@ -113,14 +118,17 @@ describe('<App />', () => {
 
 				expect(screen.queryByText('custom_labelPan')).not.toBeVisible();
 
-				fireEvent(window, new MessageEvent('message', {
-					data: JSON.stringify({
-						type: 'setStyle',
-						style: {
-							labels: { display: 'block' }
-						}
+				fireEvent(
+					window,
+					new MessageEvent('message', {
+						data: JSON.stringify({
+							type: 'setStyle',
+							style: {
+								labels: { display: 'block' },
+							},
+						}),
 					})
-				}));
+				);
 
 				expect(await screen.findByText('custom_labelPan')).toBeVisible();
 			});
@@ -131,14 +139,17 @@ describe('<App />', () => {
 
 				expect(screen.queryByText('Card number')).not.toBeVisible();
 
-				fireEvent(window, new MessageEvent('message', {
-					data: JSON.stringify({
-						type: 'setStyle',
-						style: {
-							labels: { display: 'block' }
-						}
+				fireEvent(
+					window,
+					new MessageEvent('message', {
+						data: JSON.stringify({
+							type: 'setStyle',
+							style: {
+								labels: { display: 'block' },
+							},
+						}),
 					})
-				}));
+				);
 
 				expect(await screen.findByText('Card number')).toBeVisible();
 			});
@@ -150,25 +161,37 @@ describe('<App />', () => {
 				stubMultipleJSONRespones([
 					{ httpStatus: 400, body: {} },
 					{ httpStatus: 200, body: dummyRequest2FACodeResponse },
-					{ httpStatus: 200, body: getDummyverify2FACodeResponse('expired') }
+					{ httpStatus: 200, body: getDummyverify2FACodeResponse('expired') },
 				]);
 
-				fireEvent(window, new MessageEvent('message', { data: JSON.stringify({ type: 'showCardData' }) }));
+				fireEvent(
+					window,
+					new MessageEvent('message', {
+						data: JSON.stringify({ type: 'showCardData' }),
+					})
+				);
 
 				await waitFor(() => expect(window.alert).toHaveBeenCalledWith('custom_expiredMessage'));
 			});
 
 			it('should show custom tooManyAttemptsMessage for 2FA when provided', async () => {
-				addUrlParams({ tooManyAttemptsMessage: 'custom_tooManyAttemptsMessage' });
+				addUrlParams({
+					tooManyAttemptsMessage: 'custom_tooManyAttemptsMessage',
+				});
 				render(<App />);
 
 				stubMultipleJSONRespones([
 					{ httpStatus: 400, body: {} },
 					{ httpStatus: 200, body: dummyRequest2FACodeResponse },
-					{ httpStatus: 200, body: getDummyverify2FACodeResponse('failed') }
+					{ httpStatus: 200, body: getDummyverify2FACodeResponse('failed') },
 				]);
 
-				fireEvent(window, new MessageEvent('message', { data: JSON.stringify({ type: 'showCardData' }) }));
+				fireEvent(
+					window,
+					new MessageEvent('message', {
+						data: JSON.stringify({ type: 'showCardData' }),
+					})
+				);
 
 				await waitFor(() => expect(window.alert).toHaveBeenCalledWith('custom_tooManyAttemptsMessage'));
 			});
@@ -185,16 +208,22 @@ describe('<App />', () => {
 			const spy = stubPendingResponse();
 			expect(spy).not.toHaveBeenCalled();
 
-			fireEvent(window, new MessageEvent('message', { data: JSON.stringify({ type: 'showCardData' }) }));
-			expect(spy).toHaveBeenNthCalledWith(
-				1,
-				expect.stringContaining('dummy_cardId/details'),
-				{
-					'body': null,
-					'headers': { 'Accept': 'application/json', 'Api-Key': 'Bearer null', 'Authorization': 'Bearer null', 'Content-Type': 'application/json' },
-					'method': 'GET'
-				}
+			fireEvent(
+				window,
+				new MessageEvent('message', {
+					data: JSON.stringify({ type: 'showCardData' }),
+				})
 			);
+			expect(spy).toHaveBeenNthCalledWith(1, expect.stringContaining('dummy_cardId/details'), {
+				body: null,
+				headers: {
+					Accept: 'application/json',
+					'Api-Key': 'Bearer null',
+					Authorization: 'Bearer null',
+					'Content-Type': 'application/json',
+				},
+				method: 'GET',
+			});
 		});
 
 		it('should show the previous app state while the getCardData request is pending', () => {
@@ -203,7 +232,12 @@ describe('<App />', () => {
 			const spy = stubPendingResponse();
 			expect(spy).not.toHaveBeenCalled();
 
-			fireEvent(window, new MessageEvent('message', { data: JSON.stringify({ type: 'showCardData' }) }));
+			fireEvent(
+				window,
+				new MessageEvent('message', {
+					data: JSON.stringify({ type: 'showCardData' }),
+				})
+			);
 			expect(spy).toHaveBeenCalled();
 			expect(screen.queryByText('•••• •••• •••• ••••')).toBeVisible();
 		});
@@ -212,7 +246,12 @@ describe('<App />', () => {
 			expect(screen.queryByText('•••• •••• •••• ••••')).toBeVisible();
 
 			stubJSONResponse(dummyGetCardDataResponse);
-			fireEvent(window, new MessageEvent('message', { data: JSON.stringify({ type: 'showCardData' }) }));
+			fireEvent(
+				window,
+				new MessageEvent('message', {
+					data: JSON.stringify({ type: 'showCardData' }),
+				})
+			);
 
 			expect(await screen.findByText('1234 1234 1234 1234')).toBeVisible();
 			expect(await screen.findByText('08/23')).toBeVisible();
@@ -225,7 +264,12 @@ describe('<App />', () => {
 			const spy = jest.spyOn(global, 'fetch');
 
 			stubJSONResponse(dummyGetCardDataResponse);
-			fireEvent(window, new MessageEvent('message', { data: JSON.stringify({ type: 'showCardData' }) }));
+			fireEvent(
+				window,
+				new MessageEvent('message', {
+					data: JSON.stringify({ type: 'showCardData' }),
+				})
+			);
 
 			await waitFor(() => expect(spy).toHaveBeenCalledTimes(1));
 			expect(spy).not.toHaveBeenCalledTimes(2);
@@ -237,19 +281,27 @@ describe('<App />', () => {
 
 				stubMultipleJSONRespones([
 					{ httpStatus: 400, body: {} },
-					{ httpStatus: 400, body: {} }
+					{ httpStatus: 400, body: {} },
 				]);
-				fireEvent(window, new MessageEvent('message', { data: JSON.stringify({ type: 'showCardData' }) }));
+				fireEvent(
+					window,
+					new MessageEvent('message', {
+						data: JSON.stringify({ type: 'showCardData' }),
+					})
+				);
 
-				await waitFor(() => expect(spy).toHaveBeenNthCalledWith(
-					2,
-					expect.stringContaining('verifications/primary/start'),
-					{
-						'body': JSON.stringify({ show_verification_secret: true }),
-						'headers': { 'Accept': 'application/json', 'Api-Key': 'Bearer null', 'Authorization': 'Bearer null', 'Content-Type': 'application/json' },
-						'method': 'POST'
-					}
-				));
+				await waitFor(() =>
+					expect(spy).toHaveBeenNthCalledWith(2, expect.stringContaining('verifications/primary/start'), {
+						body: JSON.stringify({ show_verification_secret: true }),
+						headers: {
+							Accept: 'application/json',
+							'Api-Key': 'Bearer null',
+							Authorization: 'Bearer null',
+							'Content-Type': 'application/json',
+						},
+						method: 'POST',
+					})
+				);
 			});
 
 			it('should have called fetch only twice and still show hidden data if request2FACode fails', async () => {
@@ -257,9 +309,14 @@ describe('<App />', () => {
 
 				stubMultipleJSONRespones([
 					{ httpStatus: 400, body: {} },
-					{ httpStatus: 400, body: {} }
+					{ httpStatus: 400, body: {} },
 				]);
-				fireEvent(window, new MessageEvent('message', { data: JSON.stringify({ type: 'showCardData' }) }));
+				fireEvent(
+					window,
+					new MessageEvent('message', {
+						data: JSON.stringify({ type: 'showCardData' }),
+					})
+				);
 
 				await waitFor(() => expect(spy).toHaveBeenCalledTimes(2));
 				expect(spy).not.toHaveBeenCalledTimes(3);
@@ -273,20 +330,32 @@ describe('<App />', () => {
 					stubMultipleJSONRespones([
 						{ httpStatus: 400, body: {} },
 						{ httpStatus: 200, body: dummyRequest2FACodeResponse },
-						{ httpStatus: 400, body: {} }
+						{ httpStatus: 400, body: {} },
 					]);
 
-					fireEvent(window, new MessageEvent('message', { data: JSON.stringify({ type: 'showCardData' }) }));
+					fireEvent(
+						window,
+						new MessageEvent('message', {
+							data: JSON.stringify({ type: 'showCardData' }),
+						})
+					);
 
-					await waitFor(() => expect(spy).toHaveBeenNthCalledWith(
-						3,
-						expect.stringContaining('verifications/dummy_verification_id/finish'),
-						{
-							'body': JSON.stringify({ secret: '123456' }),
-							'headers': { 'Accept': 'application/json', 'Api-Key': 'Bearer null', 'Authorization': 'Bearer null', 'Content-Type': 'application/json' },
-							'method': 'POST'
-						}
-					));
+					await waitFor(() =>
+						expect(spy).toHaveBeenNthCalledWith(
+							3,
+							expect.stringContaining('verifications/dummy_verification_id/finish'),
+							{
+								body: JSON.stringify({ secret: '123456' }),
+								headers: {
+									Accept: 'application/json',
+									'Api-Key': 'Bearer null',
+									Authorization: 'Bearer null',
+									'Content-Type': 'application/json',
+								},
+								method: 'POST',
+							}
+						)
+					);
 				});
 
 				it('should fail to show the data after three calls to fetch if verification fails', async () => {
@@ -295,10 +364,15 @@ describe('<App />', () => {
 					stubMultipleJSONRespones([
 						{ httpStatus: 400, body: {} },
 						{ httpStatus: 200, body: dummyRequest2FACodeResponse },
-						{ httpStatus: 400, body: {} }
+						{ httpStatus: 400, body: {} },
 					]);
 
-					fireEvent(window, new MessageEvent('message', { data: JSON.stringify({ type: 'showCardData' }) }));
+					fireEvent(
+						window,
+						new MessageEvent('message', {
+							data: JSON.stringify({ type: 'showCardData' }),
+						})
+					);
 
 					await waitFor(() => expect(spy).toHaveBeenCalledTimes(3));
 					expect(spy).not.toHaveBeenCalledTimes(4);
@@ -311,10 +385,15 @@ describe('<App />', () => {
 					stubMultipleJSONRespones([
 						{ httpStatus: 400, body: {} },
 						{ httpStatus: 200, body: dummyRequest2FACodeResponse },
-						{ httpStatus: 200, body: getDummyverify2FACodeResponse('expired') }
+						{ httpStatus: 200, body: getDummyverify2FACodeResponse('expired') },
 					]);
 
-					fireEvent(window, new MessageEvent('message', { data: JSON.stringify({ type: 'showCardData' }) }));
+					fireEvent(
+						window,
+						new MessageEvent('message', {
+							data: JSON.stringify({ type: 'showCardData' }),
+						})
+					);
 
 					await waitFor(() => expect(window.alert).toHaveBeenCalledWith('Process expired. Start again.'));
 				});
@@ -325,10 +404,15 @@ describe('<App />', () => {
 					stubMultipleJSONRespones([
 						{ httpStatus: 400, body: {} },
 						{ httpStatus: 200, body: dummyRequest2FACodeResponse },
-						{ httpStatus: 200, body: getDummyverify2FACodeResponse('failed') }
+						{ httpStatus: 200, body: getDummyverify2FACodeResponse('failed') },
 					]);
 
-					fireEvent(window, new MessageEvent('message', { data: JSON.stringify({ type: 'showCardData' }) }));
+					fireEvent(
+						window,
+						new MessageEvent('message', {
+							data: JSON.stringify({ type: 'showCardData' }),
+						})
+					);
 
 					await waitFor(() => expect(window.alert).toHaveBeenCalledWith('Too many attempts, try again.'));
 				});
@@ -343,17 +427,29 @@ describe('<App />', () => {
 						{ httpStatus: 400, body: {} },
 					]);
 
-					fireEvent(window, new MessageEvent('message', { data: JSON.stringify({ type: 'showCardData' }) }));
+					fireEvent(
+						window,
+						new MessageEvent('message', {
+							data: JSON.stringify({ type: 'showCardData' }),
+						})
+					);
 
-					await waitFor(() => expect(spy).toHaveBeenNthCalledWith(
-						4,
-						expect.stringContaining('verifications/dummy_verification_id/finish'),
-						{
-							'body': JSON.stringify({ secret: '123456' }),
-							'headers': { 'Accept': 'application/json', 'Api-Key': 'Bearer null', 'Authorization': 'Bearer null', 'Content-Type': 'application/json' },
-							'method': 'POST'
-						}
-					));
+					await waitFor(() =>
+						expect(spy).toHaveBeenNthCalledWith(
+							4,
+							expect.stringContaining('verifications/dummy_verification_id/finish'),
+							{
+								body: JSON.stringify({ secret: '123456' }),
+								headers: {
+									Accept: 'application/json',
+									'Api-Key': 'Bearer null',
+									Authorization: 'Bearer null',
+									'Content-Type': 'application/json',
+								},
+								method: 'POST',
+							}
+						)
+					);
 				});
 
 				describe('when verify2FA succeeds and we call getCardData again', () => {
@@ -363,21 +459,35 @@ describe('<App />', () => {
 						stubMultipleJSONRespones([
 							{ httpStatus: 400, body: {} },
 							{ httpStatus: 200, body: dummyRequest2FACodeResponse },
-							{ httpStatus: 200, body: getDummyverify2FACodeResponse('passed') },
+							{
+								httpStatus: 200,
+								body: getDummyverify2FACodeResponse('passed'),
+							},
 							{ httpStatus: 400, body: {} },
 						]);
 
-						fireEvent(window, new MessageEvent('message', { data: JSON.stringify({ type: 'showCardData' }) }));
+						fireEvent(
+							window,
+							new MessageEvent('message', {
+								data: JSON.stringify({ type: 'showCardData' }),
+							})
+						);
 
-						await waitFor(() => expect(spy).toHaveBeenNthCalledWith(
-							4,
-							expect.stringContaining('dummy_cardId/details'),
-							{
-								'body': JSON.stringify({ secret: '123456', verification_id: 'dummy_verification_id' }),
-								'headers': { 'Accept': 'application/json', 'Api-Key': 'Bearer null', 'Authorization': 'Bearer null', 'Content-Type': 'application/json' },
-								'method': 'POST'
-							}
-						));
+						await waitFor(() =>
+							expect(spy).toHaveBeenNthCalledWith(4, expect.stringContaining('dummy_cardId/details'), {
+								body: JSON.stringify({
+									secret: '123456',
+									verification_id: 'dummy_verification_id',
+								}),
+								headers: {
+									Accept: 'application/json',
+									'Api-Key': 'Bearer null',
+									Authorization: 'Bearer null',
+									'Content-Type': 'application/json',
+								},
+								method: 'POST',
+							})
+						);
 					});
 
 					it('should fail after four fetch requests if second getCardData attempt fails', async () => {
@@ -386,11 +496,19 @@ describe('<App />', () => {
 						stubMultipleJSONRespones([
 							{ httpStatus: 400, body: {} },
 							{ httpStatus: 200, body: dummyRequest2FACodeResponse },
-							{ httpStatus: 200, body: getDummyverify2FACodeResponse('passed') },
+							{
+								httpStatus: 200,
+								body: getDummyverify2FACodeResponse('passed'),
+							},
 							{ httpStatus: 400, body: {} },
 						]);
 
-						fireEvent(window, new MessageEvent('message', { data: JSON.stringify({ type: 'showCardData' }) }));
+						fireEvent(
+							window,
+							new MessageEvent('message', {
+								data: JSON.stringify({ type: 'showCardData' }),
+							})
+						);
 
 						await waitFor(() => expect(spy).toHaveBeenCalledTimes(4));
 						expect(spy).not.toHaveBeenCalledTimes(5);
@@ -402,11 +520,19 @@ describe('<App />', () => {
 						stubMultipleJSONRespones([
 							{ httpStatus: 400, body: {} },
 							{ httpStatus: 200, body: dummyRequest2FACodeResponse },
-							{ httpStatus: 200, body: getDummyverify2FACodeResponse('passed') },
+							{
+								httpStatus: 200,
+								body: getDummyverify2FACodeResponse('passed'),
+							},
 							{ httpStatus: 200, body: dummyGetCardDataResponse },
 						]);
 
-						fireEvent(window, new MessageEvent('message', { data: JSON.stringify({ type: 'showCardData' }) }));
+						fireEvent(
+							window,
+							new MessageEvent('message', {
+								data: JSON.stringify({ type: 'showCardData' }),
+							})
+						);
 
 						expect(await screen.findByText('1234 1234 1234 1234')).toBeVisible();
 						expect(await screen.queryByText('•••• •••• •••• ••••')).toBeNull();
@@ -422,12 +548,22 @@ describe('<App />', () => {
 			render(<App />);
 
 			stubJSONResponse(dummyGetCardDataResponse);
-			fireEvent(window, new MessageEvent('message', { data: JSON.stringify({ type: 'showCardData' }) }));
+			fireEvent(
+				window,
+				new MessageEvent('message', {
+					data: JSON.stringify({ type: 'showCardData' }),
+				})
+			);
 
 			expect(await screen.findByText('1234 1234 1234 1234')).toBeVisible();
 			expect(await screen.queryByText('•••• •••• •••• 1234')).toBeNull();
 
-			fireEvent(window, new MessageEvent('message', { data: JSON.stringify({ type: 'hideCardData' }) }));
+			fireEvent(
+				window,
+				new MessageEvent('message', {
+					data: JSON.stringify({ type: 'hideCardData' }),
+				})
+			);
 			expect(await screen.queryByText('1234 1234 1234 1234')).toBeNull();
 			expect(await screen.findByText('•••• •••• •••• 1234')).toBeVisible();
 		});
@@ -438,14 +574,17 @@ describe('<App />', () => {
 			addUrlParams();
 			render(<App />);
 
-			fireEvent(window, new MessageEvent('message', {
-				data: JSON.stringify({
-					type: 'setStyle',
-					style: {
-						labels: { color: 'blue' }
-					}
+			fireEvent(
+				window,
+				new MessageEvent('message', {
+					data: JSON.stringify({
+						type: 'setStyle',
+						style: {
+							labels: { color: 'blue' },
+						},
+					}),
 				})
-			}));
+			);
 
 			expect(screen.queryByText('Card number')).toHaveStyle('color: blue');
 		});
@@ -458,9 +597,12 @@ describe('<App />', () => {
 
 			expect(container.firstChild).toHaveStyle('color: black');
 
-			fireEvent(window, new MessageEvent('message', {
-				data: JSON.stringify({ type: 'setTheme', theme: 'dark' })
-			}));
+			fireEvent(
+				window,
+				new MessageEvent('message', {
+					data: JSON.stringify({ type: 'setTheme', theme: 'dark' }),
+				})
+			);
 
 			expect(container.firstChild).toHaveStyle('color: white');
 		});
@@ -482,21 +624,21 @@ function getUrl(customParams: Record<string, any>) {
 }
 
 const dummyGetCardDataResponse = {
-	'card_id': 'dummy_cardId',
-	'expiration': '2023-08',
-	'cvv': '123',
-	'pan': '1234123412341234'
+	card_id: 'dummy_cardId',
+	expiration: '2023-08',
+	cvv: '123',
+	pan: '1234123412341234',
 };
 
 const dummyRequest2FACodeResponse = {
-	'verification_id': 'dummy_verification_id',
-	'status': 'dummy_status',
-	'verification_type': 'dummy_verification_type',
+	verification_id: 'dummy_verification_id',
+	status: 'dummy_status',
+	verification_type: 'dummy_verification_type',
 };
 
 function getDummyverify2FACodeResponse(status: string) {
 	return {
-		'verification_id': 'dummy_verification_id',
-		'status': status,
+		verification_id: 'dummy_verification_id',
+		status: status,
 	};
 }

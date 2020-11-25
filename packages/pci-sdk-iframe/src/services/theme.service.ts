@@ -1,6 +1,5 @@
-import {ITheme } from '../types/IThemes';
 import themes, { IThemeName } from '../pages/app/themes/index';
-
+import { ITheme } from '../types/IThemes';
 
 function extendTheme(styles: ITheme) {
 	const theme = _getTheme(styles);

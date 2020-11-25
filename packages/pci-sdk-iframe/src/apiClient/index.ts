@@ -2,12 +2,11 @@ import formatterService from '../services/formatter.service';
 
 const urlParams = new URLSearchParams(window.location.search);
 const headers = {
-	'Authorization': `Bearer ${urlParams.get('userToken')}`,
+	Authorization: `Bearer ${urlParams.get('userToken')}`,
 	'Api-Key': `Bearer ${urlParams.get('apiKey')}`,
 	'Content-Type': 'application/json',
-	'Accept': 'application/json',
+	Accept: 'application/json',
 };
-
 
 export const BASE_URL = _getBaseUrl();
 export const VAULT_BASE_URL = _getVaultBaseUrl();
@@ -24,7 +23,7 @@ export async function request2FACode(): Promise<IRequest2FACodeResponse> {
 		headers,
 		body: JSON.stringify({ show_verification_secret: true }),
 	})
-		.then(res => {
+		.then((res) => {
 			switch (res.status) {
 				case 200:
 					return res.json();
@@ -32,8 +31,12 @@ export async function request2FACode(): Promise<IRequest2FACodeResponse> {
 					throw Error(res.status.toString());
 			}
 		})
-		.then(data => {
-			return { verificationId: data.verification_id, status: data.status, verificationType: data.verification_type };
+		.then((data) => {
+			return {
+				verificationId: data.verification_id,
+				status: data.status,
+				verificationType: data.verification_type,
+			};
 		});
 }
 
@@ -50,7 +53,7 @@ export async function verify2FACode(secret: string, verificationId: string): Pro
 		headers,
 		body: JSON.stringify({ secret }),
 	})
-		.then(res => {
+		.then((res) => {
 			switch (res.status) {
 				case 200:
 					return res.json();
@@ -58,7 +61,7 @@ export async function verify2FACode(secret: string, verificationId: string): Pro
 					throw Error(res.status.toString());
 			}
 		})
-		.then(res => {
+		.then((res) => {
 			return {
 				verificationId: res.verification_id,
 				status: res.status,
@@ -73,12 +76,24 @@ interface IGetCardDataResponse {
 	cvv: string;
 }
 
-export async function getCardData(cardId: string, auth?: { secret: string, verificationId: string }): Promise<IGetCardDataResponse> {
+export async function getCardData(
+	cardId: string,
+	auth?: { secret: string; verificationId: string }
+): Promise<IGetCardDataResponse> {
 	const method = !auth ? 'GET' : 'POST';
-	const body = !auth ? null : JSON.stringify({ secret: auth.secret, verification_id: auth.verificationId });
+	const body = !auth
+		? null
+		: JSON.stringify({
+				secret: auth.secret,
+				verification_id: auth.verificationId,
+		  });
 
-	return fetch(`${VAULT_BASE_URL}v1/user/accounts/${cardId}/details`, { method, headers, body })
-		.then(res => {
+	return fetch(`${VAULT_BASE_URL}v1/user/accounts/${cardId}/details`, {
+		method,
+		headers,
+		body,
+	})
+		.then((res) => {
 			// TODO: Handle different errros better
 			switch (res.status) {
 				case 200:
@@ -87,14 +102,13 @@ export async function getCardData(cardId: string, auth?: { secret: string, verif
 					throw Error(res.status.toString());
 			}
 		})
-		.then(data => ({
+		.then((data) => ({
 			cardId: data.card_id,
 			exp: formatterService.formatExpirationDate(data.expiration),
 			cvv: data.cvv,
 			pan: formatterService.formatPan(data.pan),
 		}));
 }
-
 
 function _getBaseUrl() {
 	switch (urlParams.get('environment')?.toLowerCase()) {
@@ -117,7 +131,6 @@ function _getVaultBaseUrl() {
 			return 'https://vault.aptopayments.com/';
 	}
 }
-
 
 export default {
 	verify2FACode,

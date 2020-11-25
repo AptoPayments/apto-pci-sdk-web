@@ -1,17 +1,17 @@
 const webpack = require('webpack');
-const path = require("path");
+const path = require('path');
 
 module.exports = (env, argv) => {
 	return {
 		entry: {
-			index: path.resolve(__dirname, "./src/index.ts")
+			index: path.resolve(__dirname, './src/index.ts'),
 		},
 		output: {
-			path: path.resolve(__dirname, "./dist/umd"), // builds to ./dist/umd/
-			filename: "apto-pci-sdk.js", // index.js
-			library: "AptoPCISdk", // aka window.myLibrary
-			libraryTarget: "umd", // supports commonjs, amd and web browsers
-			globalObject: "this"
+			path: path.resolve(__dirname, './dist/umd'), // builds to ./dist/umd/
+			filename: 'apto-pci-sdk.js', // index.js
+			library: 'AptoPCISdk', // aka window.myLibrary
+			libraryTarget: 'umd', // supports commonjs, amd and web browsers
+			globalObject: 'this',
 		},
 		module: {
 			rules: [
@@ -20,7 +20,7 @@ module.exports = (env, argv) => {
 					loader: 'ts-loader',
 					exclude: /node_modules/,
 					options: {
-						configFile: 'tsconfig.esm.json'
+						configFile: 'tsconfig.esm.json',
 					},
 				},
 			],
@@ -33,6 +33,6 @@ module.exports = (env, argv) => {
 			new webpack.DefinePlugin({
 				'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
 			}),
-		]
+		],
 	};
 };
