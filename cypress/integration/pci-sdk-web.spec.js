@@ -1,105 +1,104 @@
-/// <reference types="Cypress" />
+/// <reference types='Cypress' />
 
-describe("AptoPCISdk", () => {
+describe('AptoPCISdk', () => {
 	let dummyAuthData;
 	before(() => {
 		dummyAuthData = {
-			cardId: Cypress.env("CARD_ID"),
-			apiKey: Cypress.env("API_KEY"),
-			userToken: Cypress.env("USER_TOKEN"),
-			environment: Cypress.env("ENVIRONMENT"),
+			cardId: Cypress.env('CARD_ID'),
+			apiKey: Cypress.env('API_KEY'),
+			userToken: Cypress.env('USER_TOKEN'),
+			environment: Cypress.env('ENVIRONMENT'),
 		};
-		cy.visit("http://localhost:8080/test.html");
+		cy.visit('http://localhost:8080/test.html');
 	});
 
 	beforeEach(() => {
 		cy.reload();
 	});
 
-	describe("AptoPCISdk.init", () => {
-		it("should render the card inside the iframe when init is called", () => {
+	describe('AptoPCISdk.init', () => {
+		it('should render the card inside the iframe when init is called', () => {
 			cy.getAptoPCISdk(async function (AptoPCISdk) {
 				await AptoPCISdk.init({
 					auth: dummyAuthData,
-					values: { nameOnCard: "Matias Calvo" },
+					values: { nameOnCard: 'Matias Calvo' },
 				});
-				cy.getAptoIframe().find("#name").should("include.text", "Matias Calvo");
+				cy.getAptoIframe().find('#name').should('include.text', 'Matias Calvo');
 			});
 		});
 
-		it("should set the theme when specified", () => {
+		it('should set the theme when specified', () => {
 			cy.getAptoPCISdk(async function (AptoPCISdk) {
 				await AptoPCISdk.init({
 					auth: dummyAuthData,
-					theme: "dark",
+					theme: 'dark',
 				});
 				cy.getAptoIframe()
-					.find("#name")
-					.should("have.css", "color", "rgb(255, 255, 255)");
+					.find('#name')
+					.should('have.css', 'color', 'rgb(255, 255, 255)');
 			});
 		});
 
-		it("should allow user to specify target element for iframe", () => {
+		it('should allow user to specify target element for iframe', () => {
 			cy.document().then((doc) => {
 				cy.getAptoPCISdk(async function (AptoPCISdk) {
 					await AptoPCISdk.init({
 						auth: dummyAuthData,
-						element: doc.querySelector(".custom-selector"),
+						element: doc.querySelector('.custom-selector'),
 					});
-					cy.get(".custom-selector").find("iframe").should("be.visible");
+					cy.get('.custom-selector').find('iframe').should('be.visible');
 				});
 			});
 		});
 	});
 
-	describe("AptoPCISdk.setTheme", () => {
-		it("should set text color to white if theme is dark", () => {
+	describe('AptoPCISdk.setTheme', () => {
+		it('should set text color to white if theme is dark', () => {
 			cy.getAptoPCISdk(async function (AptoPCISdk) {
 				await AptoPCISdk.init({
 					auth: dummyAuthData,
-					theme: "light",
+					theme: 'light',
 				});
-				AptoPCISdk.setTheme("dark");
-				cy.wait(250).then(() => {
-					cy.getAptoIframe()
-						.find("#name")
-						.should("have.css", "color", "rgb(255, 255, 255)");
-				});
+				AptoPCISdk.setTheme('dark');
+				await cy.waitForElement('#name')
+				cy.getAptoIframe()
+					.find('#name')
+					.should('have.css', 'color', 'rgb(255, 255, 255)');
 			});
 		});
 
-		it("should set text color to black if theme is light", () => {
+		it('should set text color to black if theme is light', () => {
 			cy.getAptoPCISdk(async function (AptoPCISdk) {
 				await AptoPCISdk.init({
 					auth: dummyAuthData,
-					theme: "dark",
+					theme: 'dark',
 				});
-				AptoPCISdk.setTheme("light");
+				AptoPCISdk.setTheme('light');
 				cy.wait(250).then(() => {
 					cy.getAptoIframe()
-						.find("#name")
-						.should("have.css", "color", "rgb(0, 0, 0)");
+						.find('#name')
+						.should('have.css', 'color', 'rgb(0, 0, 0)');
 				});
 			});
 		});
 	});
 
-	describe("AptoPCISdk.setStyle", () => {
+	xdescribe('AptoPCISdk.setStyle', () => {
 		it('should set the card to custom styles when "extend" keyword is not present', () => {
 			cy.getAptoPCISdk(async function (AptoPCISdk) {
 				await AptoPCISdk.init({
 					auth: dummyAuthData,
 				});
 				AptoPCISdk.setStyle({
-					pan: { color: "blue" },
+					pan: { color: 'blue' },
 				});
 				cy.wait(250).then(() => {
 					cy.getAptoIframe()
-						.find("#pan")
-						.should("have.css", "color", "rgb(0, 0, 255)");
+						.find('#pan')
+						.should('have.css', 'color', 'rgb(0, 0, 255)');
 					cy.getAptoIframe()
-						.find("#container")
-						.should("not.have.css", "display", "flex");
+						.find('#container')
+						.should('not.have.css', 'display', 'flex');
 				});
 			});
 		});
@@ -108,26 +107,26 @@ describe("AptoPCISdk", () => {
 			cy.getAptoPCISdk(async function (AptoPCISdk) {
 				await AptoPCISdk.init({
 					auth: dummyAuthData,
-					theme: "light",
+					theme: 'light',
 				});
 				AptoPCISdk.setStyle({
-					extends: "dark",
-					pan: { color: "blue" },
+					extends: 'dark',
+					pan: { color: 'blue' },
 				});
 				cy.wait(250).then(() => {
 					cy.getAptoIframe()
-						.find("#pan")
-						.should("have.css", "color", "rgb(0, 0, 255)");
+						.find('#pan')
+						.should('have.css', 'color', 'rgb(0, 0, 255)');
 					cy.getAptoIframe()
-						.find("#container")
-						.should("have.css", "display", "flex")
-						.and("have.css", "color", "rgb(255, 255, 255)");
+						.find('#container')
+						.should('have.css', 'display', 'flex')
+						.and('have.css', 'color', 'rgb(255, 255, 255)');
 				});
 			});
 		});
 	});
 
-	// xdescribe('AptoPCISdk.getVisibility', () => {
+	// xxdescribe('AptoPCISdk.getVisibility', () => {
 	// 	it.skip('should return false when the data is not visible', () => {
 	// 		// TODO
 
