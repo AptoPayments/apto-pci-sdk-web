@@ -1,6 +1,6 @@
-// eslint-disable-next-line
 module.exports = {
-	extends: ['eslint:recommended', 'typescript', 'prettier'],
+	// We dont use react but the eslint config is pretty good ;)
+	extends: ['react-app', 'typescript', 'prettier'],
 	ignorePatterns: [
 		// '**/*.stories.tsx',
 	],
