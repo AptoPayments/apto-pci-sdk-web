@@ -1,6 +1,6 @@
 {
 	"name": "@apto-payments/pci-sdk-web",
-	"version": "2.0.0",
+	"version": "2.1.0-alpha.0",
 	"description": "PCI SDK WEB",
 	"main": "./dist/umd/apto-pci-sdk.js",
 	"browser": "./dist/umd/apto-pci-sdk.js",
@@ -21,7 +21,7 @@
 	"author": "Apto dev team",
 	"license": "ISC",
 	"dependencies": {
-		"@apto-payments/pci-sdk-iframe": "^2.0.0"
+		"@apto-payments/pci-sdk-iframe": "^2.1.0-alpha.0"
 	},
 	"devDependencies": {
 		"@testing-library/dom": "^7.28.1",
