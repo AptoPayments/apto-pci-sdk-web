@@ -60,7 +60,7 @@
 	"jest": {
 		"resetMocks": false
 	},
-	"gitHead": "57f483530ff4e7c18c6331510b43dd0bc841ee6d",
+	"gitHead": "486e18fbb08faa275f99ea054026a7bc26ff3fbe",
 	"dependencies": {
 		"react-app-polyfill": "^2.0.0"
 	}
