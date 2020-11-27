@@ -15,7 +15,7 @@
 		"cy:watch": "cypress open",
 		"postinstall": "lerna bootstrap",
 		"publish": "git push --follow-tags origin dev &&  git checkout prd && git merge dev && git push origin prd",
-		"release": "lerna publish --conventional-commits --force-publish --yes --no-verify-access",
+		"xrelease": "lerna publish --conventional-commits --force-publish --yes --no-verify-access",
 		"start": "lerna run start & http-server",
 		"test:e2e:watch": "start-server-and-test start http://localhost:8080 cy:watch",
 		"test:e2e": "start-server-and-test start http://localhost:8080 cy:run",
