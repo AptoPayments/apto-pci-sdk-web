@@ -31,15 +31,6 @@ function _getIframeDocument() {
 	);
 }
 
-Cypress.Commands.add('getAptoPCISdk', getAptoPCISdk);
-
-function getAptoPCISdk(callback) {
-	return cy.window().then(async (win) => {
-		const scopedCallback = callback.bind(this); // This gives us access to fixture data and other stored values via 'this'
-		return scopedCallback(win.AptoPCISdk);
-	});
-}
-
 Cypress.Commands.add('waitForElement', waitForElement);
 
 const POLL_INTERVAL = 200;
