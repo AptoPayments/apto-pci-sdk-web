@@ -1,8 +1,3 @@
-/************************************************
- * For more on custom commands:
- * https://on.cypress.io/custom-commands
- ************************************************/
-
 Cypress.Commands.add('getAptoIframe', getAptoIframe);
 
 function getAptoIframe() {
@@ -29,34 +24,4 @@ function _getIframeDocument() {
 			.its('0.contentDocument')
 			.should('exist')
 	);
-}
-
-Cypress.Commands.add('waitForElement', waitForElement);
-
-const POLL_INTERVAL = 200;
-const MAX_POLL_ATTEMPTS = 300;
-
-function waitForElement(selector) {
-	return new Cypress.Promise((resolve, reject) => {
-		let index = 0;
-
-		const pollForElement = setInterval(() => {
-			const domHasElement = _checkIfElementExists(selector);
-
-			if (domHasElement) {
-				clearInterval(pollForElement);
-				resolve();
-			}
-
-			if (index > MAX_POLL_ATTEMPTS) {
-				reject();
-			}
-
-			index += 1;
-		}, POLL_INTERVAL)
-	});
-}
-
-function _checkIfElementExists(selector) {
-	return Cypress.$(selector).length > 0;
 }
