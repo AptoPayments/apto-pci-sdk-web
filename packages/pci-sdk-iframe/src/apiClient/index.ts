@@ -1,4 +1,5 @@
 import formatterService from '../services/formatter.service';
+import errorMessageParser from './errorMessage.parser';
 
 const urlParams = new URLSearchParams(window.location.search);
 const headers = {
@@ -18,26 +19,28 @@ interface IRequest2FACodeResponse {
 }
 
 export async function request2FACode(): Promise<IRequest2FACodeResponse> {
-	return fetch(`${BASE_URL}v1/verifications/primary/start`, {
+	const res = await fetch(`${BASE_URL}v1/verifications/primary/start`, {
 		method: 'POST',
 		headers,
 		body: JSON.stringify({ show_verification_secret: true }),
-	})
-		.then((res) => {
-			switch (res.status) {
-				case 200:
-					return res.json();
-				default:
-					throw Error(res.status.toString());
-			}
-		})
-		.then((data) => {
+	});
+
+	const data = await res.json();
+
+	switch (res.status) {
+		case 200:
 			return {
 				verificationId: data.verification_id,
 				status: data.status,
 				verificationType: data.verification_type,
 			};
-		});
+		case 401:
+			throw new Error(errorMessageParser.parse401(data.code, data.message));
+		case 400:
+			throw new Error(errorMessageParser.parse400());
+		default:
+			throw new Error(errorMessageParser.parseUnknownError());
+	}
 }
 
 interface IVerify2FACodeResponse {
@@ -48,25 +51,27 @@ interface IVerify2FACodeResponse {
 export async function verify2FACode(secret: string, verificationId: string): Promise<IVerify2FACodeResponse> {
 	secret = formatterService.sanitize2FACode(secret);
 
-	return fetch(`${BASE_URL}v1/verifications/${verificationId}/finish`, {
+	const res = await fetch(`${BASE_URL}v1/verifications/${verificationId}/finish`, {
 		method: 'POST',
 		headers,
 		body: JSON.stringify({ secret }),
-	})
-		.then((res) => {
-			switch (res.status) {
-				case 200:
-					return res.json();
-				default:
-					throw Error(res.status.toString());
-			}
-		})
-		.then((res) => {
+	});
+
+	const data = await res.json();
+
+	switch (res.status) {
+		case 200:
 			return {
-				verificationId: res.verification_id,
-				status: res.status,
+				verificationId: data.verification_id,
+				status: data.status,
 			};
-		});
+		case 401:
+			throw new Error(errorMessageParser.parse401(data.code, data.message));
+		case 400:
+			throw new Error(errorMessageParser.parse400());
+		default:
+			throw new Error(errorMessageParser.parseUnknownError());
+	}
 }
 
 interface IGetCardDataResponse {
@@ -88,26 +93,33 @@ export async function getCardData(
 				verification_id: auth.verificationId,
 		  });
 
-	return fetch(`${VAULT_BASE_URL}v1/user/accounts/${cardId}/details`, {
+	const res = await fetch(`${VAULT_BASE_URL}v1/user/accounts/${cardId}/details`, {
 		method,
 		headers,
 		body,
-	})
-		.then((res) => {
-			// TODO: Handle different errros better
-			switch (res.status) {
-				case 200:
-					return res.json();
-				default:
-					throw Error(res.status.toString());
-			}
-		})
-		.then((data) => ({
-			cardId: data.card_id,
-			exp: formatterService.formatExpirationDate(data.expiration),
-			cvv: data.cvv,
-			pan: formatterService.formatPan(data.pan),
-		}));
+	});
+
+	const data = await res.json();
+
+	switch (res.status) {
+		case 200:
+			return {
+				cardId: data.card_id,
+				exp: formatterService.formatExpirationDate(data.expiration),
+				cvv: data.cvv,
+				pan: formatterService.formatPan(data.pan),
+			};
+		case 401:
+			throw new Error(errorMessageParser.parse401(data.code, data.message));
+		case 400:
+			throw new Error(
+				errorMessageParser.parse400(
+					'Invalid request. Are you sure the cardID is correct? http://docs.aptopayments.com/docs/pci-sdk-web/#optionsobject-properties'
+				)
+			);
+		default:
+			throw new Error(errorMessageParser.parseUnknownError());
+	}
 }
 
 function _getBaseUrl() {
