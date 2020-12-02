@@ -1,4 +1,4 @@
-/// <reference types="Cypress" />
+/// <reference types='Cypress' />
 
 describe("AptoPCISdk", () => {
 	let dummyAuthData;
@@ -16,147 +16,184 @@ describe("AptoPCISdk", () => {
 		cy.reload();
 	});
 
-	describe("AptoPCISdk.init", () => {
+	describe(".init", () => {
 		it("should render the card inside the iframe when init is called", () => {
-			cy.getAptoPCISdk(async function (AptoPCISdk) {
+			cy.getPCISdk().then(async (AptoPCISdk) => {
 				await AptoPCISdk.init({
 					auth: dummyAuthData,
 					values: { nameOnCard: "Matias Calvo" },
 				});
+
 				cy.getAptoIframe().find("#name").should("include.text", "Matias Calvo");
 			});
 		});
 
 		it("should set the theme when specified", () => {
-			cy.getAptoPCISdk(async function (AptoPCISdk) {
-				await AptoPCISdk.init({
-					auth: dummyAuthData,
-					theme: "dark",
-				});
+			cy.getPCISdk().then(async (AptoPCISdk) => {
+				await AptoPCISdk.init({ auth: dummyAuthData, theme: "dark" });
+
 				cy.getAptoIframe()
 					.find("#name")
 					.should("have.css", "color", "rgb(255, 255, 255)");
 			});
 		});
 
-		it("should allow user to specify target element for iframe", () => {
-			cy.document().then((doc) => {
-				cy.getAptoPCISdk(async function (AptoPCISdk) {
+		it("should allow user to specify custom selector/element in which to load iframe", () => {
+			cy.getPCISdk().then(async (AptoPCISdk) => {
+				cy.document().then(async (doc) => {
 					await AptoPCISdk.init({
 						auth: dummyAuthData,
 						element: doc.querySelector(".custom-selector"),
 					});
+
 					cy.get(".custom-selector").find("iframe").should("be.visible");
 				});
 			});
 		});
 	});
 
-	describe("AptoPCISdk.setTheme", () => {
+	describe(".setTheme", () => {
 		it("should set text color to white if theme is dark", () => {
-			cy.getAptoPCISdk(async function (AptoPCISdk) {
-				await AptoPCISdk.init({
-					auth: dummyAuthData,
-					theme: "light",
-				});
+			cy.getPCISdk().then(async (AptoPCISdk) => {
+				await AptoPCISdk.init({ auth: dummyAuthData, theme: "light" });
 				AptoPCISdk.setTheme("dark");
-				cy.wait(250).then(() => {
-					cy.getAptoIframe()
-						.find("#name")
-						.should("have.css", "color", "rgb(255, 255, 255)");
-				});
+
+				cy.getAptoIframe()
+					.find("#name")
+					.should("have.css", "color", "rgb(255, 255, 255)");
 			});
 		});
 
 		it("should set text color to black if theme is light", () => {
-			cy.getAptoPCISdk(async function (AptoPCISdk) {
-				await AptoPCISdk.init({
-					auth: dummyAuthData,
-					theme: "dark",
-				});
+			cy.getPCISdk().then(async (AptoPCISdk) => {
+				await AptoPCISdk.init({ auth: dummyAuthData, theme: "dark" });
 				AptoPCISdk.setTheme("light");
-				cy.wait(250).then(() => {
-					cy.getAptoIframe()
-						.find("#name")
-						.should("have.css", "color", "rgb(0, 0, 0)");
-				});
+
+				cy.getAptoIframe()
+					.find("#name")
+					.should("have.css", "color", "rgb(0, 0, 0)");
 			});
 		});
 	});
 
-	describe("AptoPCISdk.setStyle", () => {
+	describe(".setStyle", () => {
 		it('should set the card to custom styles when "extend" keyword is not present', () => {
-			cy.getAptoPCISdk(async function (AptoPCISdk) {
-				await AptoPCISdk.init({
-					auth: dummyAuthData,
-				});
-				AptoPCISdk.setStyle({
-					pan: { color: "blue" },
-				});
-				cy.wait(250).then(() => {
-					cy.getAptoIframe()
-						.find("#pan")
-						.should("have.css", "color", "rgb(0, 0, 255)");
-					cy.getAptoIframe()
-						.find("#container")
-						.should("not.have.css", "display", "flex");
-				});
+			cy.getPCISdk().then(async (AptoPCISdk) => {
+				await AptoPCISdk.init({ auth: dummyAuthData });
+				AptoPCISdk.setStyle({ pan: { color: "blue" } });
+
+				cy.getAptoIframe()
+					.find("#pan")
+					.should("have.css", "color", "rgb(0, 0, 255)");
+
+				cy.getAptoIframe()
+					.find("#container")
+					.should("not.have.css", "display", "flex");
 			});
 		});
 
 		it('should extend the theme with custom styles when "extend" keyword is present', () => {
-			cy.getAptoPCISdk(async function (AptoPCISdk) {
-				await AptoPCISdk.init({
-					auth: dummyAuthData,
-					theme: "light",
-				});
-				AptoPCISdk.setStyle({
-					extends: "dark",
-					pan: { color: "blue" },
-				});
-				cy.wait(250).then(() => {
-					cy.getAptoIframe()
-						.find("#pan")
-						.should("have.css", "color", "rgb(0, 0, 255)");
-					cy.getAptoIframe()
-						.find("#container")
-						.should("have.css", "display", "flex")
-						.and("have.css", "color", "rgb(255, 255, 255)");
-				});
+			cy.getPCISdk().then(async (AptoPCISdk) => {
+				await AptoPCISdk.init({ auth: dummyAuthData, theme: "light" });
+				AptoPCISdk.setStyle({ extends: "dark", pan: { color: "blue" } });
+
+				cy.getAptoIframe()
+					.find("#pan")
+					.should("have.css", "color", "rgb(0, 0, 255)");
+
+				cy.getAptoIframe()
+					.find("#container")
+					.should("have.css", "display", "flex")
+					.and("have.css", "color", "rgb(255, 255, 255)");
 			});
 		});
 	});
 
-	// xdescribe('AptoPCISdk.getVisibility', () => {
-	// 	it.skip('should return false when the data is not visible', () => {
-	// 		// TODO
+	describe(".showPCIData", () => {
+		it("should display the data when showPCIData and the client is PCI compliant", () => {
+			cy.getPCISdk().then(async (AptoPCISdk) => {
+				await AptoPCISdk.init({ auth: dummyAuthData });
+				cy.stubJSONResponse({
+					httpStatus: 200,
+					body: dummyGetCardDataResponse,
+				});
 
-	// 		// We might want to stub server responses to aboid 2FA logic (we assume it's unit tested at iframe-level)
-	// 		// https://docs.cypress.io/guides/guides/network-requests.html#Stub-Responses
+				cy.getAptoIframe()
+					.find("#pan")
+					.should("not.contain", "4242 4242 4242 4242")
+					.then(AptoPCISdk.showPCIData);
 
-	// 		// This would be nice to avoid the extra level of indentantion due the callback.
-	// 		const AptoPCISdk = await cy.getAptoPCISdk();
+				cy.getAptoIframe()
+					.find("#pan")
+					.should("contain", "4242 4242 4242 4242");
+			});
+		});
 
-	// 		// Just call the sdk as usual
-	// 		AptoPCISdk.init({ auth: dummyAuthData });
+		it("should display the data when showPCIData is called with an unknown cardholder id and user recieves/enters 2FA code", () => {
+			cy.getPCISdk().then(async (AptoPCISdk) => {
+				await AptoPCISdk.init({ auth: dummyAuthData });
 
-	// 		// By default we expect the visibility to be false
-	// 		const initial = await AptoPCISdk.getIsDataVisible();
-	// 		expect(initial).toBe(false);
+				cy.stubWindowPromptValue("123456");
+				cy.stubMultipleJSONResponses([
+					{ httpStatus: 400, body: {} },
+					{ httpStatus: 200, body: dummyRequest2FACodeResponse },
+					{ httpStatus: 200, body: getDummyVerify2FACodeResponse("passed") },
+					{ httpStatus: 200, body: dummyGetCardDataResponse },
+				]);
 
-	// 		// Try to get our pci-data
-	// 		AptoPCISdk.showPCISdkData();
+				cy.getAptoIframe()
+					.find("#pan")
+					.should("not.contain", "4242 4242 4242 4242")
+					.then(AptoPCISdk.showPCIData);
 
-	// 		// https://github.com/cypress-io/cypress/issues/5316
-	// 		// This might not work because the prompt is triggered by the iframe!
-	// 		cy.stubPrompt(Cypress.env('2FA_CODE_CORRECT'))
+				cy.getAptoIframe()
+					.find("#pan")
+					.should("contain", "4242 4242 4242 4242");
 
-	// 		// This might be very hard to do, but will be required for the tests
-	// 		await waitForCardDataToBeVisible();
+				cy.getAptoIframe().find("#exp").should("contain", "08/23");
 
-	// 		// Finally we expect the visibility to be true
-	// 		const actual = await AptoPCISdk.getIsDataVisible();
-	// 		expect(actual).toBe(true);
-	// 	});
-	// })
+				cy.getAptoIframe().find("#cvv").should("contain", "123");
+			});
+		});
+	});
+
+	describe(".getVisibility", () => {
+		it("should return false when the data is not visible", () => {
+			cy.getPCISdk().then(async (AptoPCISdk) => {
+				await AptoPCISdk.init({ auth: dummyAuthData });
+				cy.stubJSONResponse({
+					httpStatus: 200,
+					body: dummyGetCardDataResponse,
+				});
+
+				// By default we expect the visibility to be false
+				cy.wrap(AptoPCISdk)
+					.invoke("getIsDataVisible")
+					.should("eq", false)
+					.then(AptoPCISdk.showPCIData);
+
+				cy.wrap(AptoPCISdk).invoke("getIsDataVisible").should("eq", true);
+			});
+		});
+	});
 });
+
+const dummyGetCardDataResponse = {
+	card_id: "dummy_cardId",
+	expiration: "2023-08",
+	cvv: "123",
+	pan: "4242424242424242",
+};
+
+const dummyRequest2FACodeResponse = {
+	verification_id: "dummy_verification_id",
+	status: "dummy_status",
+	verification_type: "dummy_verification_type",
+};
+
+function getDummyVerify2FACodeResponse(status) {
+	return {
+		verification_id: "dummy_verification_id",
+		status: status,
+	};
+}
