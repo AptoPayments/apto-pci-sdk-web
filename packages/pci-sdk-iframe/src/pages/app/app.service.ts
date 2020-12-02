@@ -77,11 +77,11 @@ function _handleVerify2FACodeResponse({
 		// Timeout, we need to start again
 		case 'expired':
 			alert(messages.expiredMessage);
-			throw new Error('Process expired. Start again.');
+			throw new Error('Verification process has timed out. Please try again.');
 		// Failed means too many attepmts x.x
 		case 'failed':
 			alert(messages.tooManyAttemptsMessage);
-			throw new Error('Too many attempts, try again.');
+			throw new Error('A failed code has been entered too many times. Please start over.');
 		// The code we just inserted is invalid but we can try again
 		case 'pending':
 			return verify2FACode(cardId, verificationId, messages, false);

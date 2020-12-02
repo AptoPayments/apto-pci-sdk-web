@@ -1,4 +1,5 @@
 import formatterService from '../services/formatter.service';
+import errorsService from './errors.service';
 
 const urlParams = new URLSearchParams(window.location.search);
 const headers = {
@@ -23,12 +24,14 @@ export async function request2FACode(): Promise<IRequest2FACodeResponse> {
 		headers,
 		body: JSON.stringify({ show_verification_secret: true }),
 	})
-		.then((res) => {
+		.then(async (res) => {
 			switch (res.status) {
 				case 200:
 					return res.json();
+				case 401:
+					throw new Error(await errorsService.get401ResponseMessage(res));
 				default:
-					throw Error(res.status.toString());
+					throw new Error(res.status.toString());
 			}
 		})
 		.then((data) => {
@@ -53,12 +56,16 @@ export async function verify2FACode(secret: string, verificationId: string): Pro
 		headers,
 		body: JSON.stringify({ secret }),
 	})
-		.then((res) => {
+		.then(async (res) => {
 			switch (res.status) {
 				case 200:
 					return res.json();
+				case 401:
+					throw new Error(await errorsService.get401ResponseMessage(res));
+				case 400:
+					throw new Error('Invalid request. Please contact APTO Payments');
 				default:
-					throw Error(res.status.toString());
+					throw new Error(res.status.toString());
 			}
 		})
 		.then((res) => {
@@ -93,11 +100,16 @@ export async function getCardData(
 		headers,
 		body,
 	})
-		.then((res) => {
-			// TODO: Handle different errros better
+		.then(async (res) => {
 			switch (res.status) {
 				case 200:
 					return res.json();
+				case 401:
+					throw new Error(await errorsService.get401ResponseMessage(res));
+				case 400:
+					throw new Error(
+						'Invalid request. Are you sure the cardID is correct? http://docs.aptopayments.com/docs/pci-sdk-web/#optionsobject-properties'
+					);
 				default:
 					throw Error(res.status.toString());
 			}
