@@ -19,12 +19,12 @@ function parse400(customMessage?: string): string {
 	return customMessage ? customMessage : 'Invalid request. Please try againg or contact APTO';
 }
 
-function getDefaultMessage(): string {
+function parseUnknownError(): string {
 	return 'An unknown error occured. Please try again or contact APTO.';
 }
 
 export default {
 	parse400,
 	parse401,
-	getDefaultMessage,
+	parseUnknownError,
 };

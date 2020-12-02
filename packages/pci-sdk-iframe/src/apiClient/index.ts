@@ -39,7 +39,7 @@ export async function request2FACode(): Promise<IRequest2FACodeResponse> {
 		case 400:
 			throw new Error(errorMessageParser.parse400());
 		default:
-			throw new Error(errorMessageParser.getDefaultMessage());
+			throw new Error(errorMessageParser.parseUnknownError());
 	}
 }
 
@@ -70,7 +70,7 @@ export async function verify2FACode(secret: string, verificationId: string): Pro
 		case 400:
 			throw new Error(errorMessageParser.parse400());
 		default:
-			throw new Error(errorMessageParser.getDefaultMessage());
+			throw new Error(errorMessageParser.parseUnknownError());
 	}
 }
 
@@ -118,7 +118,7 @@ export async function getCardData(
 				)
 			);
 		default:
-			throw new Error(errorMessageParser.getDefaultMessage());
+			throw new Error(errorMessageParser.parseUnknownError());
 	}
 }
 
