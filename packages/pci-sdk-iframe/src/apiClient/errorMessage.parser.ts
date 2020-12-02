@@ -1,11 +1,5 @@
-interface I401Error {
-	message: string;
-	code: number;
-}
-
-async function get401ResponseMessage(res: Response): Promise<string> {
-	const err: I401Error = await res.json();
-	switch (err.code) {
+function parse401(errorCode: number, serverMessage: string): string {
+	switch (errorCode) {
 		case 90263:
 			return 'Cardholder needs to verify their identity. Sending 2FA code to phone or email...';
 		case 3032:
@@ -17,10 +11,20 @@ async function get401ResponseMessage(res: Response): Promise<string> {
 		case 90000:
 		default:
 			/// If 90000, somehow a header property is missing. This shouldn't be possible. Information is in the message provided by API:
-			return err.message;
+			return serverMessage;
 	}
 }
 
+function parse400(customMessage?: string): string {
+	return customMessage ? customMessage : 'Invalid request. Please try againg or contact APTO';
+}
+
+function getDefaultMessage(): string {
+	return 'An unknown error occured. Please try again or contact APTO.';
+}
+
 export default {
-	get401ResponseMessage,
+	parse400,
+	parse401,
+	getDefaultMessage,
 };
