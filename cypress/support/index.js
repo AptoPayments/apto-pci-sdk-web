@@ -13,9 +13,7 @@
 // https://on.cypress.io/configuration
 // ***********************************************************
 
-
 import "./commands/getAptoIframe";
 import "./commands/getPCISdk";
 import "./commands/stubJSONResponses";
 import "./commands/stubWindowPromptValue";
-

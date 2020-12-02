@@ -1,14 +1,16 @@
-Cypress.Commands.add('getAptoIframe', getAptoIframe);
+Cypress.Commands.add("getAptoIframe", getAptoIframe);
 
 function getAptoIframe() {
 	// get the document
-	return _getIframeDocument()
+	return (
+		_getIframeDocument()
 			// automatically retries until body is loaded
-			.its('body')
-			.should('not.be.undefined')
+			.its("body")
+			.should("not.be.undefined")
 			// wraps 'body' DOM element to allow
 			// chaining more Cypress commands, like '.find(...)'
-			.then(cy.wrap);
+			.then(cy.wrap)
+	);
 }
 
 function _getIframeDocument() {
@@ -21,7 +23,7 @@ function _getIframeDocument() {
 			// the 'document' element, it is stored in 'contentDocument' property
 			// Cypress 'its' command can access deep properties using dot notation
 			// https://on.cypress.io/its
-			.its('0.contentDocument')
-			.should('exist')
+			.its("0.contentDocument")
+			.should("exist")
 	);
 }
