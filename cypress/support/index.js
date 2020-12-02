@@ -17,5 +17,5 @@
 import "./commands/getAptoIframe";
 import "./commands/getPCISdk";
 import "./commands/stubJSONResponses";
-import "./commands/stubPrompt";
+import "./commands/stubWindowPromptValue";
 

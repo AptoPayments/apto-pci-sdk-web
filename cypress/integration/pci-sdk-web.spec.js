@@ -16,7 +16,7 @@ describe('AptoPCISdk', () => {
 		cy.reload();
 	});
 
-	describe('AptoPCISdk.init', () => {
+	describe('.init', () => {
 		it('should render the card inside the iframe when init is called', () => {
 			cy.getPCISdk().then(async AptoPCISdk => {
 				await AptoPCISdk.init({ auth: dummyAuthData, values: { nameOnCard: 'Matias Calvo' } });
@@ -35,7 +35,7 @@ describe('AptoPCISdk', () => {
 			});
 		});
 
-		it('should allow user to specify target element for iframe', () => {
+		it('should allow user to specify custom selector/element in which to load iframe', () => {
 			cy.getPCISdk().then(async AptoPCISdk => {
 				cy.document().then(async (doc) => {
 					await AptoPCISdk.init({ auth: dummyAuthData, element: doc.querySelector('.custom-selector') });
@@ -46,7 +46,7 @@ describe('AptoPCISdk', () => {
 		});
 	});
 
-	describe('AptoPCISdk.setTheme', () => {
+	describe('.setTheme', () => {
 		it('should set text color to white if theme is dark', () => {
 			cy.getPCISdk().then(async AptoPCISdk => {
 				await AptoPCISdk.init({ auth: dummyAuthData, theme: 'light' });
@@ -70,7 +70,7 @@ describe('AptoPCISdk', () => {
 		});
 	});
 
-	describe('AptoPCISdk.setStyle', () => {
+	describe('.setStyle', () => {
 		it('should set the card to custom styles when "extend" keyword is not present', () => {
 			cy.getPCISdk().then(async AptoPCISdk => {
 				await AptoPCISdk.init({ auth: dummyAuthData });
@@ -103,8 +103,8 @@ describe('AptoPCISdk', () => {
 		});
 	});
 
-	describe('AptoPCISdk.showPCIData', () => {
-		it('should display the data when showPCIData is called with a known cardholder id', () => {
+	describe('.showPCIData', () => {
+		it('should display the data when showPCIData and the client is PCI compliant', () => {
 			cy.getPCISdk().then(async AptoPCISdk => {
 				await AptoPCISdk.init({ auth: dummyAuthData });
 				cy.stubJSONResponse({ httpStatus: 200, body: dummyGetCardDataResponse });
@@ -124,7 +124,7 @@ describe('AptoPCISdk', () => {
 			cy.getPCISdk().then(async AptoPCISdk => {
 				await AptoPCISdk.init({ auth: dummyAuthData });
 
-				cy.stubPrompt('123456');
+				cy.stubWindowPromptValue('123456');
 				cy.stubMultipleJSONResponses([
 					{ httpStatus: 400, body: {} },
 					{ httpStatus: 200, body: dummyRequest2FACodeResponse },
@@ -152,7 +152,7 @@ describe('AptoPCISdk', () => {
 		})
 	})
 
-	describe('AptoPCISdk.getVisibility', () => {
+	describe('.getVisibility', () => {
 		it('should return false when the data is not visible', () => {
 			cy.getPCISdk().then(async AptoPCISdk => {
 				await AptoPCISdk.init({ auth: dummyAuthData });

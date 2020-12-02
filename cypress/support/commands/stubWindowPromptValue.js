@@ -1,6 +1,6 @@
-Cypress.Commands.add('stubPrompt', stubPrompt);
+Cypress.Commands.add('stubWindowPromptValue', stubWindowPromptValue);
 
-function stubPrompt(response) {
+function stubWindowPromptValue(response) {
 	_getIframeWindow().then(win => {
 		cy.stub(win, 'prompt').returns(response);
 	});
