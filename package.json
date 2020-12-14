@@ -2,7 +2,7 @@
 	"name": "root",
 	"private": true,
 	"devDependencies": {
-		"cypress": "^6.0.0",
+		"cypress": "^6.1.0",
 		"cypress-dotenv": "^1.2.2",
 		"dotenv": "^8.2.0",
 		"http-server": "^0.12.3",
