@@ -6,10 +6,11 @@
 	"browser": "./dist/umd/apto-pci-sdk.js",
 	"types": "./dist/umd/index.d.ts",
 	"scripts": {
-		"start": "webpack --watch",
 		"build": "webpack",
+		"prepublishOnly": "npm run build && node scripts/check-iframe-version.js",
+		"start": "webpack --watch",
 		"test": "react-scripts test",
-		"prepublishOnly": "npm run build && node scripts/check-iframe-version.js"
+		"update:deps": "npm audit fix && npm update"
 	},
 	"files": [
 		"dist/umd/apto-pci-sdk.js",
@@ -24,24 +25,24 @@
 		"@apto-payments/pci-sdk-iframe": "^2.1.0"
 	},
 	"devDependencies": {
-		"@testing-library/dom": "^7.29.0",
-		"@testing-library/jest-dom": "^5.11.8",
-		"@testing-library/user-event": "^7.2.1",
-		"@types/jest": "^24.9.1",
-		"@types/node": "^12.19.9",
-		"eslint-config-prettier": "^6.15.0",
+		"@testing-library/dom": "^7.30.0",
+		"@testing-library/jest-dom": "^5.11.9",
+		"@testing-library/user-event": "^12.8.3",
+		"@types/jest": "^26.0.20",
+		"@types/node": "^14.14.35",
+		"eslint-config-prettier": "^8.1.0",
 		"eslint-config-typescript": "^3.0.0",
 		"eslint-plugin-react": "^7.22.0",
 		"prettier": "^2.2.1",
-		"react-scripts": "^4.0.1",
-		"stylelint": "^13.8.0",
+		"react-scripts": "^4.0.3",
+		"stylelint": "^13.12.0",
 		"stylelint-config-css-modules": "^2.2.0",
 		"stylelint-config-prettier": "^8.0.2",
 		"stylelint-config-property-sort-order-smacss": "^7.0.0",
-		"stylelint-config-standard": "^20.0.0",
-		"ts-loader": "^8.0.12",
-		"typescript": "^4.1.3",
+		"stylelint-config-standard": "^21.0.0",
+		"ts-loader": "^8.0.18",
+		"typescript": "^4.2.3",
 		"webpack": "^4.44.2",
-		"webpack-cli": "^3.3.12"
+		"webpack-cli": "^4.5.0"
 	}
 }
