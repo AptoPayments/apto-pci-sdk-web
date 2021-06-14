@@ -1,0 +1,12 @@
+{
+	"recommendations": [
+		"dbaeumer.vscode-eslint",
+		"eamodio.gitlens",
+		"EditorConfig.EditorConfig",
+		"esbenp.prettier-vscode",
+		"formulahendry.auto-rename-tag",
+		"Gruntfuggly.todo-tree",
+		"stylelint.vscode-stylelint",
+		"streetsidesoftware.code-spell-checker"
+	]
+}
