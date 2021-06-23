@@ -1,6 +1,6 @@
 import { useEffect, useReducer, useState } from 'react';
 import themeService from '../../services/theme.service';
-import appService from './app.service';
+import ICardData from '../../types/ICardData';
 import messageService from './message.service';
 import reducer from './reducer';
 import themes, { IThemeName } from './themes/index';
@@ -48,10 +48,17 @@ export default function useApp() {
 					});
 				case 'showCardData':
 					dispatch({ type: 'SET_LOADING' });
-					return appService
-						.showCardData(staticState.cardId, { messages: { ...staticState } })
-						.then((cardData) => dispatch({ type: 'SET_CARD_DATA', payload: cardData }))
-						.catch(() => dispatch({ type: 'SET_ERROR' }));
+
+					setTimeout(() => {
+						const cardData: ICardData = {
+							cvv: '123',
+							exp: '10/23',
+							pan: '5555 6666 7777 8888',
+						};
+
+						dispatch({ type: 'SET_CARD_DATA', payload: cardData });
+					}, 800);
+					return;
 				case 'hideCardData':
 					return dispatch({
 						type: 'HIDE_DATA',
