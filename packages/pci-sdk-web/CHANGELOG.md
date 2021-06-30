@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.1](https://github.com/AptoPayments/apto-pci-sdk-web/compare/v2.2.0...v2.2.1) (2021-06-30)
+
+
+### Bug Fixes
+
+* Internal deps ([d7de49f](https://github.com/AptoPayments/apto-pci-sdk-web/commit/d7de49fb1b7a70f775cfa0e102d648666a8d3d07))
+
+
+
+
+
 # [2.2.0](https://github.com/AptoPayments/apto-pci-sdk-web/compare/v2.1.0...v2.2.0) (2021-06-30)
 
 
