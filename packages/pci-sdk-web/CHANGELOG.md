@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.2.0](https://github.com/AptoPayments/apto-pci-sdk-web/compare/v2.1.0...v2.2.0) (2021-06-30)
+
+
+### Features
+
+* Add network debugger (ACQ-1361) ([#42](https://github.com/AptoPayments/apto-pci-sdk-web/issues/42)) ([4a73f1a](https://github.com/AptoPayments/apto-pci-sdk-web/commit/4a73f1ab6d83e81034c97f1d9e052c812bb04c65))
+
+
+
+
+
 # 2.1.0 (2020-11-27)
 
 
