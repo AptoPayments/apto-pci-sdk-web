@@ -3,8 +3,7 @@ import Debugger from './components/Debugger';
 import useApp from './useApp';
 
 export default function App() {
-	const { isLoading, cvv, exp, labelCvv, labelExp, labelName, labelPan, nameOnCard, pan, theme, isDebug, state } =
-		useApp();
+	const { isLoading, cvv, exp, labelCvv, labelExp, labelName, labelPan, nameOnCard, pan, theme, isDebug } = useApp();
 
 	return (
 		<>
