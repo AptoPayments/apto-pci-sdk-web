@@ -4,6 +4,8 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Apto PCI SDK interactive example</title>
+		<!-- Use this to work locally: -->
+		<!-- <script src="./packages//pci-sdk-web/dist/umd/apto-pci-sdk.js"></script> -->
 		<script src="https://cdn.jsdelivr.net/npm/@apto-payments/pci-sdk-web@2"></script>
 
 		<style>
@@ -150,6 +152,12 @@
 					<option value="prd">prd</option>
 				</select>
 
+				<label for="debugger">Debugger</label>
+				<select id="debugger" name="debugger">
+					<option value="">Disabled</option>
+					<option value="true">Enabled</option>
+				</select>
+
 				<button type="submit">Init</button>
 			</form>
 
@@ -167,7 +175,7 @@
 		</main>
 
 		<script>
-			// Prepopulate fields based on query parameters
+			// Pre populate fields based on query parameters
 			new URLSearchParams(window.location.search).forEach((value, key) =>
 				document
 					.getElementsByName(key)[0]
@@ -207,6 +215,7 @@
 						userToken: event.target.elements.userToken.value,
 						environment: event.target.elements.environment.value,
 					},
+					debug: event.target.elements.debugger.value,
 				});
 			}
 		</script>

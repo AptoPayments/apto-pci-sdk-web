@@ -20,9 +20,11 @@ export default function useApp() {
 		enter2FAPrompt: (urlParams.get('enter2FAPrompt') as string) || 'Enter the code we sent you (numbers only):',
 		failed2FAPrompt: (urlParams.get('failed2FAPrompt') as string) || 'Wrong code. try again:',
 		lastFour: (urlParams.get('lastFour') as string) || '••••',
+		isDebug: !!urlParams.get('debug'),
 	}));
 
 	const themeParam = urlParams.get('theme') as IThemeName;
+
 	const [state, dispatch] = useReducer(reducer, {
 		cvv: '•••',
 		exp: '••/••',
@@ -70,6 +72,7 @@ export default function useApp() {
 	}, [staticState]);
 
 	return {
+		state,
 		cvv: state.cvv,
 		exp: state.exp,
 		isLoading: state.networkStatus === 'PENDING',
