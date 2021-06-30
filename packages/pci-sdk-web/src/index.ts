@@ -1,10 +1,10 @@
 import { version } from '@apto-payments/pci-sdk-iframe';
 
-// This is required!
-export { version } from '@apto-payments/pci-sdk-iframe';
-
 export interface InitOptions {
 	auth: IAuthOptions;
+	/**
+	 * When enabled a debugger console will be displayed in the iframe
+	 */
 	debug?: boolean;
 	element?: HTMLElement;
 	size?: Size;
@@ -40,10 +40,11 @@ export interface Values {
 }
 
 let $aptoIframe: Promise<HTMLIFrameElement>;
-const CORS_DOMAIN =
+const ALLOWED_CORS_DOMAIN =
 	process.env.NODE_ENV === 'development'
 		? '*'
 		: 'https://apto-pci-sdk-iframe.aptopayments.com';
+
 const IFRAME_URL =
 	process.env.NODE_ENV === 'development'
 		? 'http://localhost:3000/'
@@ -83,7 +84,10 @@ export function getIsDataVisible(): Promise<boolean> {
 		window.addEventListener(
 			'message',
 			function onVisibilityChanged(event) {
-				if (CORS_DOMAIN !== '*' && event.origin !== CORS_DOMAIN) {
+				if (
+					ALLOWED_CORS_DOMAIN !== '*' &&
+					event.origin !== ALLOWED_CORS_DOMAIN
+				) {
 					return;
 				}
 
@@ -149,7 +153,10 @@ function _initIframe(
 		window.addEventListener(
 			'message',
 			(event) => {
-				if (CORS_DOMAIN !== '*' && event.origin !== CORS_DOMAIN) {
+				if (
+					ALLOWED_CORS_DOMAIN !== '*' &&
+					event.origin !== ALLOWED_CORS_DOMAIN
+				) {
 					return;
 				}
 
@@ -194,9 +201,12 @@ function _sendMessage(data: { type: string; theme?: any; style?: any }) {
 	}
 	return $aptoIframe.then((frame) => {
 		const messageEvent = JSON.stringify(data);
-		frame.contentWindow?.postMessage(messageEvent, CORS_DOMAIN);
+		frame.contentWindow?.postMessage(messageEvent, ALLOWED_CORS_DOMAIN);
 	});
 }
+
+// This is required!
+export { version } from '@apto-payments/pci-sdk-iframe';
 
 export default {
 	init,

@@ -45,7 +45,7 @@ export default function App() {
 					</span>
 				</div>
 			</main>
-			{isDebug ? <Debugger state={state} /> : null}
+			{isDebug ? <Debugger /> : null}
 		</>
 	);
 }

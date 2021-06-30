@@ -1,28 +1,25 @@
-import React, { PropsWithChildren, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import Response from './components/Response';
 
-type IDebuggerProps = any;
-
-export default function Debugger(props: IDebuggerProps) {
+/**
+ * Since the pci-sdk is hard do debug from the mobile we added this component that allows to see
+ * useful data like interactions with the server or iframe status.
+ */
+export default function Debugger() {
 	const [responses, setResponses] = useState<IResponse[]>([]);
 	const [mountDate] = useState<Date>(() => new Date());
 
-	useEffect(() => {
-		const { fetch: origFetch } = window;
-		(window as Window).fetch = async function fetchWithDebug(input: RequestInfo, init?: RequestInit) {
-			const response = await origFetch(input, init);
+	useEffect(function overrideFetchWithASpyToDebug() {
+		const { fetch: originalFetchImplementation } = window;
+
+		// Modify the original implementation. Clone and persist each server interaction.
+		window.fetch = async function fetchWithDebug(input: RequestInfo, init: RequestInit = {}) {
+			const { body, headers } = init;
+			const response = await originalFetchImplementation(input, init);
 			const res = await response.clone();
 			const serverResponse = await res.json();
-			const body = init?.body;
 
-			const newResponse: IResponse = {
-				body,
-				headers: init?.headers,
-				serverResponse,
-				status: res.status,
-				url: res.url,
-			};
-
-			setResponses((s: IResponse[]) => [...s, newResponse]);
+			setResponses((s) => [...s, { body, headers, serverResponse, status: res.status, url: res.url }]);
 
 			return response;
 		};
@@ -32,7 +29,6 @@ export default function Debugger(props: IDebuggerProps) {
 		<aside
 			style={{
 				position: 'fixed',
-				background: 'white',
 				top: 0,
 				left: 0,
 				right: 0,
@@ -51,56 +47,5 @@ export default function Debugger(props: IDebuggerProps) {
 				))}
 			</div>
 		</aside>
-	);
-}
-
-interface IResponse {
-	status: number;
-	url: string;
-	body?: BodyInit | null;
-	serverResponse?: {
-		code?: number;
-		message?: string;
-	};
-	headers?: HeadersInit;
-}
-
-function Response(props: PropsWithChildren<IResponse>) {
-	return (
-		<div
-			style={{ display: 'block', padding: '.3rem .2rem', fontFamily: 'monospace', borderBottom: '1px solid #d2d2d2' }}
-		>
-			<div style={{ display: 'flex' }}>
-				<div style={{ marginRight: '.3rem' }}>{props.status}</div>
-				<div>{props.url}</div>
-			</div>
-
-			<div style={{ display: 'flex' }}>
-				<details>
-					<summary>Server Response</summary>
-					<dt>Message</dt>
-					<dd>{props.serverResponse?.message}</dd>
-
-					<dt>Code:</dt>
-					<dd>{props.serverResponse?.code}</dd>
-				</details>
-			</div>
-
-			<div style={{ display: 'flex' }}>
-				<details>
-					<summary>Request</summary>
-
-					<dt>Body</dt>
-					<dd>
-						<pre>{props.body}</pre>
-					</dd>
-
-					<dt>Headers:</dt>
-					<dd>
-						<pre>{JSON.stringify(props.headers, null, '\t')}</pre>
-					</dd>
-				</details>
-			</div>
-		</div>
 	);
 }
