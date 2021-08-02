@@ -1,8 +1,9 @@
-import { useEffect, useReducer, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import apiClient from '../../apiClient';
+import usePureState from '../../hooks/usePureState';
 import themeService from '../../services/theme.service';
-import appService from './app.service';
+import { ITheme } from '../../types/IThemes';
 import messageService from './message.service';
-import reducer from './reducer';
 import themes, { IThemeName } from './themes/index';
 
 export default function useApp() {
@@ -25,13 +26,15 @@ export default function useApp() {
 
 	const themeParam = urlParams.get('theme') as IThemeName;
 
-	const [state, dispatch] = useReducer(reducer, {
+	const { state, dispatch } = usePureState({
 		cvv: '•••',
 		exp: '••/••',
 		isDataVisible: false,
 		networkStatus: 'IDLE',
 		pan: `•••• •••• •••• ${staticState.lastFour}`,
-		theme: themes[themeParam] || themes['light' as IThemeName],
+		theme: (themes[themeParam] as ITheme) || (themes['light' as IThemeName] as ITheme),
+		verificationId: '', // Used to get the 2FA code
+		message: '',
 	});
 
 	useEffect(() => {
@@ -39,28 +42,25 @@ export default function useApp() {
 			const data = JSON.parse(event.data);
 			switch (data.type) {
 				case 'setStyle':
-					return dispatch({
-						type: 'SET_THEME',
-						payload: { theme: themeService.extendTheme(data.style) },
-					});
+					// TODO: Investigate this any
+					return dispatch({ theme: themeService.extendTheme(data.style) as any });
 				case 'setTheme':
-					return dispatch({
-						type: 'SET_THEME',
-						payload: { theme: themes[data.theme as IThemeName] },
-					});
+					return dispatch({ theme: themes[data.theme as IThemeName] });
 				case 'showCardData':
-					dispatch({ type: 'SET_LOADING' });
-					return appService
-						.showCardData(staticState.cardId, { messages: { ...staticState } })
-						.then((cardData) => dispatch({ type: 'SET_CARD_DATA', payload: cardData }))
-						.catch(() => dispatch({ type: 'SET_ERROR' }));
+					return _showCardData(staticState.cardId);
 				case 'hideCardData':
 					return dispatch({
-						type: 'HIDE_DATA',
-						payload: { lastFour: staticState.lastFour },
+						cvv: '•••',
+						exp: '••/••',
+						isDataVisible: false,
+						pan: `•••• •••• •••• ${staticState.lastFour}`,
+						message: '',
 					});
 				case 'isDataVisible':
-					return dispatch({ type: 'EMIT_VISIBILITY_MESSAGE' });
+					return messageService.emitMessage({
+						type: 'apto-iframe-visibility-change',
+						payload: { isVisible: state.isDataVisible },
+					});
 				default:
 					break;
 			}
@@ -68,16 +68,88 @@ export default function useApp() {
 
 		window.addEventListener('message', _onMessage, false);
 		messageService.emitMessage({ type: 'apto-iframe-ready' });
+
+		async function _showCardData(cardId: string) {
+			dispatch({ isDataVisible: false, networkStatus: 'PENDING' });
+
+			try {
+				const cardData = await apiClient.getCardData(cardId);
+
+				if (cardData) {
+					dispatch({
+						cvv: cardData.cvv as string,
+						exp: cardData.exp as string,
+						isDataVisible: true,
+						networkStatus: 'SUCCESS',
+						pan: cardData.pan as string,
+						verificationId: '',
+					});
+				}
+			} catch (err) {
+				const { verificationId } = await apiClient.request2FACode();
+				// When the verification id is not empty the UI will ask for the 2FA code
+				dispatch({ verificationId });
+			}
+		}
+
 		return () => window.removeEventListener('message', _onMessage);
-	}, [staticState]);
+	}, [staticState, state, dispatch]);
+
+	/**
+	 *
+	 */
+	async function handleCodeSubmit(e: React.FormEvent) {
+		e.preventDefault();
+
+		const secret = (e.target as any).elements['code'].value as string;
+		const { status } = await apiClient.verify2FACode(secret, state.verificationId);
+
+		switch (status) {
+			// 2FA token is valid. We are good to get card data using the validated secret
+			case 'passed':
+				return apiClient
+					.getCardData(staticState.cardId, { verificationId: state.verificationId, secret })
+					.then((res) => {
+						dispatch({
+							cvv: res.cvv as string,
+							exp: res.exp as string,
+							isDataVisible: true,
+							networkStatus: 'SUCCESS',
+							pan: res.pan as string,
+							verificationId: '',
+						});
+					})
+					.catch(() => {
+						dispatch({
+							networkStatus: 'ERROR',
+							isDataVisible: false,
+							message: '',
+							verificationId: '',
+						});
+					});
+			// Timeout, we need to start again
+			case 'expired':
+				return dispatch({ message: staticState.expiredMessage });
+			// Failed means too many attempts ¯\_(ツ)_/¯
+			case 'failed':
+				return dispatch({ message: staticState.tooManyAttemptsMessage });
+			// Pending means the code is wrong  ¯\_(ツ)_/¯
+			case 'pending':
+				return dispatch({ message: staticState.failed2FAPrompt });
+			default:
+				return dispatch({ message: 'Unexpected error.' });
+		}
+	}
 
 	return {
-		state,
+		handleCodeSubmit,
+		...staticState,
 		cvv: state.cvv,
 		exp: state.exp,
 		isLoading: state.networkStatus === 'PENDING',
-		...staticState,
+		message: state.message,
 		pan: state.pan,
 		theme: state.theme,
+		verificationId: state.verificationId,
 	};
 }
