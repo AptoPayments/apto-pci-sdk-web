@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0](https://github.com/AptoPayments/apto-pci-sdk-web/compare/v2.2.1...v3.0.0) (2021-08-03)
+
+
+### Bug Fixes
+
+* cross-origin iframes usage of window are disabled (ACQ-1663) ([#44](https://github.com/AptoPayments/apto-pci-sdk-web/issues/44)) ([d671232](https://github.com/AptoPayments/apto-pci-sdk-web/commit/d6712327399e321824977408b17bdceb689c2482))
+
+
+### BREAKING CHANGES
+
+* whatwg disabled the usage of alert and prompt from a cors iframe.  
+
+This change forces us to collect user data (2FA secret) directly from the iframe UI instead of using window.prompt
+More info: https://github.com/whatwg/html/issues/5407 
+
+Changes:
+- Add an input to collect user data instead using window.prompt
+- Display messages over the card instead using window.alert
+
+
+
+
+
 ## [2.2.1](https://github.com/AptoPayments/apto-pci-sdk-web/compare/v2.2.0...v2.2.1) (2021-06-30)
 
 
