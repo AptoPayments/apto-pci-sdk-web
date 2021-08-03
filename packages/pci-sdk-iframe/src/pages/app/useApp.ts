@@ -20,6 +20,7 @@ export default function useApp() {
 		tooManyAttemptsMessage: (urlParams.get('tooManyAttemptsMessage') as string) || 'Too many attempts, try again.',
 		enter2FAPrompt: (urlParams.get('enter2FAPrompt') as string) || 'Enter the code we sent you (numbers only):',
 		failed2FAPrompt: (urlParams.get('failed2FAPrompt') as string) || 'Wrong code. try again:',
+		codePlaceholderMessage: (urlParams.get('codePlaceholderMessage') as string) || 'Enter the code',
 		lastFour: (urlParams.get('lastFour') as string) || '••••',
 		isDebug: !!urlParams.get('debug'),
 	}));
@@ -30,11 +31,12 @@ export default function useApp() {
 		cvv: '•••',
 		exp: '••/••',
 		isDataVisible: false,
-		networkStatus: 'IDLE',
+		isFormVisible: false,
+		isLoading: false,
+		message: '',
 		pan: `•••• •••• •••• ${staticState.lastFour}`,
 		theme: (themes[themeParam] as ITheme) || (themes['light' as IThemeName] as ITheme),
 		verificationId: '', // Used to get the 2FA code
-		message: '',
 	});
 
 	useEffect(() => {
@@ -42,8 +44,7 @@ export default function useApp() {
 			const data = JSON.parse(event.data);
 			switch (data.type) {
 				case 'setStyle':
-					// TODO: Investigate this any
-					return dispatch({ theme: themeService.extendTheme(data.style) as any });
+					return dispatch({ theme: themeService.extendTheme(data.style) });
 				case 'setTheme':
 					return dispatch({ theme: themes[data.theme as IThemeName] });
 				case 'showCardData':
@@ -55,6 +56,8 @@ export default function useApp() {
 						isDataVisible: false,
 						pan: `•••• •••• •••• ${staticState.lastFour}`,
 						message: '',
+						isFormVisible: false,
+						verificationId: '',
 					});
 				case 'isDataVisible':
 					return messageService.emitMessage({
@@ -70,25 +73,37 @@ export default function useApp() {
 		messageService.emitMessage({ type: 'apto-iframe-ready' });
 
 		async function _showCardData(cardId: string) {
-			dispatch({ isDataVisible: false, networkStatus: 'PENDING' });
+			dispatch({
+				isDataVisible: false,
+				isLoading: true,
+				message: '',
+				verificationId: '',
+				isFormVisible: false,
+			});
 
 			try {
+				// When the client is pci compatible the server will return valid data
 				const cardData = await apiClient.getCardData(cardId);
-
 				if (cardData) {
 					dispatch({
 						cvv: cardData.cvv as string,
 						exp: cardData.exp as string,
 						isDataVisible: true,
-						networkStatus: 'SUCCESS',
+						isFormVisible: false,
+						isLoading: false,
 						pan: cardData.pan as string,
 						verificationId: '',
+						message: '',
 					});
 				}
 			} catch (err) {
-				const { verificationId } = await apiClient.request2FACode();
-				// When the verification id is not empty the UI will ask for the 2FA code
-				dispatch({ verificationId });
+				if (checkIfInvalidAPIKeyError(err)) {
+					return dispatch({ message: 'Invalid API key', isLoading: false });
+				}
+				if (checkRequires2FACodeError(err)) {
+					const { verificationId } = await apiClient.request2FACode();
+					return dispatch({ verificationId, isFormVisible: true });
+				}
 			}
 		}
 
@@ -100,6 +115,8 @@ export default function useApp() {
 	 */
 	async function handleCodeSubmit(e: React.FormEvent) {
 		e.preventDefault();
+
+		dispatch({ message: '', isFormVisible: false, isLoading: true });
 
 		const secret = (e.target as any).elements['code'].value as string;
 		const { status } = await apiClient.verify2FACode(secret, state.verificationId);
@@ -113,31 +130,71 @@ export default function useApp() {
 						dispatch({
 							cvv: res.cvv as string,
 							exp: res.exp as string,
-							isDataVisible: true,
-							networkStatus: 'SUCCESS',
+							isLoading: false,
 							pan: res.pan as string,
 							verificationId: '',
+							isFormVisible: false,
+							isDataVisible: true,
+							message: '',
 						});
 					})
 					.catch(() => {
 						dispatch({
-							networkStatus: 'ERROR',
+							exp: '••/••',
 							isDataVisible: false,
-							message: '',
+							isFormVisible: false,
+							isLoading: false,
+							message: 'Unexpected error',
 							verificationId: '',
+							cvv: '•••',
+							pan: `•••• •••• •••• ${staticState.lastFour}`,
 						});
 					});
 			// Timeout, we need to start again
 			case 'expired':
-				return dispatch({ message: staticState.expiredMessage });
+				return dispatch({
+					cvv: '•••',
+					exp: '••/••',
+					isDataVisible: false,
+					isFormVisible: true,
+					isLoading: false,
+					message: staticState.expiredMessage,
+					pan: `•••• •••• •••• ${staticState.lastFour}`,
+				});
 			// Failed means too many attempts ¯\_(ツ)_/¯
 			case 'failed':
-				return dispatch({ message: staticState.tooManyAttemptsMessage });
+				return dispatch({
+					cvv: '•••',
+					exp: '••/••',
+					isDataVisible: false,
+					isFormVisible: false,
+					isLoading: false,
+					message: staticState.tooManyAttemptsMessage,
+					pan: `•••• •••• •••• ${staticState.lastFour}`,
+					verificationId: '',
+				});
 			// Pending means the code is wrong  ¯\_(ツ)_/¯
 			case 'pending':
-				return dispatch({ message: staticState.failed2FAPrompt });
+				return dispatch({
+					isDataVisible: false,
+					isFormVisible: true,
+					isLoading: false,
+					message: staticState.failed2FAPrompt,
+					exp: '••/••',
+					pan: `•••• •••• •••• ${staticState.lastFour}`,
+					cvv: '•••',
+				});
 			default:
-				return dispatch({ message: 'Unexpected error.' });
+				return dispatch({
+					isDataVisible: false,
+					isFormVisible: false,
+					isLoading: false,
+					message: 'Unexpected error',
+					verificationId: '',
+					exp: '••/••',
+					pan: `•••• •••• •••• ${staticState.lastFour}`,
+					cvv: '•••',
+				});
 		}
 	}
 
@@ -146,10 +203,19 @@ export default function useApp() {
 		...staticState,
 		cvv: state.cvv,
 		exp: state.exp,
-		isLoading: state.networkStatus === 'PENDING',
+		isLoading: state.isLoading,
+		isFormVisible: state.isFormVisible,
 		message: state.message,
 		pan: state.pan,
 		theme: state.theme,
 		verificationId: state.verificationId,
 	};
+}
+
+function checkIfInvalidAPIKeyError(err: unknown) {
+	return String(err).includes('The mobile API key you provided is invalid');
+}
+
+function checkRequires2FACodeError(err: unknown) {
+	return String(err).includes('Cardholder needs to verify their identity');
 }
