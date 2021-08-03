@@ -16,4 +16,3 @@
 import "./commands/getAptoIframe";
 import "./commands/getPCISdk";
 import "./commands/stubJSONResponses";
-import "./commands/stubWindowPromptValue";

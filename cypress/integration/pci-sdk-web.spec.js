@@ -129,13 +129,12 @@ describe("AptoPCISdk", () => {
 			});
 		});
 
-		it("should display the data when showPCIData is called with an unknown cardholder id and user recieves/enters 2FA code", () => {
+		it("should display the data when showPCIData is called with an unknown cardholder id and user receives/enters 2FA code", () => {
 			cy.getPCISdk().then(async (AptoPCISdk) => {
 				await AptoPCISdk.init({ auth: dummyAuthData });
 
-				cy.stubWindowPromptValue("123456");
 				cy.stubMultipleJSONResponses([
-					{ httpStatus: 400, body: {} },
+					{ httpStatus: 401, body: { code: 90263 } },
 					{ httpStatus: 200, body: dummyRequest2FACodeResponse },
 					{ httpStatus: 200, body: getDummyVerify2FACodeResponse("passed") },
 					{ httpStatus: 200, body: dummyGetCardDataResponse },
@@ -145,6 +144,8 @@ describe("AptoPCISdk", () => {
 					.find("#pan")
 					.should("not.contain", "4242 4242 4242 4242")
 					.then(AptoPCISdk.showPCIData);
+
+				cy.getAptoIframe().find("#code").type("123456").type("{enter}");
 
 				cy.getAptoIframe()
 					.find("#pan")
