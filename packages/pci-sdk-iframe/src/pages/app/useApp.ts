@@ -17,9 +17,9 @@ export default function useApp() {
 		labelPan: (urlParams.get('labelPan') as string) || 'Card number',
 		nameOnCard: (urlParams.get('nameOnCard') as string) || '',
 		expiredMessage: (urlParams.get('expiredMessage') as string) || 'Process expired. Start again.',
-		tooManyAttemptsMessage: (urlParams.get('tooManyAttemptsMessage') as string) || 'Too many attempts, try again.',
-		enter2FAPrompt: (urlParams.get('enter2FAPrompt') as string) || 'Enter the code we sent you (numbers only):',
-		failed2FAPrompt: (urlParams.get('failed2FAPrompt') as string) || 'Wrong code. try again:',
+		tooManyAttemptsMessage: (urlParams.get('tooManyAttemptsMessage') as string) || 'Too many attempts. Start again.',
+		enter2FAPrompt: (urlParams.get('enter2FAPrompt') as string) || 'Enter the code we sent you (numbers only).',
+		failed2FAPrompt: (urlParams.get('failed2FAPrompt') as string) || 'Wrong code. Try again.',
 		codePlaceholderMessage: (urlParams.get('codePlaceholderMessage') as string) || 'Enter the code',
 		lastFour: (urlParams.get('lastFour') as string) || '••••',
 		isDebug: !!urlParams.get('debug'),
@@ -42,6 +42,7 @@ export default function useApp() {
 	useEffect(() => {
 		function _onMessage(event: MessageEvent) {
 			const data = JSON.parse(event.data);
+
 			switch (data.type) {
 				case 'setStyle':
 					return dispatch({ theme: themeService.extendTheme(data.style) });
@@ -100,10 +101,27 @@ export default function useApp() {
 				if (checkIfInvalidAPIKeyError(err)) {
 					return dispatch({ message: 'Invalid API key', isLoading: false });
 				}
+
 				if (checkRequires2FACodeError(err)) {
-					const { verificationId } = await apiClient.request2FACode();
-					return dispatch({ verificationId, isFormVisible: true });
+					try {
+						const { verificationId } = await apiClient.request2FACode();
+						return dispatch({ verificationId, isFormVisible: true });
+					} catch (e) {
+						dispatch({
+							isDataVisible: false,
+							isFormVisible: false,
+							isLoading: false,
+							message: 'Unexpected error',
+						});
+					}
 				}
+
+				dispatch({
+					isDataVisible: false,
+					isFormVisible: false,
+					isLoading: false,
+					message: err?.message || 'Unexpected error',
+				});
 			}
 		}
 
@@ -119,9 +137,20 @@ export default function useApp() {
 		dispatch({ message: '', isFormVisible: false, isLoading: true });
 
 		const secret = (e.target as any).elements['code'].value as string;
-		const { status } = await apiClient.verify2FACode(secret, state.verificationId);
+		let res = null;
 
-		switch (status) {
+		try {
+			res = await apiClient.verify2FACode(secret, state.verificationId);
+		} catch (e) {
+			return dispatch({
+				isDataVisible: false,
+				isFormVisible: false,
+				isLoading: false,
+				message: e?.message || 'Unexpected error',
+			});
+		}
+
+		switch (res.status) {
 			// 2FA token is valid. We are good to get card data using the validated secret
 			case 'passed':
 				return apiClient
@@ -156,7 +185,7 @@ export default function useApp() {
 					cvv: '•••',
 					exp: '••/••',
 					isDataVisible: false,
-					isFormVisible: true,
+					isFormVisible: false,
 					isLoading: false,
 					message: staticState.expiredMessage,
 					pan: `•••• •••• •••• ${staticState.lastFour}`,

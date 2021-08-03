@@ -16,7 +16,7 @@ interface ICardDataProps {
 
 export default function CardData(props: ICardDataProps) {
 	return (
-		<main id="container" style={{ ...props.theme.container }}>
+		<main id="container" data-testid="card-container" style={{ ...props.theme.container }}>
 			<div id="group-name" style={{ ...props.theme.groups, ...props.theme.groupName }}>
 				<label id="label-name" style={{ ...props.theme.labels, ...props.theme.labelName }}>
 					{props.labelName}

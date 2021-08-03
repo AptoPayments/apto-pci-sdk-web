@@ -17,6 +17,7 @@ export default function Form(props: IFormProps) {
 				padding: '5vw',
 			}}
 			onSubmit={props.handleSubmit}
+			data-testid="2fa-form"
 		>
 			<div
 				style={{
@@ -37,6 +38,7 @@ export default function Form(props: IFormProps) {
 					id="code"
 					name="code"
 					type="text"
+					aria-label="2FA code"
 					placeholder={props.placeholder}
 				/>
 				<button
