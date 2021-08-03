@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
-import { stubJSONResponse, stubMultipleJSONRespones, stubPendingResponse } from '../../fetchStub';
+import { stubJSONResponse, stubMultipleJSONResponses, stubPendingResponse } from '../../fetchStub';
 import App from './App';
 
 describe('<App />', () => {
@@ -12,21 +12,21 @@ describe('<App />', () => {
 	afterEach(jest.clearAllMocks);
 
 	describe('when rendering card with custom text properties', () => {
-		it('should show custom lastFour when provided', () => {
+		it.only('should show custom lastFour when provided', () => {
 			addUrlParams({ lastFour: '9999' });
 			render(<App />);
 
 			expect(screen.queryByText('•••• •••• •••• 9999')).toBeVisible();
 		});
 
-		it('should show default lastFour when not provided', () => {
+		it.only('should show default lastFour when not provided', () => {
 			addUrlParams();
 			render(<App />);
 
 			expect(screen.queryByText('•••• •••• •••• ••••')).toBeVisible();
 		});
 
-		it('should show custom cardholder name when provided', () => {
+		it.only('should show custom cardholder name when provided', () => {
 			addUrlParams({ nameOnCard: 'Matias Calvo' });
 			render(<App />);
 
@@ -34,35 +34,35 @@ describe('<App />', () => {
 			expect(screen.queryByText('Matias Calvo')).toBeVisible();
 		});
 
-		it('should show default cardholder name when property not provided', () => {
+		it.only('should show default cardholder name when property not provided', () => {
 			addUrlParams();
 			render(<App />);
 
 			expect(screen.queryByTestId('cardholder-name')).toBeEmptyDOMElement();
 		});
 
-		it('should show custom labelCvv when provided', () => {
+		it.only('should show custom labelCvv when provided', () => {
 			addUrlParams({ labelCvv: 'custom_cvv' });
 			render(<App />);
 
 			expect(screen.queryByText('custom_cvv')).toBeVisible();
 		});
 
-		it('should show default labelCvv when property not provided', () => {
+		it.only('should show default labelCvv when property not provided', () => {
 			addUrlParams();
 			render(<App />);
 
 			expect(screen.queryByText('Cvv')).toBeVisible();
 		});
 
-		it('should show custom labelExp when provided', () => {
+		it.only('should show custom labelExp when provided', () => {
 			addUrlParams({ labelExp: 'custom_exp' });
 			render(<App />);
 
 			expect(screen.queryByText('custom_exp')).toBeVisible();
 		});
 
-		it('should show default labelExp when property not provided', () => {
+		it.only('should show default labelExp when property not provided', () => {
 			addUrlParams();
 			render(<App />);
 
@@ -70,7 +70,7 @@ describe('<App />', () => {
 		});
 
 		describe('when optional properties, hidden by default, are provided', () => {
-			it('should show custom labelName when provided', async () => {
+			it.only('should show custom labelName when provided', async () => {
 				addUrlParams({ labelName: 'custom_labelName' });
 				render(<App />);
 
@@ -91,7 +91,7 @@ describe('<App />', () => {
 				expect(await screen.findByText('custom_labelName')).toBeVisible();
 			});
 
-			it('should show default labelName when property not provided', async () => {
+			it.only('should show default labelName when property not provided', async () => {
 				addUrlParams();
 				render(<App />);
 
@@ -112,7 +112,7 @@ describe('<App />', () => {
 				expect(await screen.findByText('Name')).toBeVisible();
 			});
 
-			it('should show custom labelPan when provided', async () => {
+			it.only('should show custom labelPan when provided', async () => {
 				addUrlParams({ labelPan: 'custom_labelPan' });
 				render(<App />);
 
@@ -133,7 +133,7 @@ describe('<App />', () => {
 				expect(await screen.findByText('custom_labelPan')).toBeVisible();
 			});
 
-			it('should show default labelPan when property not provided', async () => {
+			it.only('should show default labelPan when property not provided', async () => {
 				addUrlParams();
 				render(<App />);
 
@@ -154,11 +154,12 @@ describe('<App />', () => {
 				expect(await screen.findByText('Card number')).toBeVisible();
 			});
 
-			it('should show custom expiredMessage for 2FA when provided', async () => {
+			it.only('should show custom expiredMessage for 2FA when provided', async () => {
 				addUrlParams({ expiredMessage: 'custom_expiredMessage' });
+
 				render(<App />);
 
-				stubMultipleJSONRespones([
+				stubMultipleJSONResponses([
 					{ httpStatus: 400, body: {} },
 					{ httpStatus: 200, body: dummyRequest2FACodeResponse },
 					{ httpStatus: 200, body: getDummyverify2FACodeResponse('expired') },
@@ -171,16 +172,23 @@ describe('<App />', () => {
 					})
 				);
 
-				await waitFor(() => expect(window.alert).toHaveBeenCalledWith('custom_expiredMessage'));
+				console.log(global.fetch.mock.calls);
+
+				await waitFor(() => {
+					expect(screen.queryByTestId('2fa-form')).toBeVisible();
+				});
+
+				// await waitFor(() => expect(screen.queryByText('custom_expiredMessage')).toBeVisible());
 			});
 
 			it('should show custom tooManyAttemptsMessage for 2FA when provided', async () => {
 				addUrlParams({
 					tooManyAttemptsMessage: 'custom_tooManyAttemptsMessage',
 				});
+
 				render(<App />);
 
-				stubMultipleJSONRespones([
+				stubMultipleJSONResponses([
 					{ httpStatus: 400, body: {} },
 					{ httpStatus: 200, body: dummyRequest2FACodeResponse },
 					{ httpStatus: 200, body: getDummyverify2FACodeResponse('failed') },
@@ -193,7 +201,7 @@ describe('<App />', () => {
 					})
 				);
 
-				await waitFor(() => expect(window.alert).toHaveBeenCalledWith('custom_tooManyAttemptsMessage'));
+				await waitFor(() => expect(screen.queryByText('custom_tooManyAttemptsMessage')).toBeVisible());
 			});
 		});
 	});
@@ -242,7 +250,7 @@ describe('<App />', () => {
 			expect(screen.queryByText('•••• •••• •••• ••••')).toBeVisible();
 		});
 
-		it('should display the users data when getCardData is successful and response recieved', async () => {
+		it('should display the users data when getCardData is successful and response received', async () => {
 			expect(screen.queryByText('•••• •••• •••• ••••')).toBeVisible();
 
 			stubJSONResponse(dummyGetCardDataResponse);
@@ -279,7 +287,7 @@ describe('<App />', () => {
 			it('should request a new 2FA code if authentication fails', async () => {
 				const spy = jest.spyOn(global, 'fetch');
 
-				stubMultipleJSONRespones([
+				stubMultipleJSONResponses([
 					{ httpStatus: 400, body: {} },
 					{ httpStatus: 400, body: {} },
 				]);
@@ -307,7 +315,7 @@ describe('<App />', () => {
 			it('should have called fetch only twice and still show hidden data if request2FACode fails', async () => {
 				const spy = jest.spyOn(global, 'fetch');
 
-				stubMultipleJSONRespones([
+				stubMultipleJSONResponses([
 					{ httpStatus: 400, body: {} },
 					{ httpStatus: 400, body: {} },
 				]);
@@ -324,10 +332,10 @@ describe('<App />', () => {
 			});
 
 			describe('when request2FACode succeeds and the user attempts to verify their code', () => {
-				it('should request to verifiy the new 2FA code after user enters it', async () => {
+				it('should request to verify the new 2FA code after user enters it', async () => {
 					const spy = jest.spyOn(global, 'fetch');
 
-					stubMultipleJSONRespones([
+					stubMultipleJSONResponses([
 						{ httpStatus: 400, body: {} },
 						{ httpStatus: 200, body: dummyRequest2FACodeResponse },
 						{ httpStatus: 400, body: {} },
@@ -361,7 +369,7 @@ describe('<App />', () => {
 				it('should fail to show the data after three calls to fetch if verification fails', async () => {
 					const spy = jest.spyOn(global, 'fetch');
 
-					stubMultipleJSONRespones([
+					stubMultipleJSONResponses([
 						{ httpStatus: 400, body: {} },
 						{ httpStatus: 200, body: dummyRequest2FACodeResponse },
 						{ httpStatus: 400, body: {} },
@@ -379,10 +387,10 @@ describe('<App />', () => {
 					expect(screen.queryByText('•••• •••• •••• ••••')).toBeVisible();
 				});
 
-				it('should alert "Process expired. Start againg." when 2FA is expired', async () => {
-					expect(window.alert).not.toHaveBeenCalled();
+				it('should alert "Process expired. Start again." when 2FA is expired', async () => {
+					expect(screen.queryByText('Process expired. Start again.')).toBeNull();
 
-					stubMultipleJSONRespones([
+					stubMultipleJSONResponses([
 						{ httpStatus: 400, body: {} },
 						{ httpStatus: 200, body: dummyRequest2FACodeResponse },
 						{ httpStatus: 200, body: getDummyverify2FACodeResponse('expired') },
@@ -395,13 +403,13 @@ describe('<App />', () => {
 						})
 					);
 
-					await waitFor(() => expect(window.alert).toHaveBeenCalledWith('Process expired. Start again.'));
+					await waitFor(() => expect(screen.queryByText('Process expired. Start again.')).toBeVisible());
 				});
 
 				it('should alert "Too many attempts, try again." when 2FA fails', async () => {
-					expect(window.alert).not.toHaveBeenCalled();
+					expect(screen.queryByText('Too many attempts, try again.')).toBeNull();
 
-					stubMultipleJSONRespones([
+					stubMultipleJSONResponses([
 						{ httpStatus: 400, body: {} },
 						{ httpStatus: 200, body: dummyRequest2FACodeResponse },
 						{ httpStatus: 200, body: getDummyverify2FACodeResponse('failed') },
@@ -414,13 +422,13 @@ describe('<App />', () => {
 						})
 					);
 
-					await waitFor(() => expect(window.alert).toHaveBeenCalledWith('Too many attempts, try again.'));
+					await waitFor(() => expect(screen.queryByText('Too many attempts, try again.')).toBeVisible());
 				});
 
 				it('should retry verifying the 2FA code when the previous response is "pending"', async () => {
 					const spy = jest.spyOn(global, 'fetch');
 
-					stubMultipleJSONRespones([
+					stubMultipleJSONResponses([
 						{ httpStatus: 400, body: {} },
 						{ httpStatus: 200, body: dummyRequest2FACodeResponse },
 						{ httpStatus: 200, body: getDummyverify2FACodeResponse('pending') },
@@ -456,7 +464,7 @@ describe('<App />', () => {
 					it('should re-request the card data with a verificationId when 2FA succeeds', async () => {
 						const spy = jest.spyOn(global, 'fetch');
 
-						stubMultipleJSONRespones([
+						stubMultipleJSONResponses([
 							{ httpStatus: 400, body: {} },
 							{ httpStatus: 200, body: dummyRequest2FACodeResponse },
 							{
@@ -493,7 +501,7 @@ describe('<App />', () => {
 					it('should fail after four fetch requests if second getCardData attempt fails', async () => {
 						const spy = jest.spyOn(global, 'fetch');
 
-						stubMultipleJSONRespones([
+						stubMultipleJSONResponses([
 							{ httpStatus: 400, body: {} },
 							{ httpStatus: 200, body: dummyRequest2FACodeResponse },
 							{
@@ -517,7 +525,7 @@ describe('<App />', () => {
 					it('should show the card data when 2nd attempt at getCardData succeeds', async () => {
 						expect(screen.queryByText('•••• •••• •••• ••••')).toBeVisible();
 
-						stubMultipleJSONRespones([
+						stubMultipleJSONResponses([
 							{ httpStatus: 400, body: {} },
 							{ httpStatus: 200, body: dummyRequest2FACodeResponse },
 							{
@@ -593,9 +601,10 @@ describe('<App />', () => {
 	describe('when user triggers the setTheme event', () => {
 		it('should turn the theme from default to "dark" when set in setTheme', () => {
 			addUrlParams({ nameOnCard: 'Matias Calvo' });
-			const { container } = render(<App />);
 
-			expect(container.firstChild).toHaveStyle('color: black');
+			render(<App />);
+
+			expect(screen.getByTestId('card-container')).toHaveStyle('color: black');
 
 			fireEvent(
 				window,
@@ -604,7 +613,7 @@ describe('<App />', () => {
 				})
 			);
 
-			expect(container.firstChild).toHaveStyle('color: white');
+			expect(screen.getByTestId('card-container')).toHaveStyle('color: white');
 		});
 	});
 });

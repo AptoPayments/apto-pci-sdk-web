@@ -17,6 +17,7 @@ export default function Form(props: IFormProps) {
 				padding: '5vw',
 			}}
 			onSubmit={props.handleSubmit}
+			data-testid="2fa-form"
 		>
 			<div
 				style={{

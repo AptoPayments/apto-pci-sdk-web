@@ -14,7 +14,7 @@ export function stubJSONResponse(body: unknown, httpStatus = 200) {
 		.mockResolvedValueOnce(new Response(JSON.stringify(body), { status: httpStatus }));
 }
 
-export function stubMultipleJSONRespones(responses: Array<{ httpStatus: 200 | 400; body: unknown }>) {
+export function stubMultipleJSONResponses(responses: Array<{ httpStatus: 200 | 400; body: unknown }>) {
 	_resetMocks();
 	return responses.reduce((spy: any, response: { httpStatus: 200 | 400; body: unknown }) => {
 		// TODO: set Spy type
@@ -32,5 +32,5 @@ function _resetMocks() {
 export default {
 	stubJSONResponse,
 	stubPendingResponse,
-	stubMultipleJSONRespones,
+	stubMultipleJSONResponses,
 };
