@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.1.0](https://github.com/AptoPayments/apto-pci-sdk-web/compare/v3.0.0...v3.1.0) (2021-08-04)
+
+
+### Features
+
+* Enable custom styling of OTP Form (ACQ-1673) ([#47](https://github.com/AptoPayments/apto-pci-sdk-web/issues/47)) ([634a377](https://github.com/AptoPayments/apto-pci-sdk-web/commit/634a377ffb642ebb5b7fc4069bbc6bd68ebeb6c7))
+
+
+
+
+
 # [3.0.0](https://github.com/AptoPayments/apto-pci-sdk-web/compare/v2.2.1...v3.0.0) (2021-08-03)
 
 
