@@ -16,4 +16,7 @@ export interface ITheme {
 	pan?: CSSProperties;
 	cvv?: CSSProperties;
 	exp?: CSSProperties;
+	form2FA?: CSSProperties;
+	form2FAInput?: CSSProperties;
+	form2FASubmit?: CSSProperties;
 }

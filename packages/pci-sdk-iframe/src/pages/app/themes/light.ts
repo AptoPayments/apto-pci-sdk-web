@@ -1,4 +1,6 @@
+// TODO: group this with context: `cardData: { ... }, form2FA: { ... }` in the next major release
 export default {
+	// Card Data
 	container: {
 		display: 'flex',
 		flexWrap: 'wrap',
@@ -25,7 +27,7 @@ export default {
 	groupPan: {
 		order: 1,
 		width: '100%',
-		marginBottom: '3.53vw', //'12px'
+		marginBottom: '3.53vw', // '12px'
 	},
 	groupCvv: {
 		order: 4,
@@ -53,5 +55,29 @@ export default {
 	},
 	pan: {
 		fontSize: '7.06vw', //24px
+	},
+	// 2FA Form
+	form2FA: {
+		alignContent: 'center',
+		display: 'flex',
+		flexDirection: 'column',
+		height: '100%',
+		justifyContent: 'center',
+		padding: '0 15vw',
+	},
+	form2FAInput: {
+		width: '90%',
+		margin: 'auto',
+		fontSize: '3.53vw', // '12px'
+		padding: '2.35vw',
+		borderRadius: '1.2vw 0 0 1.2vw',
+		border: '1px solid #ccc',
+	},
+	form2FASubmit: {
+		padding: '0 1rem',
+		border: '1px solid #ccc',
+		borderRadius: '0 1.2vw 1.2vw 0',
+		cursor: 'pointer',
+		fontSize: '3.53vw', // '12px'
 	},
 };
