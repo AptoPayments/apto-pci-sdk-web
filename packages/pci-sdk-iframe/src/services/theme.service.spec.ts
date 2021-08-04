@@ -113,4 +113,27 @@ const dummy_style_default_theme_extended: ITheme = {
 	cvv: {
 		fontSize: '24px',
 	},
+	form2FA: {
+		alignContent: 'center',
+		display: 'flex',
+		flexDirection: 'column',
+		height: '100%',
+		justifyContent: 'center',
+		padding: '0 15vw',
+	},
+	form2FAInput: {
+		border: '1px solid #ccc',
+		borderRadius: '1.2vw 0 0 1.2vw',
+		fontSize: '3.53vw',
+		margin: 'auto',
+		padding: '2.35vw',
+		width: '90%',
+	},
+	form2FASubmit: {
+		border: '1px solid #ccc',
+		borderRadius: '0 1.2vw 1.2vw 0',
+		cursor: 'pointer',
+		fontSize: '3.53vw',
+		padding: '0 1rem',
+	},
 };
