@@ -130,10 +130,13 @@ const dummy_style_default_theme_extended: ITheme = {
 		width: '90%',
 	},
 	form2FASubmit: {
+		backgroundColor: '#ccc',
 		border: '1px solid #ccc',
 		borderRadius: '0 1.2vw 1.2vw 0',
 		cursor: 'pointer',
 		fontSize: '3.53vw',
 		padding: '0 1rem',
+		boxSizing: 'border-box',
+		margin: '0',
 	},
 };

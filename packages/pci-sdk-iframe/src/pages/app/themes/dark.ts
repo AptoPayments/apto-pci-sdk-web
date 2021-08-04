@@ -83,5 +83,7 @@ export default {
 		cursor: 'pointer',
 		fontSize: '3.53vw', // '12px'
 		color: 'white',
+		boxSizing: 'border-box',
+		margin: '0',
 	},
 };

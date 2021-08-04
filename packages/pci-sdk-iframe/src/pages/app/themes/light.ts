@@ -75,9 +75,12 @@ export default {
 	},
 	form2FASubmit: {
 		padding: '0 1rem',
+		backgroundColor: '#ccc',
 		border: '1px solid #ccc',
 		borderRadius: '0 1.2vw 1.2vw 0',
 		cursor: 'pointer',
 		fontSize: '3.53vw', // '12px'
+		boxSizing: 'border-box',
+		margin: '0',
 	},
 };
