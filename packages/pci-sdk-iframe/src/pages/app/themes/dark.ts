@@ -1,4 +1,6 @@
+// TODO: group this with context: `cardData: { ... }, formOTP: { ... }` in the next major release
 export default {
+	// Card Data
 	container: {
 		display: 'flex',
 		flexWrap: 'wrap',
@@ -53,5 +55,35 @@ export default {
 	},
 	pan: {
 		fontSize: '7.06vw', //24px
+	},
+	// 2FA Form
+	formOTP: {
+		alignContent: 'center',
+		display: 'flex',
+		flexDirection: 'column',
+		height: '100%',
+		justifyContent: 'center',
+		padding: '0 15vw',
+	},
+	formOTPInput: {
+		width: '90%',
+		margin: 'auto',
+		fontSize: '3.53vw', // '12px'
+		padding: '2.35vw',
+		backgroundColor: '#424242',
+		borderRadius: '1.2vw 0 0 1.2vw',
+		border: '1px solid #424242',
+		color: 'white',
+	},
+	formOTPSubmit: {
+		padding: '0 1rem',
+		backgroundColor: '#212121',
+		border: '1px solid #000',
+		borderRadius: '0 1.2vw 1.2vw 0',
+		cursor: 'pointer',
+		fontSize: '3.53vw', // '12px'
+		color: 'white',
+		boxSizing: 'border-box',
+		margin: '0',
 	},
 };

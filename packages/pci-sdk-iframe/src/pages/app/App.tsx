@@ -28,7 +28,7 @@ export default function App() {
 		<>
 			<Info message={message} />
 			{isFormVisible ? (
-				<Form handleSubmit={handleCodeSubmit} placeholder={codePlaceholderMessage} />
+				<Form handleSubmit={handleCodeSubmit} placeholder={codePlaceholderMessage} theme={theme} />
 			) : (
 				<CardData
 					isLoading={isLoading}

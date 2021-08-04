@@ -16,4 +16,7 @@ export interface ITheme {
 	pan?: CSSProperties;
 	cvv?: CSSProperties;
 	exp?: CSSProperties;
+	formOTP?: CSSProperties;
+	formOTPInput?: CSSProperties;
+	formOTPSubmit?: CSSProperties;
 }
