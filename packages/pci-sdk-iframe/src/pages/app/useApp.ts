@@ -41,7 +41,7 @@ export default function useApp() {
 
 	useEffect(() => {
 		function _onMessage(event: MessageEvent) {
-			const data = JSON.parse(event.data);
+			const data = event?.data ? JSON.parse(event.data) : {};
 
 			switch (data.type) {
 				case 'setStyle':
@@ -59,6 +59,7 @@ export default function useApp() {
 						message: '',
 						isFormVisible: false,
 						verificationId: '',
+						isLoading: false,
 					});
 				case 'isDataVisible':
 					return messageService.emitMessage({
