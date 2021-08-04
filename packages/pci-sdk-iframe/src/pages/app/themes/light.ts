@@ -1,4 +1,4 @@
-// TODO: group this with context: `cardData: { ... }, form2FA: { ... }` in the next major release
+// TODO: group this with context: `cardData: { ... }, formOTP: { ... }` in the next major release
 export default {
 	// Card Data
 	container: {
@@ -57,7 +57,7 @@ export default {
 		fontSize: '7.06vw', //24px
 	},
 	// 2FA Form
-	form2FA: {
+	formOTP: {
 		alignContent: 'center',
 		display: 'flex',
 		flexDirection: 'column',
@@ -65,7 +65,7 @@ export default {
 		justifyContent: 'center',
 		padding: '0 15vw',
 	},
-	form2FAInput: {
+	formOTPInput: {
 		width: '90%',
 		margin: 'auto',
 		fontSize: '3.53vw', // '12px'
@@ -73,7 +73,7 @@ export default {
 		borderRadius: '1.2vw 0 0 1.2vw',
 		border: '1px solid #ccc',
 	},
-	form2FASubmit: {
+	formOTPSubmit: {
 		padding: '0 1rem',
 		backgroundColor: '#ccc',
 		border: '1px solid #ccc',

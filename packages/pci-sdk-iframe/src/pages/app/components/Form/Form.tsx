@@ -9,14 +9,14 @@ interface IFormProps {
 
 export default function Form(props: IFormProps) {
 	return (
-		<form style={props.theme.form2FA} onSubmit={props.handleSubmit} data-testid="2fa-form">
+		<form style={props.theme.formOTP} onSubmit={props.handleSubmit} data-testid="2fa-form">
 			<div
 				style={{
 					display: 'flex',
 				}}
 			>
 				<input
-					style={props.theme.form2FAInput}
+					style={props.theme.formOTPInput}
 					autoComplete="off"
 					required
 					id="code"
@@ -25,7 +25,7 @@ export default function Form(props: IFormProps) {
 					aria-label="2FA code"
 					placeholder={props.placeholder}
 				/>
-				<button style={props.theme.form2FASubmit} type="submit">
+				<button style={props.theme.formOTPSubmit} type="submit">
 					Send
 				</button>
 			</div>

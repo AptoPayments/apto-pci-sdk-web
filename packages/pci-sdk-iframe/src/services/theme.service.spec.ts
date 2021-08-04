@@ -113,7 +113,7 @@ const dummy_style_default_theme_extended: ITheme = {
 	cvv: {
 		fontSize: '24px',
 	},
-	form2FA: {
+	formOTP: {
 		alignContent: 'center',
 		display: 'flex',
 		flexDirection: 'column',
@@ -121,7 +121,7 @@ const dummy_style_default_theme_extended: ITheme = {
 		justifyContent: 'center',
 		padding: '0 15vw',
 	},
-	form2FAInput: {
+	formOTPInput: {
 		border: '1px solid #ccc',
 		borderRadius: '1.2vw 0 0 1.2vw',
 		fontSize: '3.53vw',
@@ -129,7 +129,7 @@ const dummy_style_default_theme_extended: ITheme = {
 		padding: '2.35vw',
 		width: '90%',
 	},
-	form2FASubmit: {
+	formOTPSubmit: {
 		backgroundColor: '#ccc',
 		border: '1px solid #ccc',
 		borderRadius: '0 1.2vw 1.2vw 0',
