@@ -6,7 +6,7 @@ interface IInfoProps {
 	theme: ITheme;
 }
 export default function Info(props: IInfoProps) {
-	const color = props.theme.container['color'];
+	const color = props.theme.container?.color;
 	return (
 		<div
 			style={{
