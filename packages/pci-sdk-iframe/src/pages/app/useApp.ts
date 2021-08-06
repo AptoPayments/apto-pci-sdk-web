@@ -129,9 +129,6 @@ export default function useApp() {
 		return () => window.removeEventListener('message', _onMessage);
 	}, [staticState, state, dispatch]);
 
-	/**
-	 *
-	 */
 	async function handleCodeSubmit(e: React.FormEvent) {
 		e.preventDefault();
 
