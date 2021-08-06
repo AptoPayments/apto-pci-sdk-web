@@ -26,7 +26,7 @@ export default function App() {
 
 	return (
 		<>
-			<Info message={message} />
+			{message ? <Info message={message} theme={theme} /> : null}
 			{isFormVisible ? (
 				<Form handleSubmit={handleCodeSubmit} placeholder={codePlaceholderMessage} theme={theme} />
 			) : (

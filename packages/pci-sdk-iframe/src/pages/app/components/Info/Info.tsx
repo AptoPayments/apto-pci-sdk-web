@@ -1,18 +1,11 @@
 import React from 'react';
+import { ITheme } from '../../../../types/IThemes';
 
 interface IInfoProps {
 	message: string;
+	theme: ITheme;
 }
+
 export default function Info(props: IInfoProps) {
-	return (
-		<div
-			style={{
-				fontFamily: 'sans-serif',
-				padding: '5vw',
-				position: 'absolute',
-			}}
-		>
-			{props.message}
-		</div>
-	);
+	return <div style={props.theme.notification}>{props.message}</div>;
 }

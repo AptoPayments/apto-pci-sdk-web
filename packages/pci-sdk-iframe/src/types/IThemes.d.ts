@@ -19,4 +19,5 @@ export interface ITheme {
 	formOTP?: CSSProperties;
 	formOTPInput?: CSSProperties;
 	formOTPSubmit?: CSSProperties;
+	notification?: CSSProperties;
 }
