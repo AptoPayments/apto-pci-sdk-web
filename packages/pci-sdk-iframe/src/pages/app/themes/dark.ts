@@ -86,4 +86,20 @@ export default {
 		boxSizing: 'border-box',
 		margin: '0',
 	},
+	// Notification
+	notification: {
+		fontFamily: 'sans-serif',
+		padding: '2vw 4vw',
+		lineHeight: '24px',
+		position: 'absolute',
+		left: '50%',
+		transform: 'translateX(-50%)',
+		backgroundColor: '#263238',
+		color: '#CFD8DC',
+		borderRadius: '6px',
+		zIndex: 3,
+		width: '70%',
+		textAlign: 'center',
+		top: '15px',
+	},
 };

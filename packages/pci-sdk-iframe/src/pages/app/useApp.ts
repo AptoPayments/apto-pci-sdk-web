@@ -41,6 +41,11 @@ export default function useApp() {
 
 	useEffect(() => {
 		function _onMessage(event: MessageEvent) {
+			if (!event.data) {
+				console.error(`[PCI-SDK]: iframe received unexpected event: ${event}`);
+				return;
+			}
+
 			const data = JSON.parse(event.data);
 
 			switch (data.type) {
@@ -129,9 +134,6 @@ export default function useApp() {
 		return () => window.removeEventListener('message', _onMessage);
 	}, [staticState, state, dispatch]);
 
-	/**
-	 *
-	 */
 	async function handleCodeSubmit(e: React.FormEvent) {
 		e.preventDefault();
 
