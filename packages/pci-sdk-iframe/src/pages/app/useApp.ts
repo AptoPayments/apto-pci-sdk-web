@@ -46,7 +46,7 @@ export default function useApp() {
 				return;
 			}
 
-			const data = event.data;
+			const data = JSON.parse(event.data);
 
 			switch (data.type) {
 				case 'setStyle':
