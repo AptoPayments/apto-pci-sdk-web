@@ -41,12 +41,12 @@ export default function useApp() {
 
 	useEffect(() => {
 		function _onMessage(event: MessageEvent) {
-			if (!event.data) {
+			if (!event?.data) {
 				console.error(`[PCI-SDK]: iframe received unexpected event: ${event}`);
 				return;
 			}
 
-			const data = JSON.parse(event.data);
+			const data = event?.data ? JSON.parse(event.data) : {};
 
 			switch (data.type) {
 				case 'setStyle':
