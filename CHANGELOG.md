@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.2.0](https://github.com/AptoPayments/apto-pci-sdk-web/compare/v3.1.0...v3.2.0) (2021-08-13)
+
+
+### Bug Fixes
+
+* **notification:** style fixes ([#54](https://github.com/AptoPayments/apto-pci-sdk-web/issues/54)) ([6120999](https://github.com/AptoPayments/apto-pci-sdk-web/commit/612099996b76a839ee55040f9e613f96247e1de9))
+
+
+### Features
+
+* enable theming notifciation ([#53](https://github.com/AptoPayments/apto-pci-sdk-web/issues/53)) ([b805520](https://github.com/AptoPayments/apto-pci-sdk-web/commit/b8055206a451338c502d8fcb02de86c9091f917d))
+
+
+
+
+
 # [3.1.0](https://github.com/AptoPayments/apto-pci-sdk-web/compare/v3.0.0...v3.1.0) (2021-08-04)
 
 
