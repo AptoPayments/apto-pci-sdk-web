@@ -24,6 +24,8 @@ export default function Form(props: IFormProps) {
 					type="text"
 					aria-label="2FA code"
 					placeholder={props.placeholder}
+					pattern="\d*"
+					inputMode="numeric"
 				/>
 				<button style={props.theme.formOTPSubmit} type="submit">
 					Send
