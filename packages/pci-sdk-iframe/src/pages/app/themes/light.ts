@@ -70,22 +70,22 @@ export default {
 	formOTPInput: {
 		width: '90%',
 		margin: 'auto',
-		fontSize: '4.118vw', // '14px'
 		padding: '2.35vw 3.52vw', //8px 12px
-		borderRadius: '1.2vw 0 0 1.2vw',
 		border: '1px solid #ccc',
+		borderRadius: '1.2vw 0 0 1.2vw',
+		fontSize: '4.118vw', // '14px'
 	},
 	formOTPSubmit: {
+		margin: '0',
 		padding: '0 1rem',
 		backgroundColor: '#ccc',
 		border: '1px solid #ccc',
 		borderRadius: '0 1.2vw 1.2vw 0',
-		cursor: 'pointer',
 		fontFamily:
 			'-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif',
 		fontSize: '4.118vw', // '14px'
+		cursor: 'pointer',
 		boxSizing: 'border-box',
-		margin: '0',
 	},
 	// Notification
 	notification: {

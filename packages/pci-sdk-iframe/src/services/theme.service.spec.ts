@@ -80,7 +80,7 @@ const dummy_style_default_theme_extended: ITheme = {
 	groupPan: {
 		order: 1,
 		width: '100%',
-		marginBottom: '3.53vw', //'12px'
+		marginBottom: '4.70vw', // '16px'
 	},
 	groupCvv: {
 		order: 4,
@@ -117,27 +117,31 @@ const dummy_style_default_theme_extended: ITheme = {
 		alignContent: 'center',
 		display: 'flex',
 		flexDirection: 'column',
-		height: '100%',
+		height: '92%',
 		justifyContent: 'center',
-		padding: '0 15vw',
+		padding: '0 18vw',
+		fontFamily:
+			'-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif',
 	},
 	formOTPInput: {
+		width: '90%',
+		margin: 'auto',
+		padding: '2.35vw 3.52vw', //8px 12px
 		border: '1px solid #ccc',
 		borderRadius: '1.2vw 0 0 1.2vw',
-		fontSize: '3.53vw',
-		margin: 'auto',
-		padding: '2.35vw',
-		width: '90%',
+		fontSize: '4.118vw', // '14px'
 	},
 	formOTPSubmit: {
+		margin: '0',
+		padding: '0 1rem',
 		backgroundColor: '#ccc',
 		border: '1px solid #ccc',
 		borderRadius: '0 1.2vw 1.2vw 0',
+		fontFamily:
+			'-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif',
+		fontSize: '4.118vw', // '14px'
 		cursor: 'pointer',
-		fontSize: '3.53vw',
-		padding: '0 1rem',
 		boxSizing: 'border-box',
-		margin: '0',
 	},
 	notification: {
 		position: 'absolute',
