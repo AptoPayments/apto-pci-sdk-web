@@ -109,27 +109,27 @@ export function getIsDataVisible(): Promise<boolean> {
 function _checkInitOptions(initOptions: InitOptions) {
 	if (!initOptions) {
 		throw new Error(
-			'Cannot call .init() with no options. At least auth parameters are required: http://docs.aptopayments.com/docs/pci-sdk-web#initialize-the-sdk'
+			'Cannot call .init() with no options. At least auth parameters are required: https://docs.aptopayments.com/docs/sdks/Web/pci_sdk_web#initialize-the-sdk'
 		);
 	}
 	if (!initOptions.auth.apiKey) {
 		throw new Error(
-			'You need to provide the mobile API key init the PCI SDK: http://docs.aptopayments.com/docs/pci-sdk-web/#get-the-mobile-api-key'
+			'You need to provide the mobile API key init the PCI SDK: https://docs.aptopayments.com/docs/sdks/Web/pci_sdk_web/#get-the-mobile-api-key'
 		);
 	}
 	if (!initOptions.auth.userToken) {
 		throw new Error(
-			'You need to provide an user token to init the PCI SDK: http://docs.aptopayments.com/docs/pci-sdk-web/#optionsobject-properties'
+			'You need to provide an user token to init the PCI SDK: https://docs.aptopayments.com/docs/sdks/Web/pci_sdk_web/#optionsobject-properties'
 		);
 	}
 	if (!initOptions.auth.cardId) {
 		throw new Error(
-			'You need to provide a cardID to init the PCI SDK: http://docs.aptopayments.com/docs/pci-sdk-web/#optionsobject-properties'
+			'You need to provide a cardID to init the PCI SDK: https://docs.aptopayments.com/docs/sdks/Web/pci_sdk_web/#optionsobject-properties'
 		);
 	}
 	if (!initOptions.auth.environment) {
 		throw new Error(
-			'You need to provide an environment to init the PCI SDK. Try "sbx" if you are testing: http://docs.aptopayments.com/docs/pci-sdk-web/#optionsobject-properties'
+			'You need to provide an environment to init the PCI SDK. Try "sbx" if you are testing: https://docs.aptopayments.com/docs/sdks/Web/pci_sdk_web/#optionsobject-properties'
 		);
 	}
 }

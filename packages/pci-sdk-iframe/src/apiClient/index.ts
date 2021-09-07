@@ -114,7 +114,7 @@ export async function getCardData(
 		case 400:
 			throw new Error(
 				errorMessageParser.parse400(
-					'Invalid request. Are you sure the cardID is correct? http://docs.aptopayments.com/docs/pci-sdk-web/#optionsobject-properties'
+					'Invalid request. Are you sure the cardID is correct? https://docs.aptopayments.com/docs/sdks/Web/pci_sdk_web/#optionsobject-properties'
 				)
 			);
 		default:
