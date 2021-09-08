@@ -10,10 +10,10 @@ The Apto Web PCI SDK enables developers to display protected PCI data using an i
 
 You can test the Apto Web PCI SDK in our [demo](https://aptopayments.github.io/apto-pci-sdk-web/).
 
-For more information about the SDK, installation and development, see the [Web PCI SDK docs](http://docs.aptopayments.com/docs/pci-sdk-web).
+For more information about the SDK, installation and development, see the [Web PCI SDK docs](https://docs.aptopayments.com/docs/sdks/Web/pci_sdk_web).
 
 ## 🧑‍💻 Contributions & Development
 
 We look forward to receiving your feedback, including new feature requests, bug fixes and documentation improvements.
 
-If you would like to contribute to the SDK development, see [Contributions & Development](http://docs.aptopayments.com/docs/pci-sdk-web#contributions--development).
+If you would like to contribute to the SDK development, see [Contributions & Development](https://docs.aptopayments.com/docs/sdks/Web/pci_sdk_web#contributions--development).

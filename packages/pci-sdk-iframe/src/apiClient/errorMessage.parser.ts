@@ -3,9 +3,9 @@ function parse401(errorCode: number, serverMessage: string): string {
 		case 90263:
 			return 'Cardholder needs to verify their identity. Sending 2FA code to phone or email...';
 		case 3032:
-			return 'The user token you provided is invalid. Please set a valid user token: http://docs.aptopayments.com/docs/pci-sdk-web/#optionsobject-properties';
+			return 'The user token you provided is invalid. Please set a valid user token: https://docs.aptopayments.com/docs/sdks/Web/pci_sdk_web/#optionsobject-properties';
 		case 3035:
-			return 'The mobile API key you provided is invalid. Please set a valid API key: http://docs.aptopayments.com/docs/pci-sdk-web/#get-the-mobile-api-key';
+			return 'The mobile API key you provided is invalid. Please set a valid API key: https://docs.aptopayments.com/docs/sdks/Web/pci_sdk_web/#get-the-mobile-api-key';
 		case 90262:
 			return 'Unexpected error in cardholder verification. Please restart verification process or contact APTO if problem persists.';
 		case 90000:
