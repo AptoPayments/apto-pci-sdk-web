@@ -739,7 +739,7 @@ describe('<App />', () => {
 
 			return waitFor(() => {
 				// TODO: Make this test more sensitive
-				expect(fetchSpy).toHaveBeenLastCalledWith(expect.stringContaining('/set_pin'), expect.anything());
+				expect(fetchSpy).toHaveBeenLastCalledWith(expect.stringContaining('/pin'), expect.anything());
 			});
 		});
 	});
