@@ -17,7 +17,7 @@ export default function Form(props: IFormProps) {
 			>
 				<input
 					style={props.theme.formOTPInput}
-					autoComplete="off"
+					autoComplete="one-time-code"
 					required
 					id="code"
 					name="code"
