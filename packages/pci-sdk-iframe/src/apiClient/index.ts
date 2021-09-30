@@ -139,19 +139,35 @@ function _getVaultBaseUrl() {
 export interface ISetPinArgs {
 	pin: string;
 	verificationId: string;
+	cardId: string;
 }
 
 /**
  * TODO: Implement this
  */
 async function setPin(args: ISetPinArgs) {
-	const res = await fetch(`${BASE_URL}v1/dummy_url/set_pin`, {
+	const res = await fetch(`${BASE_URL}v2/cards/${args.cardId}/set_pin`, {
 		method: 'POST',
 		headers,
 		body: JSON.stringify({ pin: args.pin, verification_id: args.verificationId }),
 	});
 
-	return res;
+	const data = await res.json();
+
+	switch (res.status) {
+		case 200:
+			return res;
+		case 401:
+			throw new Error(errorMessageParser.parse401(data.code, data.message));
+		case 400:
+			throw new Error(
+				errorMessageParser.parse400(
+					'Invalid request. Are you sure the cardID is correct? https://docs.aptopayments.com/docs/sdks/Web/pci_sdk_web/#optionsobject-properties'
+				)
+			);
+		default:
+			throw new Error(errorMessageParser.parseUnknownError());
+	}
 }
 
 export default {

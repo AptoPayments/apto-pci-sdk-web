@@ -38,6 +38,8 @@ export default function useApp() {
 		failed2FAPrompt: (urlParams.get('failed2FAPrompt') as string) || 'Wrong code. Try again.',
 		codePlaceholderMessage: (urlParams.get('codePlaceholderMessage') as string) || 'Enter the code',
 		pinPlaceholderMessage: (urlParams.get('pinPlaceholderMessage') as string) || 'Enter your new PIN',
+		pinUpdatedMessage: (urlParams.get('pinUpdatedMessage') as string) || 'Pin updated successfully',
+
 		lastFour: (urlParams.get('lastFour') as string) || '••••',
 		isDebug: !!urlParams.get('debug'),
 	}));
@@ -63,8 +65,18 @@ export default function useApp() {
 				console.error(`[PCI-SDK]: iframe received unexpected event: ${event}`);
 				return;
 			}
+			let data;
+			try {
+				data = JSON.parse(event.data);
+			} catch (err) {
+				console.error(`[PCI-SDK]: iframe received unexpected event: ${event}`);
+				return;
+			}
 
-			const data = JSON.parse(event.data);
+			if (!data.type) {
+				console.error(`[PCI-SDK]: iframe received unexpected event: ${event}`);
+				return;
+			}
 
 			switch (data.type) {
 				case 'setStyle':
@@ -99,12 +111,8 @@ export default function useApp() {
 		messageService.emitMessage({ type: 'apto-iframe-ready' });
 
 		async function _showSetPinForm() {
-			if (state.verificationId && state.isVerificationIdValid) {
-				dispatch({ uiStatus: 'SET_PIN_FORM' });
-			}
-
 			const { verificationId } = await apiClient.request2FACode();
-			return dispatch({ verificationId, uiStatus: 'OTP_FORM', nextStep: 'SET_PIN' });
+			return dispatch({ verificationId, uiStatus: 'OTP_FORM', nextStep: 'SET_PIN', message: '' });
 		}
 
 		async function _showCardData(cardId: string) {
@@ -112,22 +120,20 @@ export default function useApp() {
 				uiStatus: 'CARD_DATA_HIDDEN',
 				isLoading: true,
 				message: '',
-				verificationId: '',
 				nextStep: 'VIEW_CARD_DATA',
 			});
 
 			try {
-				// When the client is pci compatible the server will return valid data
 				const cardData = await apiClient.getCardData(cardId);
+
 				if (cardData) {
 					dispatch({
-						cvv: cardData.cvv as string,
-						exp: cardData.exp as string,
-						uiStatus: 'CARD_DATA_VISIBLE',
+						cvv: cardData.cvv,
+						exp: cardData.exp,
 						isLoading: false,
-						pan: cardData.pan as string,
-						verificationId: '',
 						message: '',
+						pan: cardData.pan,
+						uiStatus: 'CARD_DATA_VISIBLE',
 					});
 				}
 			} catch (err) {
@@ -136,22 +142,27 @@ export default function useApp() {
 				}
 
 				if (checkRequires2FACodeError(err)) {
+					// Verification id failed. Lets get a new one and try again.
 					try {
 						const { verificationId } = await apiClient.request2FACode();
-						return dispatch({ verificationId, uiStatus: 'OTP_FORM' });
+						return dispatch({ verificationId, isVerificationIdValid: false, uiStatus: 'OTP_FORM' });
 					} catch (e) {
-						dispatch({
-							uiStatus: 'CARD_DATA_HIDDEN',
+						return dispatch({
 							isLoading: false,
+							isVerificationIdValid: false,
 							message: 'Unexpected error',
+							uiStatus: 'CARD_DATA_HIDDEN',
+							verificationId: '',
 						});
 					}
 				}
 
-				dispatch({
-					uiStatus: 'CARD_DATA_HIDDEN',
+				return dispatch({
+					isVerificationIdValid: false,
 					isLoading: false,
-					message: err?.message || 'Unexpected error',
+					message: 'Unexpected error',
+					uiStatus: 'CARD_DATA_HIDDEN',
+					verificationId: '',
 				});
 			}
 		}
@@ -167,9 +178,9 @@ export default function useApp() {
 		const pin = (e.target as any).elements['pin'].value as string;
 
 		await apiClient
-			.setPin({ pin, verificationId: state.verificationId })
+			.setPin({ pin, verificationId: state.verificationId, cardId: staticState.cardId })
 			.then(() => {
-				dispatch({ isLoading: false });
+				return dispatch({ isLoading: false, message: staticState.pinUpdatedMessage });
 			})
 			.catch(() => {
 				return dispatch({
@@ -192,9 +203,11 @@ export default function useApp() {
 			res = await apiClient.verify2FACode(secret, state.verificationId);
 		} catch (e) {
 			return dispatch({
-				uiStatus: 'CARD_DATA_HIDDEN',
 				isLoading: false,
-				message: e?.message || 'Unexpected error',
+				isVerificationIdValid: false,
+				message: 'Unexpected error',
+				uiStatus: 'CARD_DATA_HIDDEN',
+				verificationId: '',
 			});
 		}
 
@@ -202,31 +215,32 @@ export default function useApp() {
 			// 2FA token is valid. We are good to get card data using the validated secret
 			case 'passed':
 				if (state.nextStep === 'SET_PIN') {
-					return dispatch({ uiStatus: 'SET_PIN_FORM' });
+					return dispatch({ uiStatus: 'SET_PIN_FORM', isVerificationIdValid: true });
 				}
 
 				if (state.nextStep === 'VIEW_CARD_DATA') {
 					return apiClient
 						.getCardData(staticState.cardId, { verificationId: state.verificationId })
 						.then((res) => {
-							dispatch({
+							return dispatch({
 								cvv: res.cvv,
 								exp: res.exp,
-								uiStatus: 'CARD_DATA_VISIBLE',
 								isLoading: false,
 								isVerificationIdValid: true,
 								message: '',
 								pan: res.pan,
+								uiStatus: 'CARD_DATA_VISIBLE',
 							});
 						})
 						.catch(() => {
-							dispatch({
+							return dispatch({
 								cvv: '•••',
 								exp: '••/••',
-								uiStatus: 'CARD_DATA_HIDDEN',
 								isLoading: false,
+								isVerificationIdValid: false,
 								message: 'Unexpected error',
 								pan: `•••• •••• •••• ${staticState.lastFour}`,
+								uiStatus: 'CARD_DATA_HIDDEN',
 								verificationId: '',
 							});
 						});
