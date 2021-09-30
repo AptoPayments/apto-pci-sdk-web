@@ -6,7 +6,6 @@ import App from './App';
 
 describe('<App />', () => {
 	beforeAll(() => {
-		jest.spyOn(window, 'alert').mockImplementation(jest.fn());
 		global.prompt = jest.fn().mockImplementation((isFirstAttempt) => (isFirstAttempt ? '123456' : '654321'));
 	});
 
@@ -416,7 +415,7 @@ describe('<App />', () => {
 					expect(screen.queryByText('•••• •••• •••• ••••')).toBeVisible();
 				});
 
-				it('should alert "Process expired. Start again." when 2FA is expired', async () => {
+				it('should display "Process expired. Start again." when 2FA is expired', async () => {
 					expect(screen.queryByText('Process expired. Start again.')).toBeNull();
 
 					stubMultipleJSONResponses([
@@ -445,7 +444,7 @@ describe('<App />', () => {
 					});
 				});
 
-				it('should alert "Too many attempts. Start again." when 2FA fails', async () => {
+				it('should display "Too many attempts. Start again." when 2FA fails', async () => {
 					expect(screen.queryByText('Too many attempts, try again.')).toBeNull();
 
 					stubMultipleJSONResponses([
@@ -474,7 +473,7 @@ describe('<App />', () => {
 					});
 				});
 
-				it('should alert "Wrong code. Try again." when 2FA fails but can retry', async () => {
+				it('should display "Wrong code. Try again." when 2FA fails but can retry', async () => {
 					stubMultipleJSONResponses([
 						{ httpStatus: 401, body: { code: 90263 } },
 						{ httpStatus: 200, body: dummyRequest2FACodeResponse },
@@ -531,10 +530,7 @@ describe('<App />', () => {
 
 						await waitFor(() =>
 							expect(spy).toHaveBeenNthCalledWith(4, expect.stringContaining('dummy_cardId/details'), {
-								body: JSON.stringify({
-									secret: '123456',
-									verification_id: 'dummy_verification_id',
-								}),
+								body: JSON.stringify({ verification_id: 'dummy_verification_id' }),
 								headers: {
 									Accept: 'application/json',
 									'Api-Key': 'Bearer null',
@@ -649,6 +645,102 @@ describe('<App />', () => {
 			);
 
 			expect(screen.getByTestId('card-container')).toHaveStyle('color: white');
+		});
+	});
+
+	describe('when the user triggers the "showSetPinForm" event', () => {
+		it('should start the verification process to get a valid verification id', () => {
+			stubJSONResponse(dummyRequest2FACodeResponse, 200);
+
+			render(<App />);
+
+			fireEvent(
+				window,
+				new MessageEvent('message', {
+					data: JSON.stringify({ type: 'showSetPinForm' }),
+				})
+			);
+
+			return waitFor(() => {
+				expect(screen.queryByTestId('2fa-form')).toBeVisible();
+			});
+		});
+
+		it('should display the set pin form once the 2FA passes', async () => {
+			stubMultipleJSONResponses([
+				// First return a 2FA response
+				{ httpStatus: 200, body: dummyRequest2FACodeResponse },
+				// The pass the 2FA
+				{
+					httpStatus: 200,
+					body: getDummyVerify2FACodeResponse('passed'),
+				},
+			]);
+
+			render(<App />);
+
+			fireEvent(
+				window,
+				new MessageEvent('message', {
+					data: JSON.stringify({ type: 'showSetPinForm' }),
+				})
+			);
+
+			await waitFor(() => {
+				expect(screen.queryByTestId('2fa-form')).toBeVisible();
+			});
+
+			// Fill the 2FA with a valid code
+			userEvent.type(screen.getByLabelText('2FA code'), '123456');
+			userEvent.click(screen.getByRole('button'));
+
+			return waitFor(() => {
+				expect(screen.queryByTestId('set-pin-form')).toBeVisible();
+			});
+		});
+
+		it('should send the new pin to the server', async () => {
+			const fetchSpy = jest.spyOn(global, 'fetch');
+
+			stubMultipleJSONResponses([
+				// First return a 2FA response
+				{ httpStatus: 200, body: dummyRequest2FACodeResponse },
+				// The pass the 2FA
+				{
+					httpStatus: 200,
+					body: getDummyVerify2FACodeResponse('passed'),
+				},
+			]);
+
+			render(<App />);
+
+			fireEvent(
+				window,
+				new MessageEvent('message', {
+					data: JSON.stringify({ type: 'showSetPinForm' }),
+				})
+			);
+
+			await waitFor(() => {
+				expect(screen.queryByTestId('2fa-form')).toBeVisible();
+			});
+
+			// Fill the 2FA with a valid code
+			userEvent.type(screen.getByLabelText('2FA code'), '123456');
+			userEvent.click(screen.getByRole('button'));
+
+			await waitFor(() => {
+				expect(screen.queryByTestId('set-pin-form')).toBeVisible();
+			});
+
+			// Fill the 2FA with a valid code
+			userEvent.type(screen.getByPlaceholderText('Enter your new PIN'), '0000');
+			userEvent.click(screen.getByRole('button'));
+
+			return waitFor(() => {
+				// TODO: Make this test more sensitive
+				expect(fetchSpy).toHaveBeenLastCalledWith(expect.stringContaining('/set_pin'), expect.anything());
+			});
 		});
 	});
 });

@@ -81,17 +81,9 @@ interface IGetCardDataResponse {
 	cvv: string;
 }
 
-export async function getCardData(
-	cardId: string,
-	auth?: { secret: string; verificationId: string }
-): Promise<IGetCardDataResponse> {
+export async function getCardData(cardId: string, auth?: { verificationId: string }): Promise<IGetCardDataResponse> {
 	const method = !auth ? 'GET' : 'POST';
-	const body = !auth
-		? null
-		: JSON.stringify({
-				secret: auth.secret,
-				verification_id: auth.verificationId,
-		  });
+	const body = !auth ? null : JSON.stringify({ verification_id: auth.verificationId });
 
 	const res = await fetch(`${VAULT_BASE_URL}v1/user/accounts/${cardId}/details`, {
 		method,
@@ -144,8 +136,27 @@ function _getVaultBaseUrl() {
 	}
 }
 
+export interface ISetPinArgs {
+	pin: string;
+	verificationId: string;
+}
+
+/**
+ * TODO: Implement this
+ */
+async function setPin(args: ISetPinArgs) {
+	const res = await fetch(`${BASE_URL}v1/dummy_url/set_pin`, {
+		method: 'POST',
+		headers,
+		body: JSON.stringify({ pin: args.pin, verification_id: args.verificationId }),
+	});
+
+	return res;
+}
+
 export default {
-	verify2FACode,
 	getCardData,
 	request2FACode,
+	setPin,
+	verify2FACode,
 };

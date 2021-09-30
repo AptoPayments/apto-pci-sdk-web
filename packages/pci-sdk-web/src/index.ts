@@ -79,6 +79,10 @@ export function setTheme(theme: string) {
 	_sendMessage({ type: 'setTheme', theme });
 }
 
+export function showSetPinForm() {
+	_sendMessage({ type: 'showSetPinForm' });
+}
+
 export function getIsDataVisible(): Promise<boolean> {
 	return new Promise((resolve) => {
 		window.addEventListener(
