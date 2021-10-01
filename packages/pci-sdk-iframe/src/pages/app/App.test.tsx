@@ -585,7 +585,7 @@ describe('<App />', () => {
 			userEvent.click(screen.getByRole('button'));
 
 			return waitFor(() => {
-				expect(fetchSpy).toHaveBeenLastCalledWith(expect.stringContaining('/pin'), {
+				expect(fetchSpy).toHaveBeenLastCalledWith(expect.stringContaining('/pci_pin'), {
 					body: JSON.stringify({ pin: '0000', verification_id: 'dummy_verification_id' }),
 					headers: {
 						Accept: 'application/json',
