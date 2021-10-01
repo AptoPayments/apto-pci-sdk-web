@@ -585,8 +585,16 @@ describe('<App />', () => {
 			userEvent.click(screen.getByRole('button'));
 
 			return waitFor(() => {
-				// TODO: Make this test more sensitive
-				expect(fetchSpy).toHaveBeenLastCalledWith(expect.stringContaining('/pin'), expect.anything());
+				expect(fetchSpy).toHaveBeenLastCalledWith(expect.stringContaining('/pin'), {
+					body: JSON.stringify({ pin: '0000', verification_id: 'dummy_verification_id' }),
+					headers: {
+						Accept: 'application/json',
+						'Api-Key': 'Bearer null',
+						Authorization: 'Bearer null',
+						'Content-Type': 'application/json',
+					},
+					method: 'POST',
+				});
 			});
 		});
 	});
