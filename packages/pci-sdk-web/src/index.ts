@@ -213,11 +213,12 @@ function _sendMessage(data: { type: string; theme?: any; style?: any }) {
 export { version } from '@apto-payments/pci-sdk-iframe';
 
 export default {
-	init,
-	showPCIData,
+	getIsDataVisible,
 	hidePCIData,
+	init,
 	setStyle,
 	setTheme,
-	getIsDataVisible,
+	showPCIData,
+	showSetPinForm,
 	version,
 };
