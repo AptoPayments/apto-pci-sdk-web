@@ -27,16 +27,54 @@ export interface Size {
 }
 
 export interface Values {
-	labelName?: string;
-	labelPan?: string;
-	labelCvv?: string;
-	labelExp?: string;
-	lastFour?: string;
-	nameOnCard?: string;
+	/**
+	 * Placeholder in the OTP code input.
+	 */
+	codePlaceholderMessage?: string;
+	/**
+	 * Message displayed when the OTP session expired
+	 */
 	expiredMessage?: string;
-	tooManyAttemptsMessage?: string;
-	enter2FAPrompt?: string;
+	/**
+	 * Message displayed when the OTP inserted is invalid
+	 */
 	failed2FAPrompt?: string;
+	/**
+	 * Text used as a label for the CVV
+	 */
+	labelCvv?: string;
+	/**
+	 * Text used as a label for the expiration date
+	 */
+	labelExp?: string;
+	/**
+	 * Text used as a label for the cardholder name
+	 */
+	labelName?: string;
+	/**
+	 * Text used as a label for the PAN
+	 */
+	labelPan?: string;
+	/**
+	 * Text containing the last four digits of the PAN
+	 */
+	lastFour?: string;
+	/**
+	 * Cardholder name
+	 */
+	nameOnCard?: string;
+	/**
+	 * Placeholder in the change PIN input
+	 */
+	pinPlaceholderMessage: string;
+	/**
+	 * Message displayed when the PIN is changed
+	 */
+	pinUpdatedMessage: string;
+	/**
+	 * Message displayed when too many OTP attempts are performed
+	 */
+	tooManyAttemptsMessage?: string;
 }
 
 let $aptoIframe: Promise<HTMLIFrameElement>;

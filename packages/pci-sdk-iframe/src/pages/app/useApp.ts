@@ -39,7 +39,6 @@ export default function useApp() {
 		codePlaceholderMessage: (urlParams.get('codePlaceholderMessage') as string) || 'Enter the code',
 		pinPlaceholderMessage: (urlParams.get('pinPlaceholderMessage') as string) || 'Enter your new PIN',
 		pinUpdatedMessage: (urlParams.get('pinUpdatedMessage') as string) || 'Pin updated successfully',
-
 		lastFour: (urlParams.get('lastFour') as string) || '••••',
 		isDebug: !!urlParams.get('debug'),
 	}));
