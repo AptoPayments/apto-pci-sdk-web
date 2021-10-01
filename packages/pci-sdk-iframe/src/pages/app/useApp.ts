@@ -38,7 +38,7 @@ export default function useApp() {
 		failed2FAPrompt: (urlParams.get('failed2FAPrompt') as string) || 'Wrong code. Try again.',
 		codePlaceholderMessage: (urlParams.get('codePlaceholderMessage') as string) || 'Enter the code',
 		pinPlaceholderMessage: (urlParams.get('pinPlaceholderMessage') as string) || 'Enter your new PIN',
-		pinUpdatedMessage: (urlParams.get('pinUpdatedMessage') as string) || 'Pin updated successfully',
+		pinUpdatedMessage: (urlParams.get('pinUpdatedMessage') as string) || 'Pin successfully updated',
 		lastFour: (urlParams.get('lastFour') as string) || '••••',
 		isDebug: !!urlParams.get('debug'),
 	}));

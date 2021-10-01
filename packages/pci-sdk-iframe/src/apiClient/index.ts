@@ -142,9 +142,6 @@ export interface ISetPinArgs {
 	cardId: string;
 }
 
-/**
- * TODO: Implement this
- */
 async function setPin(args: ISetPinArgs) {
 	const res = await fetch(`${BASE_URL}v1/cards/${args.cardId}/pci_pin`, {
 		method: 'POST',

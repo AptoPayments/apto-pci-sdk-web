@@ -16,11 +16,11 @@ function parse401(errorCode: number, serverMessage: string): string {
 }
 
 function parse400(customMessage?: string): string {
-	return customMessage ? customMessage : 'Invalid request. Please try againg or contact APTO';
+	return customMessage ? customMessage : 'Invalid request. Please try again or contact APTO';
 }
 
 function parseUnknownError(): string {
-	return 'An unknown error occured. Please try again or contact APTO.';
+	return 'An unknown error happened. Please try again or contact APTO.';
 }
 
 export default {

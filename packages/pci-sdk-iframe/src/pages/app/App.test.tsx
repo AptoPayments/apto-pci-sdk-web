@@ -525,12 +525,17 @@ describe('<App />', () => {
 
 		it('should display the set pin form once the 2FA passes', async () => {
 			stubMultipleJSONResponses([
-				// First return a 2FA response
+				// Mock the 2FA code request
 				{ httpStatus: 200, body: dummyRequest2FACodeResponse },
-				// The pass the 2FA
+				// Pass the the 2FA validation
 				{
 					httpStatus: 200,
 					body: getDummyVerify2FACodeResponse('passed'),
+				},
+				// Pin is successfully updated
+				{
+					httpStatus: 200,
+					body: {},
 				},
 			]);
 
@@ -555,12 +560,17 @@ describe('<App />', () => {
 			const fetchSpy = jest.spyOn(global, 'fetch');
 
 			stubMultipleJSONResponses([
-				// First return a 2FA response
+				// Mock the 2FA code request
 				{ httpStatus: 200, body: dummyRequest2FACodeResponse },
-				// The pass the 2FA
+				// Pass the the 2FA validation
 				{
 					httpStatus: 200,
 					body: getDummyVerify2FACodeResponse('passed'),
+				},
+				// Pin is successfully updated
+				{
+					httpStatus: 200,
+					body: {},
 				},
 			]);
 
@@ -580,11 +590,11 @@ describe('<App />', () => {
 				expect(screen.queryByTestId('set-pin-form')).toBeVisible();
 			});
 
-			// Fill the 2FA with a valid code
+			// Set a new PIN
 			userEvent.type(screen.getByPlaceholderText('Enter your new PIN'), '0000');
 			userEvent.click(screen.getByRole('button'));
 
-			return waitFor(() => {
+			await waitFor(() => {
 				expect(fetchSpy).toHaveBeenLastCalledWith(expect.stringContaining('/pci_pin'), {
 					body: JSON.stringify({ pin: '0000', verification_id: 'dummy_verification_id' }),
 					headers: {
@@ -596,6 +606,62 @@ describe('<App />', () => {
 					method: 'POST',
 				});
 			});
+
+			expect(screen.queryByText('Pin successfully updated')).toBeVisible();
+		});
+
+		it('should display an error message when the update pin request fails', async () => {
+			const fetchSpy = jest.spyOn(global, 'fetch');
+
+			stubMultipleJSONResponses([
+				// Mock the 2FA code request
+				{ httpStatus: 200, body: dummyRequest2FACodeResponse },
+				// Pass the the 2FA validation
+				{
+					httpStatus: 200,
+					body: getDummyVerify2FACodeResponse('passed'),
+				},
+				// Pin is successfully updated
+				{
+					httpStatus: 500,
+					body: {},
+				},
+			]);
+
+			render(<App />);
+
+			_fireMessage('showSetPinForm');
+
+			await waitFor(() => {
+				expect(screen.queryByTestId('2fa-form')).toBeVisible();
+			});
+
+			// Fill the 2FA with a valid code
+			userEvent.type(screen.getByLabelText('2FA code'), '123456');
+			userEvent.click(screen.getByRole('button'));
+
+			await waitFor(() => {
+				expect(screen.queryByTestId('set-pin-form')).toBeVisible();
+			});
+
+			// Set a new PIN
+			userEvent.type(screen.getByPlaceholderText('Enter your new PIN'), '0000');
+			userEvent.click(screen.getByRole('button'));
+
+			await waitFor(() => {
+				expect(fetchSpy).toHaveBeenLastCalledWith(expect.stringContaining('/pci_pin'), {
+					body: JSON.stringify({ pin: '0000', verification_id: 'dummy_verification_id' }),
+					headers: {
+						Accept: 'application/json',
+						'Api-Key': 'Bearer null',
+						Authorization: 'Bearer null',
+						'Content-Type': 'application/json',
+					},
+					method: 'POST',
+				});
+			});
+
+			expect(screen.queryByText('Unexpected error')).toBeVisible();
 		});
 	});
 });

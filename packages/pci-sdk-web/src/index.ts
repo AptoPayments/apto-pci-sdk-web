@@ -66,11 +66,11 @@ export interface Values {
 	/**
 	 * Placeholder in the change PIN input
 	 */
-	pinPlaceholderMessage: string;
+	pinPlaceholderMessage?: string;
 	/**
 	 * Message displayed when the PIN is changed
 	 */
-	pinUpdatedMessage: string;
+	pinUpdatedMessage?: string;
 	/**
 	 * Message displayed when too many OTP attempts are performed
 	 */
