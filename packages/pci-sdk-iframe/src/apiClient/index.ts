@@ -143,7 +143,7 @@ export interface ISetPinArgs {
 }
 
 async function setPin(args: ISetPinArgs) {
-	const res = await fetch(`${BASE_URL}v1/cards/${args.cardId}/pci_pin`, {
+	const res = await fetch(`${BASE_URL}v1/user/accounts/${args.cardId}/pci_pin`, {
 		method: 'POST',
 		headers,
 		body: JSON.stringify({ pin: args.pin, verification_id: args.verificationId }),
