@@ -6,7 +6,6 @@ import App from './App';
 
 describe('<App />', () => {
 	beforeAll(() => {
-		jest.spyOn(window, 'alert').mockImplementation(jest.fn());
 		global.prompt = jest.fn().mockImplementation((isFirstAttempt) => (isFirstAttempt ? '123456' : '654321'));
 	});
 
@@ -77,17 +76,7 @@ describe('<App />', () => {
 
 				expect(screen.queryByText('custom_labelName')).not.toBeVisible();
 
-				fireEvent(
-					window,
-					new MessageEvent('message', {
-						data: JSON.stringify({
-							type: 'setStyle',
-							style: {
-								labels: { display: 'block' },
-							},
-						}),
-					})
-				);
+				_fireMessage('setStyle', { style: { labels: { display: 'block' } } });
 
 				expect(await screen.findByText('custom_labelName')).toBeVisible();
 			});
@@ -98,17 +87,7 @@ describe('<App />', () => {
 
 				expect(screen.queryByText('Name')).not.toBeVisible();
 
-				fireEvent(
-					window,
-					new MessageEvent('message', {
-						data: JSON.stringify({
-							type: 'setStyle',
-							style: {
-								labels: { display: 'block' },
-							},
-						}),
-					})
-				);
+				_fireMessage('setStyle', { style: { labels: { display: 'block' } } });
 
 				expect(await screen.findByText('Name')).toBeVisible();
 			});
@@ -119,17 +98,7 @@ describe('<App />', () => {
 
 				expect(screen.queryByText('custom_labelPan')).not.toBeVisible();
 
-				fireEvent(
-					window,
-					new MessageEvent('message', {
-						data: JSON.stringify({
-							type: 'setStyle',
-							style: {
-								labels: { display: 'block' },
-							},
-						}),
-					})
-				);
+				_fireMessage('setStyle', { style: { labels: { display: 'block' } } });
 
 				expect(await screen.findByText('custom_labelPan')).toBeVisible();
 			});
@@ -140,17 +109,7 @@ describe('<App />', () => {
 
 				expect(screen.queryByText('Card number')).not.toBeVisible();
 
-				fireEvent(
-					window,
-					new MessageEvent('message', {
-						data: JSON.stringify({
-							type: 'setStyle',
-							style: {
-								labels: { display: 'block' },
-							},
-						}),
-					})
-				);
+				_fireMessage('setStyle', { style: { labels: { display: 'block' } } });
 
 				expect(await screen.findByText('Card number')).toBeVisible();
 			});
@@ -166,12 +125,7 @@ describe('<App />', () => {
 					{ httpStatus: 200, body: getDummyVerify2FACodeResponse('expired') },
 				]);
 
-				fireEvent(
-					window,
-					new MessageEvent('message', {
-						data: JSON.stringify({ type: 'showCardData' }),
-					})
-				);
+				_fireMessage('showCardData');
 
 				await waitFor(() => {
 					expect(screen.queryByTestId('2fa-form')).toBeVisible();
@@ -195,12 +149,7 @@ describe('<App />', () => {
 					{ httpStatus: 200, body: getDummyVerify2FACodeResponse('failed') },
 				]);
 
-				fireEvent(
-					window,
-					new MessageEvent('message', {
-						data: JSON.stringify({ type: 'showCardData' }),
-					})
-				);
+				_fireMessage('showCardData');
 
 				await waitFor(() => {
 					expect(screen.queryByTestId('2fa-form')).toBeVisible();
@@ -223,12 +172,8 @@ describe('<App />', () => {
 			const spy = stubPendingResponse();
 			expect(spy).not.toHaveBeenCalled();
 
-			fireEvent(
-				window,
-				new MessageEvent('message', {
-					data: JSON.stringify({ type: 'showCardData' }),
-				})
-			);
+			_fireMessage('showCardData');
+
 			expect(spy).toHaveBeenNthCalledWith(1, expect.stringContaining('dummy_cardId/details'), {
 				body: null,
 				headers: {
@@ -247,12 +192,8 @@ describe('<App />', () => {
 			const spy = stubPendingResponse();
 			expect(spy).not.toHaveBeenCalled();
 
-			fireEvent(
-				window,
-				new MessageEvent('message', {
-					data: JSON.stringify({ type: 'showCardData' }),
-				})
-			);
+			_fireMessage('showCardData');
+
 			expect(spy).toHaveBeenCalled();
 			expect(screen.queryByText('•••• •••• •••• ••••')).toBeVisible();
 		});
@@ -261,12 +202,7 @@ describe('<App />', () => {
 			expect(screen.queryByText('•••• •••• •••• ••••')).toBeVisible();
 
 			stubJSONResponse(dummyGetCardDataResponse);
-			fireEvent(
-				window,
-				new MessageEvent('message', {
-					data: JSON.stringify({ type: 'showCardData' }),
-				})
-			);
+			_fireMessage('showCardData');
 
 			expect(await screen.findByText('1234 1234 1234 1234')).toBeVisible();
 			expect(await screen.findByText('08/23')).toBeVisible();
@@ -279,12 +215,7 @@ describe('<App />', () => {
 			const spy = jest.spyOn(global, 'fetch');
 
 			stubJSONResponse(dummyGetCardDataResponse);
-			fireEvent(
-				window,
-				new MessageEvent('message', {
-					data: JSON.stringify({ type: 'showCardData' }),
-				})
-			);
+			_fireMessage('showCardData');
 
 			await waitFor(() => expect(spy).toHaveBeenCalledTimes(1));
 			expect(spy).not.toHaveBeenCalledTimes(2);
@@ -299,12 +230,7 @@ describe('<App />', () => {
 					{ httpStatus: 200, body: {} },
 				]);
 
-				fireEvent(
-					window,
-					new MessageEvent('message', {
-						data: JSON.stringify({ type: 'showCardData' }),
-					})
-				);
+				_fireMessage('showCardData');
 
 				await waitFor(() => {
 					const [secondCallPath, secondCallPayload] = fetchSpy.mock.calls[1];
@@ -333,12 +259,7 @@ describe('<App />', () => {
 					{ httpStatus: 500, body: {} },
 				]);
 
-				fireEvent(
-					window,
-					new MessageEvent('message', {
-						data: JSON.stringify({ type: 'showCardData' }),
-					})
-				);
+				_fireMessage('showCardData');
 
 				await waitFor(() => expect(spy).toHaveBeenCalledTimes(2));
 
@@ -356,12 +277,7 @@ describe('<App />', () => {
 						{ httpStatus: 200, body: getDummyVerify2FACodeResponse('expired') },
 					]);
 
-					fireEvent(
-						window,
-						new MessageEvent('message', {
-							data: JSON.stringify({ type: 'showCardData' }),
-						})
-					);
+					_fireMessage('showCardData');
 
 					await waitFor(() => {
 						expect(screen.queryByTestId('2fa-form')).toBeVisible();
@@ -397,12 +313,7 @@ describe('<App />', () => {
 						{ httpStatus: 400, body: {} },
 					]);
 
-					fireEvent(
-						window,
-						new MessageEvent('message', {
-							data: JSON.stringify({ type: 'showCardData' }),
-						})
-					);
+					_fireMessage('showCardData');
 
 					await waitFor(() => {
 						expect(screen.queryByTestId('2fa-form')).toBeVisible();
@@ -416,7 +327,7 @@ describe('<App />', () => {
 					expect(screen.queryByText('•••• •••• •••• ••••')).toBeVisible();
 				});
 
-				it('should alert "Process expired. Start again." when 2FA is expired', async () => {
+				it('should display "Process expired. Start again." when 2FA is expired', async () => {
 					expect(screen.queryByText('Process expired. Start again.')).toBeNull();
 
 					stubMultipleJSONResponses([
@@ -425,12 +336,7 @@ describe('<App />', () => {
 						{ httpStatus: 200, body: getDummyVerify2FACodeResponse('expired') },
 					]);
 
-					fireEvent(
-						window,
-						new MessageEvent('message', {
-							data: JSON.stringify({ type: 'showCardData' }),
-						})
-					);
+					_fireMessage('showCardData');
 
 					await waitFor(() => {
 						expect(screen.queryByTestId('2fa-form')).toBeVisible();
@@ -445,7 +351,7 @@ describe('<App />', () => {
 					});
 				});
 
-				it('should alert "Too many attempts. Start again." when 2FA fails', async () => {
+				it('should display "Too many attempts. Start again." when 2FA fails', async () => {
 					expect(screen.queryByText('Too many attempts, try again.')).toBeNull();
 
 					stubMultipleJSONResponses([
@@ -454,12 +360,7 @@ describe('<App />', () => {
 						{ httpStatus: 200, body: getDummyVerify2FACodeResponse('failed') },
 					]);
 
-					fireEvent(
-						window,
-						new MessageEvent('message', {
-							data: JSON.stringify({ type: 'showCardData' }),
-						})
-					);
+					_fireMessage('showCardData');
 
 					await waitFor(() => {
 						expect(screen.queryByTestId('2fa-form')).toBeVisible();
@@ -474,19 +375,14 @@ describe('<App />', () => {
 					});
 				});
 
-				it('should alert "Wrong code. Try again." when 2FA fails but can retry', async () => {
+				it('should display "Wrong code. Try again." when 2FA fails but can retry', async () => {
 					stubMultipleJSONResponses([
 						{ httpStatus: 401, body: { code: 90263 } },
 						{ httpStatus: 200, body: dummyRequest2FACodeResponse },
 						{ httpStatus: 200, body: getDummyVerify2FACodeResponse('pending') },
 					]);
 
-					fireEvent(
-						window,
-						new MessageEvent('message', {
-							data: JSON.stringify({ type: 'showCardData' }),
-						})
-					);
+					_fireMessage('showCardData');
 
 					await waitFor(() => {
 						expect(screen.queryByTestId('2fa-form')).toBeVisible();
@@ -515,12 +411,7 @@ describe('<App />', () => {
 							{ httpStatus: 200, body: dummyGetCardDataResponse },
 						]);
 
-						fireEvent(
-							window,
-							new MessageEvent('message', {
-								data: JSON.stringify({ type: 'showCardData' }),
-							})
-						);
+						_fireMessage('showCardData');
 
 						await waitFor(() => {
 							expect(screen.queryByTestId('2fa-form')).toBeVisible();
@@ -531,10 +422,7 @@ describe('<App />', () => {
 
 						await waitFor(() =>
 							expect(spy).toHaveBeenNthCalledWith(4, expect.stringContaining('dummy_cardId/details'), {
-								body: JSON.stringify({
-									secret: '123456',
-									verification_id: 'dummy_verification_id',
-								}),
+								body: JSON.stringify({ verification_id: 'dummy_verification_id' }),
 								headers: {
 									Accept: 'application/json',
 									'Api-Key': 'Bearer null',
@@ -559,12 +447,7 @@ describe('<App />', () => {
 							{ httpStatus: 200, body: dummyGetCardDataResponse },
 						]);
 
-						fireEvent(
-							window,
-							new MessageEvent('message', {
-								data: JSON.stringify({ type: 'showCardData' }),
-							})
-						);
+						_fireMessage('showCardData');
 
 						await waitFor(() => {
 							expect(screen.queryByTestId('2fa-form')).toBeVisible();
@@ -591,22 +474,12 @@ describe('<App />', () => {
 			render(<App />);
 
 			stubJSONResponse(dummyGetCardDataResponse);
-			fireEvent(
-				window,
-				new MessageEvent('message', {
-					data: JSON.stringify({ type: 'showCardData' }),
-				})
-			);
+			_fireMessage('showCardData');
 
 			expect(await screen.findByText('1234 1234 1234 1234')).toBeVisible();
 			expect(await screen.queryByText('•••• •••• •••• 1234')).toBeNull();
 
-			fireEvent(
-				window,
-				new MessageEvent('message', {
-					data: JSON.stringify({ type: 'hideCardData' }),
-				})
-			);
+			_fireMessage('hideCardData');
 			expect(await screen.queryByText('1234 1234 1234 1234')).toBeNull();
 			expect(await screen.findByText('•••• •••• •••• 1234')).toBeVisible();
 		});
@@ -617,17 +490,7 @@ describe('<App />', () => {
 			addUrlParams();
 			render(<App />);
 
-			fireEvent(
-				window,
-				new MessageEvent('message', {
-					data: JSON.stringify({
-						type: 'setStyle',
-						style: {
-							labels: { color: 'blue' },
-						},
-					}),
-				})
-			);
+			_fireMessage('setStyle', { style: { labels: { color: 'blue' } } });
 
 			expect(screen.queryByText('Card number')).toHaveStyle('color: blue');
 		});
@@ -641,17 +504,179 @@ describe('<App />', () => {
 
 			expect(screen.getByTestId('card-container')).toHaveStyle('color: black');
 
-			fireEvent(
-				window,
-				new MessageEvent('message', {
-					data: JSON.stringify({ type: 'setTheme', theme: 'dark' }),
-				})
-			);
+			_fireMessage('setTheme', { theme: 'dark' });
 
 			expect(screen.getByTestId('card-container')).toHaveStyle('color: white');
 		});
 	});
+
+	describe('when the user triggers the "showSetPinForm" event', () => {
+		it('should start the verification process to get a valid verification id', () => {
+			stubJSONResponse(dummyRequest2FACodeResponse, 200);
+
+			render(<App />);
+
+			_fireMessage('showSetPinForm');
+
+			return waitFor(() => {
+				expect(screen.queryByTestId('2fa-form')).toBeVisible();
+			});
+		});
+
+		it('should display the set pin form once the 2FA passes', async () => {
+			stubMultipleJSONResponses([
+				// Mock the 2FA code request
+				{ httpStatus: 200, body: dummyRequest2FACodeResponse },
+				// Pass the the 2FA validation
+				{
+					httpStatus: 200,
+					body: getDummyVerify2FACodeResponse('passed'),
+				},
+				// Pin is successfully updated
+				{
+					httpStatus: 200,
+					body: {},
+				},
+			]);
+
+			render(<App />);
+
+			_fireMessage('showSetPinForm');
+
+			await waitFor(() => {
+				expect(screen.queryByTestId('2fa-form')).toBeVisible();
+			});
+
+			// Fill the 2FA with a valid code
+			userEvent.type(screen.getByLabelText('2FA code'), '123456');
+			userEvent.click(screen.getByRole('button'));
+
+			return waitFor(() => {
+				expect(screen.queryByTestId('set-pin-form')).toBeVisible();
+			});
+		});
+
+		it('should send the new pin to the server', async () => {
+			const fetchSpy = jest.spyOn(global, 'fetch');
+
+			stubMultipleJSONResponses([
+				// Mock the 2FA code request
+				{ httpStatus: 200, body: dummyRequest2FACodeResponse },
+				// Pass the the 2FA validation
+				{
+					httpStatus: 200,
+					body: getDummyVerify2FACodeResponse('passed'),
+				},
+				// Pin is successfully updated
+				{
+					httpStatus: 200,
+					body: {},
+				},
+			]);
+
+			render(<App />);
+
+			_fireMessage('showSetPinForm');
+
+			await waitFor(() => {
+				expect(screen.queryByTestId('2fa-form')).toBeVisible();
+			});
+
+			// Fill the 2FA with a valid code
+			userEvent.type(screen.getByLabelText('2FA code'), '123456');
+			userEvent.click(screen.getByRole('button'));
+
+			await waitFor(() => {
+				expect(screen.queryByTestId('set-pin-form')).toBeVisible();
+			});
+
+			// Set a new PIN
+			userEvent.type(screen.getByPlaceholderText('Enter your new PIN'), '0000');
+			userEvent.click(screen.getByRole('button'));
+
+			await waitFor(() => {
+				expect(fetchSpy).toHaveBeenLastCalledWith(expect.stringContaining('/pci_pin'), {
+					body: JSON.stringify({ pin: '0000', verification_id: 'dummy_verification_id' }),
+					headers: {
+						Accept: 'application/json',
+						'Api-Key': 'Bearer null',
+						Authorization: 'Bearer null',
+						'Content-Type': 'application/json',
+					},
+					method: 'POST',
+				});
+			});
+
+			expect(screen.queryByText('Pin successfully updated')).toBeVisible();
+		});
+
+		it('should display an error message when the update pin request fails', async () => {
+			const fetchSpy = jest.spyOn(global, 'fetch');
+
+			stubMultipleJSONResponses([
+				// Mock the 2FA code request
+				{ httpStatus: 200, body: dummyRequest2FACodeResponse },
+				// Pass the the 2FA validation
+				{
+					httpStatus: 200,
+					body: getDummyVerify2FACodeResponse('passed'),
+				},
+				// Pin is successfully updated
+				{
+					httpStatus: 500,
+					body: {},
+				},
+			]);
+
+			render(<App />);
+
+			_fireMessage('showSetPinForm');
+
+			await waitFor(() => {
+				expect(screen.queryByTestId('2fa-form')).toBeVisible();
+			});
+
+			// Fill the 2FA with a valid code
+			userEvent.type(screen.getByLabelText('2FA code'), '123456');
+			userEvent.click(screen.getByRole('button'));
+
+			await waitFor(() => {
+				expect(screen.queryByTestId('set-pin-form')).toBeVisible();
+			});
+
+			// Set a new PIN
+			userEvent.type(screen.getByPlaceholderText('Enter your new PIN'), '0000');
+			userEvent.click(screen.getByRole('button'));
+
+			await waitFor(() => {
+				expect(fetchSpy).toHaveBeenLastCalledWith(expect.stringContaining('/pci_pin'), {
+					body: JSON.stringify({ pin: '0000', verification_id: 'dummy_verification_id' }),
+					headers: {
+						Accept: 'application/json',
+						'Api-Key': 'Bearer null',
+						Authorization: 'Bearer null',
+						'Content-Type': 'application/json',
+					},
+					method: 'POST',
+				});
+			});
+
+			expect(screen.queryByText('Unexpected error')).toBeVisible();
+		});
+	});
 });
+
+/**
+ * Emulates the parent window sending a message to the child window
+ */
+function _fireMessage(message: string, args?: any) {
+	fireEvent(
+		window,
+		new MessageEvent('message', {
+			data: JSON.stringify({ type: message, ...args }),
+		})
+	);
+}
 
 const defaultParams = {
 	cardId: 'dummy_cardId',

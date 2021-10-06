@@ -81,17 +81,9 @@ interface IGetCardDataResponse {
 	cvv: string;
 }
 
-export async function getCardData(
-	cardId: string,
-	auth?: { secret: string; verificationId: string }
-): Promise<IGetCardDataResponse> {
+export async function getCardData(cardId: string, auth?: { verificationId: string }): Promise<IGetCardDataResponse> {
 	const method = !auth ? 'GET' : 'POST';
-	const body = !auth
-		? null
-		: JSON.stringify({
-				secret: auth.secret,
-				verification_id: auth.verificationId,
-		  });
+	const body = !auth ? null : JSON.stringify({ verification_id: auth.verificationId });
 
 	const res = await fetch(`${VAULT_BASE_URL}v1/user/accounts/${cardId}/details`, {
 		method,
@@ -144,8 +136,40 @@ function _getVaultBaseUrl() {
 	}
 }
 
+export interface ISetPinArgs {
+	pin: string;
+	verificationId: string;
+	cardId: string;
+}
+
+async function setPin(args: ISetPinArgs) {
+	const res = await fetch(`${BASE_URL}v1/user/accounts/${args.cardId}/pci_pin`, {
+		method: 'POST',
+		headers,
+		body: JSON.stringify({ pin: args.pin, verification_id: args.verificationId }),
+	});
+
+	const data = await res.json();
+
+	switch (res.status) {
+		case 200:
+			return res;
+		case 401:
+			throw new Error(errorMessageParser.parse401(data.code, data.message));
+		case 400:
+			throw new Error(
+				errorMessageParser.parse400(
+					'Invalid request. Are you sure the cardID is correct? https://docs.aptopayments.com/docs/sdks/Web/pci_sdk_web/#optionsobject-properties'
+				)
+			);
+		default:
+			throw new Error(errorMessageParser.parseUnknownError());
+	}
+}
+
 export default {
-	verify2FACode,
 	getCardData,
 	request2FACode,
+	setPin,
+	verify2FACode,
 };

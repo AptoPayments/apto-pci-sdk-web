@@ -7,5 +7,6 @@ describe('apto-pci-sdk', () => {
 		expect(aptoPCISdk.setStyle).toBeDefined();
 		expect(aptoPCISdk.setTheme).toBeDefined();
 		expect(aptoPCISdk.showPCIData).toBeDefined();
+		expect(aptoPCISdk.showSetPinForm).toBeDefined();
 	});
 });

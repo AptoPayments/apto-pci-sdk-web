@@ -7,9 +7,9 @@ interface IFormProps {
 	theme: ITheme;
 }
 
-export default function Form(props: IFormProps) {
+export default function SetPinForm(props: IFormProps) {
 	return (
-		<form style={props.theme.formOTP} onSubmit={props.handleSubmit} data-testid="2fa-form">
+		<form style={props.theme.formOTP} onSubmit={props.handleSubmit} data-testid="set-pin-form">
 			<div
 				style={{
 					display: 'flex',
@@ -17,12 +17,12 @@ export default function Form(props: IFormProps) {
 			>
 				<input
 					style={props.theme.formOTPInput}
-					autoComplete="one-time-code"
+					autoComplete="off"
 					required
-					id="code"
-					name="code"
+					id="pin"
+					name="pin"
 					type="text"
-					aria-label="2FA code"
+					aria-label="Set pin code"
 					placeholder={props.placeholder}
 					pattern="\d*"
 					inputMode="numeric"
