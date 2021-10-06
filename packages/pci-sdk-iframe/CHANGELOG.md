@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.4.0](https://github.com/AptoPayments/apto-pci-sdk-web/compare/v3.3.0...v3.4.0) (2021-10-06)
+
+
+### Bug Fixes
+
+* Update docs URLs ([#64](https://github.com/AptoPayments/apto-pci-sdk-web/issues/64)) ([0dd50f2](https://github.com/AptoPayments/apto-pci-sdk-web/commit/0dd50f2f384d04211b2166121fd4c0e5fc688c10))
+
+
+### Features
+
+* Allow to set PIN ([#67](https://github.com/AptoPayments/apto-pci-sdk-web/issues/67)) ([3ca33fe](https://github.com/AptoPayments/apto-pci-sdk-web/commit/3ca33fe76420fbe05909d5159e6cb1d0fa8774d2))
+
+
+
+
+
 # [3.3.0](https://github.com/AptoPayments/apto-pci-sdk-web/compare/v3.2.0...v3.3.0) (2021-09-07)
 
 
