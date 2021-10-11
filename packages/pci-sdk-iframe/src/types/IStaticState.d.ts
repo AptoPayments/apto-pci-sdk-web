@@ -7,6 +7,7 @@ export interface IStaticState {
 	expiredMessage: string;
 	failed2FAPrompt: string;
 	isDebug: boolean;
+	isPCICompliant: boolean;
 	labelCvv: string;
 	labelExp: string;
 	labelName: string;

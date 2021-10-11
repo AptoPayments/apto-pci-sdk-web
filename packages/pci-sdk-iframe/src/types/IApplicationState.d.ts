@@ -7,7 +7,6 @@ export default interface IApplicationState {
 	cvv: string;
 	exp: string;
 	isLoading: boolean;
-	isVerificationIdValid: boolean;
 	message: string;
 	nextStep: INextStep;
 	pan: string;

@@ -12,6 +12,7 @@ export default function useStaticState() {
 		expiredMessage: (urlParams.get('expiredMessage') as string) || 'Process expired. Start again.',
 		failed2FAPrompt: (urlParams.get('failed2FAPrompt') as string) || 'Wrong code. Try again.',
 		isDebug: !!urlParams.get('debug'),
+		isPCICompliant: _getIsPCICompliant(urlParams.get('isPCICompliant')),
 		labelCvv: (urlParams.get('labelCvv') as string) || 'Cvv',
 		labelExp: (urlParams.get('labelExp') as string) || 'Exp',
 		labelName: (urlParams.get('labelName') as string) || 'Name',
@@ -25,4 +26,8 @@ export default function useStaticState() {
 	}));
 
 	return staticState;
+}
+
+function _getIsPCICompliant(value: string | null) {
+	return value === 'true';
 }

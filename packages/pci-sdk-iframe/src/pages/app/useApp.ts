@@ -22,7 +22,7 @@ export default function useApp() {
 				case 'setTheme':
 					return appService.setTheme({ dispatch, theme: data.theme });
 				case 'showCardData':
-					return appService.showCardData({ dispatch, cardId: staticState.cardId });
+					return appService.showCardData({ dispatch, ...staticState });
 				case 'hideCardData':
 					return appService.hideCardData({ dispatch, lastFour: staticState.lastFour });
 				case 'isDataVisible':
@@ -73,13 +73,13 @@ export default function useApp() {
 			// 2FA token is valid. We are good to get card data using the validated secret
 			case 'passed':
 				if (state.nextStep === 'SET_PIN') {
-					return dispatch({ uiStatus: 'SET_PIN_FORM', isVerificationIdValid: true });
+					return dispatch({ uiStatus: 'SET_PIN_FORM' });
 				}
 
 				if (state.nextStep === 'VIEW_CARD_DATA') {
 					return apiClient
 						.getCardData(staticState.cardId, { verificationId: state.verificationId })
-						.then((cardData) => dispatch({ ...$visible(cardData), isVerificationIdValid: true }))
+						.then((cardData) => dispatch({ ...$visible(cardData) }))
 						.catch(() => dispatch({ ...$hidden(staticState.lastFour), message: 'Unexpected error' }));
 				}
 
@@ -107,7 +107,6 @@ function $hidden(lastFour: string): Partial<IApplicationState> {
 	return {
 		message: '',
 		verificationId: '',
-		isVerificationIdValid: false,
 		isLoading: false,
 		cvv: '•••',
 		exp: '••/••',

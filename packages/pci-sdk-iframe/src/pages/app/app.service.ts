@@ -44,9 +44,10 @@ function isDataVisible({ dispatch, isVisible }: IIsDataVisibleArgs) {
 interface IShowCardDataArgs {
 	dispatch: React.Dispatch<Partial<IApplicationState>>;
 	cardId: string;
+	isPCICompliant: boolean;
 }
 
-async function showCardData({ dispatch, cardId }: IShowCardDataArgs) {
+async function showCardData({ dispatch, cardId, isPCICompliant }: IShowCardDataArgs) {
 	dispatch({
 		uiStatus: 'CARD_DATA_HIDDEN',
 		isLoading: true,
@@ -55,6 +56,10 @@ async function showCardData({ dispatch, cardId }: IShowCardDataArgs) {
 	});
 
 	try {
+		if (!isPCICompliant) {
+			return handleNoPCICompliant(dispatch);
+		}
+
 		const cardData = await apiClient.getCardData(cardId);
 
 		if (cardData) {
@@ -69,27 +74,14 @@ async function showCardData({ dispatch, cardId }: IShowCardDataArgs) {
 		}
 	} catch (err) {
 		if (checkIfInvalidAPIKeyError(err)) {
-			return dispatch({ message: 'Invalid API key', isLoading: false });
+			return dispatch({ message: 'Invalid API key', uiStatus: 'CARD_DATA_HIDDEN', isLoading: false });
 		}
 
 		if (checkRequires2FACodeError(err)) {
-			// Verification id failed. Lets get a new one and try again.
-			try {
-				const { verificationId } = await apiClient.request2FACode();
-				return dispatch({ verificationId, isVerificationIdValid: false, uiStatus: 'OTP_FORM' });
-			} catch (e) {
-				return dispatch({
-					isLoading: false,
-					isVerificationIdValid: false,
-					message: 'Unexpected error',
-					uiStatus: 'CARD_DATA_HIDDEN',
-					verificationId: '',
-				});
-			}
+			handleNoPCICompliant(dispatch);
 		}
 
 		return dispatch({
-			isVerificationIdValid: false,
 			isLoading: false,
 			message: 'Unexpected error',
 			uiStatus: 'CARD_DATA_HIDDEN',
@@ -113,6 +105,12 @@ function checkIfInvalidAPIKeyError(err: unknown) {
 
 function checkRequires2FACodeError(err: unknown) {
 	return String(err).includes('Cardholder needs to verify their identity');
+}
+
+async function handleNoPCICompliant(dispatch: React.Dispatch<Partial<IApplicationState>>) {
+	// Verification id failed. Lets get a new one and try again.
+	const { verificationId } = await apiClient.request2FACode();
+	return dispatch({ verificationId, uiStatus: 'OTP_FORM' });
 }
 
 export default {

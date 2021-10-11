@@ -13,7 +13,6 @@ export default function useApplicationState(staticState: IStaticState) {
 		pan: `•••• •••• •••• ${staticState.lastFour}`,
 		theme: themes[staticState.theme],
 		verificationId: '', // Used to get the 2FA code
-		isVerificationIdValid: false,
 		nextStep: '',
 	});
 
