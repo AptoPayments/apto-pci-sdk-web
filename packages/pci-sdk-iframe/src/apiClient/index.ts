@@ -43,7 +43,7 @@ export async function request2FACode(): Promise<IRequest2FACodeResponse> {
 	}
 }
 
-interface IVerify2FACodeResponse {
+export interface IVerify2FACodeResponse {
 	verificationId: string;
 	status: 'passed' | 'pending' | 'failed' | 'expired';
 }

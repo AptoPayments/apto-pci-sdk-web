@@ -1,106 +1,34 @@
-import React, { useEffect, useState } from 'react';
-import apiClient from '../../apiClient';
-import usePureState from '../../hooks/usePureState';
-import themeService from '../../services/theme.service';
-import { ITheme } from '../../types/IThemes';
+import apiClient, { IVerify2FACodeResponse } from 'apiClient';
+import useApplicationState from 'hooks/useApplicationState';
+import useStaticState from 'hooks/useStaticState';
+import { useEffect } from 'react';
+import eventService from 'services/event.service';
+import IApplicationState from 'types/IApplicationState';
+import ICardData from 'types/ICardData';
+import appService from './app.service';
 import messageService from './message.service';
-import themes, { IThemeName } from './themes/index';
-
-type IUIStatus = 'CARD_DATA_VISIBLE' | 'CARD_DATA_HIDDEN' | 'OTP_FORM' | 'SET_PIN_FORM';
-type INextStep = 'VIEW_CARD_DATA' | 'SET_PIN' | '';
-
-interface IState {
-	cvv: string;
-	exp: string;
-	isLoading: boolean;
-	isVerificationIdValid: boolean;
-	message: string;
-	nextStep: INextStep;
-	pan: string;
-	theme: ITheme;
-	uiStatus: IUIStatus;
-	verificationId: string;
-}
 
 export default function useApp() {
-	const urlParams = new URLSearchParams(window.location.search);
+	const staticState = useStaticState();
+	const { state, dispatch } = useApplicationState(staticState);
 
-	const [staticState] = useState(() => ({
-		cardId: (urlParams.get('cardId') as string) || '',
-		labelCvv: (urlParams.get('labelCvv') as string) || 'Cvv',
-		labelExp: (urlParams.get('labelExp') as string) || 'Exp',
-		labelName: (urlParams.get('labelName') as string) || 'Name',
-		labelPan: (urlParams.get('labelPan') as string) || 'Card number',
-		nameOnCard: (urlParams.get('nameOnCard') as string) || '',
-		expiredMessage: (urlParams.get('expiredMessage') as string) || 'Process expired. Start again.',
-		tooManyAttemptsMessage: (urlParams.get('tooManyAttemptsMessage') as string) || 'Too many attempts. Start again.',
-		enter2FAPrompt: (urlParams.get('enter2FAPrompt') as string) || 'Enter the code we sent you (numbers only).',
-		failed2FAPrompt: (urlParams.get('failed2FAPrompt') as string) || 'Wrong code. Try again.',
-		codePlaceholderMessage: (urlParams.get('codePlaceholderMessage') as string) || 'Enter the code',
-		pinPlaceholderMessage: (urlParams.get('pinPlaceholderMessage') as string) || 'Enter your new PIN',
-		pinUpdatedMessage: (urlParams.get('pinUpdatedMessage') as string) || 'Pin successfully updated',
-		lastFour: (urlParams.get('lastFour') as string) || '••••',
-		isDebug: !!urlParams.get('debug'),
-	}));
-
-	const themeParam = urlParams.get('theme') as IThemeName;
-
-	const { state, dispatch } = usePureState<IState>({
-		cvv: '•••',
-		exp: '••/••',
-		uiStatus: 'CARD_DATA_HIDDEN',
-		isLoading: false,
-		message: '',
-		pan: `•••• •••• •••• ${staticState.lastFour}`,
-		theme: (themes[themeParam] as ITheme) || (themes['light' as IThemeName] as ITheme),
-		verificationId: '', // Used to get the 2FA code
-		isVerificationIdValid: false,
-		nextStep: '',
-	});
-
+	// When the sdk is mounted we set a message listener.
 	useEffect(() => {
 		function _onMessage(event: MessageEvent) {
-			if (!event.data) {
-				console.error(`[PCI-SDK]: iframe received unexpected event: ${event}`);
-				return;
-			}
-			let data;
-			try {
-				data = JSON.parse(event.data);
-			} catch (err) {
-				console.error(`[PCI-SDK]: iframe received unexpected event: ${event}`);
-				return;
-			}
-
-			if (!data.type) {
-				console.error(`[PCI-SDK]: iframe received unexpected event: ${event}`);
-				return;
-			}
-
+			const data = eventService.parse(event);
 			switch (data.type) {
 				case 'setStyle':
-					return dispatch({ theme: themeService.extendTheme(data.style) });
+					return appService.setStyle({ dispatch, style: data.style });
 				case 'setTheme':
-					return dispatch({ theme: themes[data.theme as IThemeName] });
+					return appService.setTheme({ dispatch, theme: data.theme });
 				case 'showCardData':
-					return _showCardData(staticState.cardId);
+					return appService.showCardData({ dispatch, cardId: staticState.cardId });
 				case 'hideCardData':
-					return dispatch({
-						cvv: '•••',
-						exp: '••/••',
-						uiStatus: 'CARD_DATA_HIDDEN',
-						pan: `•••• •••• •••• ${staticState.lastFour}`,
-						message: '',
-						verificationId: '',
-						isLoading: false,
-					});
+					return appService.hideCardData({ dispatch, lastFour: staticState.lastFour });
 				case 'isDataVisible':
-					return messageService.emitMessage({
-						type: 'apto-iframe-visibility-change',
-						payload: { isVisible: state.uiStatus === 'CARD_DATA_VISIBLE' },
-					});
+					return appService.isDataVisible({ dispatch, isVisible: state.uiStatus === 'CARD_DATA_VISIBLE' });
 				case 'showSetPinForm':
-					return _showSetPinForm();
+					return appService.showSetPinForm({ dispatch });
 				default:
 					break;
 			}
@@ -109,107 +37,38 @@ export default function useApp() {
 		window.addEventListener('message', _onMessage, false);
 		messageService.emitMessage({ type: 'apto-iframe-ready' });
 
-		async function _showSetPinForm() {
-			const { verificationId } = await apiClient.request2FACode();
-			return dispatch({ verificationId, uiStatus: 'OTP_FORM', nextStep: 'SET_PIN', message: '' });
-		}
-
-		async function _showCardData(cardId: string) {
-			dispatch({
-				uiStatus: 'CARD_DATA_HIDDEN',
-				isLoading: true,
-				message: '',
-				nextStep: 'VIEW_CARD_DATA',
-			});
-
-			try {
-				const cardData = await apiClient.getCardData(cardId);
-
-				if (cardData) {
-					dispatch({
-						cvv: cardData.cvv,
-						exp: cardData.exp,
-						isLoading: false,
-						message: '',
-						pan: cardData.pan,
-						uiStatus: 'CARD_DATA_VISIBLE',
-					});
-				}
-			} catch (err) {
-				if (checkIfInvalidAPIKeyError(err)) {
-					return dispatch({ message: 'Invalid API key', isLoading: false });
-				}
-
-				if (checkRequires2FACodeError(err)) {
-					// Verification id failed. Lets get a new one and try again.
-					try {
-						const { verificationId } = await apiClient.request2FACode();
-						return dispatch({ verificationId, isVerificationIdValid: false, uiStatus: 'OTP_FORM' });
-					} catch (e) {
-						return dispatch({
-							isLoading: false,
-							isVerificationIdValid: false,
-							message: 'Unexpected error',
-							uiStatus: 'CARD_DATA_HIDDEN',
-							verificationId: '',
-						});
-					}
-				}
-
-				return dispatch({
-					isVerificationIdValid: false,
-					isLoading: false,
-					message: 'Unexpected error',
-					uiStatus: 'CARD_DATA_HIDDEN',
-					verificationId: '',
-				});
-			}
-		}
-
 		return () => window.removeEventListener('message', _onMessage);
-	}, [staticState, state, dispatch]);
+	}, [dispatch, state, staticState]); // All deps are stable
 
+	/**
+	 * Callback to be executed when the setPin form is submitted
+	 * In order to view the setPinForm we must have a valid verification ID.
+	 */
 	async function handlePinSubmit(e: React.FormEvent) {
 		e.preventDefault();
-
 		dispatch({ message: '', uiStatus: 'CARD_DATA_HIDDEN', isLoading: true });
-
 		const pin = (e.target as any).elements['pin'].value as string;
 
 		await apiClient
 			.setPin({ pin, verificationId: state.verificationId, cardId: staticState.cardId })
-			.then(() => {
-				return dispatch({ isLoading: false, message: staticState.pinUpdatedMessage });
-			})
-			.catch(() => {
-				return dispatch({
-					uiStatus: 'CARD_DATA_HIDDEN',
-					isLoading: false,
-					message: 'Unexpected error',
-				});
-			});
+			.then(() => dispatch({ isLoading: false, message: staticState.pinUpdatedMessage }))
+			.catch(() => dispatch({ uiStatus: 'CARD_DATA_HIDDEN', isLoading: false, message: 'Unexpected error' }));
 	}
 
+	// Callback to be executed when the verify OTP form is submitted
 	async function handleCodeSubmit(e: React.FormEvent) {
 		e.preventDefault();
-
 		dispatch({ message: '', uiStatus: 'CARD_DATA_HIDDEN', isLoading: true });
-
 		const secret = (e.target as any).elements['code'].value as string;
-		let res = null;
 
-		try {
-			res = await apiClient.verify2FACode(secret, state.verificationId);
-		} catch (e) {
-			return dispatch({
-				isLoading: false,
-				isVerificationIdValid: false,
-				message: 'Unexpected error',
-				uiStatus: 'CARD_DATA_HIDDEN',
-				verificationId: '',
-			});
-		}
+		apiClient
+			.verify2FACode(secret, state.verificationId)
+			.then(_onVerificationReceived)
+			.catch(() => dispatch({ ...$hidden(staticState.lastFour), message: 'Unexpected error' }));
+	}
 
+	// Callback executed when we receive a verification response from the server.
+	function _onVerificationReceived(res: IVerify2FACodeResponse) {
 		switch (res.status) {
 			// 2FA token is valid. We are good to get card data using the validated secret
 			case 'passed':
@@ -220,96 +79,51 @@ export default function useApp() {
 				if (state.nextStep === 'VIEW_CARD_DATA') {
 					return apiClient
 						.getCardData(staticState.cardId, { verificationId: state.verificationId })
-						.then((res) => {
-							return dispatch({
-								cvv: res.cvv,
-								exp: res.exp,
-								isLoading: false,
-								isVerificationIdValid: true,
-								message: '',
-								pan: res.pan,
-								uiStatus: 'CARD_DATA_VISIBLE',
-							});
-						})
-						.catch(() => {
-							return dispatch({
-								cvv: '•••',
-								exp: '••/••',
-								isLoading: false,
-								isVerificationIdValid: false,
-								message: 'Unexpected error',
-								pan: `•••• •••• •••• ${staticState.lastFour}`,
-								uiStatus: 'CARD_DATA_HIDDEN',
-								verificationId: '',
-							});
-						});
+						.then((cardData) => dispatch({ ...$visible(cardData), isVerificationIdValid: true }))
+						.catch(() => dispatch({ ...$hidden(staticState.lastFour), message: 'Unexpected error' }));
 				}
 
 				throw new Error(`Unexpected next step ${state.nextStep}`);
 
-			// Timeout, we need to start again
+			// Timeout, we need to start again. TODO: According to the backend spec we should trigger a restart verification but works for some reason ¯\_(ツ)_/¯
 			case 'expired':
-				return dispatch({
-					cvv: '•••',
-					exp: '••/••',
-					uiStatus: 'CARD_DATA_HIDDEN',
-					isLoading: false,
-					isVerificationIdValid: false,
-					message: staticState.expiredMessage,
-					pan: `•••• •••• •••• ${staticState.lastFour}`,
-				});
+				return dispatch({ ...$hidden(staticState.lastFour), message: staticState.expiredMessage });
 			// Failed means too many attempts ¯\_(ツ)_/¯
 			case 'failed':
-				return dispatch({
-					cvv: '•••',
-					exp: '••/••',
-					uiStatus: 'CARD_DATA_HIDDEN',
-					isLoading: false,
-					isVerificationIdValid: false,
-					message: staticState.tooManyAttemptsMessage,
-					pan: `•••• •••• •••• ${staticState.lastFour}`,
-					verificationId: '',
-				});
+				return dispatch({ ...$hidden(staticState.lastFour), message: staticState.tooManyAttemptsMessage });
 			// Pending means the code is wrong but we can try again  ¯\_(ツ)_/¯
 			case 'pending':
-				return dispatch({
-					uiStatus: 'OTP_FORM',
-					isLoading: false,
-					message: staticState.failed2FAPrompt,
-				});
+				return dispatch({ uiStatus: 'OTP_FORM', isLoading: false, message: staticState.failed2FAPrompt });
 			default:
-				return dispatch({
-					cvv: '•••',
-					exp: '••/••',
-					uiStatus: 'CARD_DATA_HIDDEN',
-					isLoading: false,
-					isVerificationIdValid: false,
-					message: 'Unexpected error',
-					pan: `•••• •••• •••• ${staticState.lastFour}`,
-					verificationId: '',
-				});
+				return dispatch({ ...$hidden(staticState.lastFour), message: 'Unexpected error' });
 		}
 	}
 
+	return { handleCodeSubmit, handlePinSubmit, ...staticState, ...state };
+}
+
+// Helper function to generate a hidden state
+function $hidden(lastFour: string): Partial<IApplicationState> {
 	return {
-		handlePinSubmit,
-		handleCodeSubmit,
-		...staticState,
-		cvv: state.cvv,
-		exp: state.exp,
-		isLoading: state.isLoading,
-		uiStatus: state.uiStatus,
-		message: state.message,
-		pan: state.pan,
-		theme: state.theme,
-		verificationId: state.verificationId,
+		message: '',
+		verificationId: '',
+		isVerificationIdValid: false,
+		isLoading: false,
+		cvv: '•••',
+		exp: '••/••',
+		pan: `•••• •••• •••• ${lastFour}`,
+		uiStatus: 'CARD_DATA_HIDDEN',
 	};
 }
 
-function checkIfInvalidAPIKeyError(err: unknown) {
-	return String(err).includes('The mobile API key you provided is invalid');
-}
-
-function checkRequires2FACodeError(err: unknown) {
-	return String(err).includes('Cardholder needs to verify their identity');
+// Helper function to generate a visible state
+function $visible(card: ICardData): Partial<IApplicationState> {
+	return {
+		message: '',
+		isLoading: false,
+		cvv: card.cvv,
+		exp: card.exp,
+		pan: card.pan,
+		uiStatus: 'CARD_DATA_VISIBLE',
+	};
 }
