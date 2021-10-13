@@ -63,7 +63,8 @@ function showCardData({ dispatch, cardId, isPCICompliant }: IShowCardDataArgs) {
 		nextStep: 'VIEW_CARD_DATA',
 	});
 
-	if (!isPCICompliant) {
+	// We will skip the initial request if we know the client is not PCI compliant
+	if (isPCICompliant === false) {
 		return handleNoPCICompliant(dispatch);
 	}
 
