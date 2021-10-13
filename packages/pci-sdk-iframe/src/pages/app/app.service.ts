@@ -1,6 +1,9 @@
-import apiClient from 'apiClient';
+import apiClient, { IVerify2FACodeResponse } from 'apiClient';
 import themeService from 'services/theme.service';
+import IApplicationState from 'types/IApplicationState';
+import ICardData from 'types/ICardData';
 import IStateFn from 'types/IStateFn';
+import { IStaticState } from 'types/IStaticState';
 import { ITheme } from 'types/IThemes';
 import messageService from './message.service';
 import themes, { IThemeName } from './themes';
@@ -98,18 +101,6 @@ async function showSetPinForm({ dispatch }: IShowSetPinFormArgs) {
 	return dispatch({ verificationId, uiStatus: 'OTP_FORM', nextStep: 'SET_PIN', message: '' });
 }
 
-interface IUpdatePinArgs {
-	pin: string;
-	cardId: string;
-	verificationId?: string;
-	isPCICompliant?: boolean;
-}
-
-async function updatePin(args: IUpdatePinArgs) {
-	// TODO: We need to update this function to allow not having a verificationId (when client is PCI compatible)
-	return apiClient.setPin({ pin: args.pin, verificationId: args.verificationId as string, cardId: args.cardId });
-}
-
 function checkIfInvalidAPIKeyError(err: unknown) {
 	return String(err).includes('The mobile API key you provided is invalid');
 }
@@ -138,12 +129,114 @@ async function handleNoPCICompliant(dispatch: IStateFn) {
 		);
 }
 
+interface ISetPinArgs {
+	cardId: string;
+	pin: string;
+	// TODO: Make this optional since when the client is PCI-Compatible we don't need a verificationId)
+	verificationId: string;
+}
+
+function setPin(args: ISetPinArgs) {
+	return apiClient.setPin({ pin: args.pin, verificationId: args.verificationId, cardId: args.cardId });
+}
+
+interface IVerify2FACodeArgs {
+	secret: string;
+	dispatch: IStateFn;
+	state: IApplicationState;
+	staticState: IStaticState;
+}
+
+function verify2FACode(args: IVerify2FACodeArgs) {
+	return apiClient
+		.verify2FACode(args.secret, args.state.verificationId)
+		.then((res) => _onVerificationReceived({ res, ...args }))
+		.catch(() => args.dispatch({ isLoading: false, message: 'Unexpected error' }));
+}
+
+interface IOnVerificationReceivedArgs {
+	res: IVerify2FACodeResponse;
+	dispatch: IStateFn;
+	state: IApplicationState;
+	staticState: IStaticState;
+}
+
+// Callback executed when we receive a verification response from the server.
+function _onVerificationReceived({ res, dispatch, state, staticState }: IOnVerificationReceivedArgs) {
+	switch (res.status) {
+		// 2FA token is valid. We are good to get card data using the validated secret
+		case 'passed':
+			if (state.nextStep === 'SET_PIN') {
+				return dispatch({ uiStatus: 'SET_PIN_FORM' });
+			}
+
+			if (state.nextStep === 'VIEW_CARD_DATA') {
+				return getCardData({ cardId: staticState.cardId, verificationId: state.verificationId })
+					.then((cardData) => dispatch({ ...$visible(cardData) }))
+					.catch(() => dispatch({ ...$hidden(staticState.lastFour), message: 'Unexpected error' }));
+			}
+
+			throw new Error(`Unexpected next step ${state.nextStep}`);
+
+		// Timeout, we need to start again. TODO: According to the backend spec we should trigger a restart verification but works for some reason ¯\_(ツ)_/¯
+		case 'expired':
+			return dispatch({ ...$hidden(staticState.lastFour), message: staticState.expiredMessage });
+		// Failed means too many attempts ¯\_(ツ)_/¯
+		case 'failed':
+			return dispatch({ ...$hidden(staticState.lastFour), message: staticState.tooManyAttemptsMessage });
+		// Pending means the code is wrong but we can try again  ¯\_(ツ)_/¯
+		case 'pending':
+			return dispatch({ uiStatus: 'OTP_FORM', isLoading: false, message: staticState.failed2FAPrompt });
+		default:
+			return dispatch({ ...$hidden(staticState.lastFour), message: 'Unexpected error' });
+	}
+}
+
+interface IGetCardDataArgs {
+	cardId: string;
+	verificationId?: string;
+}
+
+function getCardData(args: IGetCardDataArgs) {
+	if (!args.verificationId) {
+		return apiClient.getCardData(args.cardId);
+	}
+	return apiClient.getCardData(args.cardId, { verificationId: args.verificationId });
+}
+
 export default {
+	getCardData,
 	hideCardData,
 	isDataVisible,
+	setPin,
 	setStyle,
 	setTheme,
 	showCardData,
 	showSetPinForm,
-	updatePin,
+	verify2FACode,
 };
+
+// Helper function to generate a hidden state
+function $hidden(lastFour: string): Partial<IApplicationState> {
+	return {
+		message: '',
+		verificationId: '',
+		isLoading: false,
+		cvv: '•••',
+		exp: '••/••',
+		pan: `•••• •••• •••• ${lastFour}`,
+		uiStatus: 'CARD_DATA_HIDDEN',
+	};
+}
+
+// Helper function to generate a visible state
+function $visible(card: ICardData): Partial<IApplicationState> {
+	return {
+		message: '',
+		isLoading: false,
+		cvv: card.cvv,
+		exp: card.exp,
+		pan: card.pan,
+		uiStatus: 'CARD_DATA_VISIBLE',
+	};
+}
