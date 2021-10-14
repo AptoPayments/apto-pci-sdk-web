@@ -1,4 +1,4 @@
-import IMessage from '../../types/IMessage';
+import IMessage from '../types/IMessage';
 
 function emitMessage(message: IMessage) {
 	if (window.self !== window.parent) {
