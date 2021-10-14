@@ -1,5 +1,24 @@
-import themes, { IThemeName } from '../pages/app/themes/index';
-import { ITheme } from '../types/IThemes';
+import themes, { IThemeName } from 'pages/app/themes/index';
+import IStateFn from 'types/IStateFn';
+import { ITheme } from 'types/IThemes';
+
+interface ISetStyleArgs {
+	dispatch: IStateFn;
+	style: ITheme;
+}
+
+function setStyle({ dispatch, style }: ISetStyleArgs) {
+	return dispatch({ theme: extendTheme(style) });
+}
+
+interface ISetThemeArgs {
+	dispatch: IStateFn;
+	theme: IThemeName;
+}
+
+function setTheme({ dispatch, theme }: ISetThemeArgs) {
+	return dispatch({ theme: themes[theme] });
+}
 
 function extendTheme(styles: ITheme) {
 	const theme = _getTheme(styles);
@@ -35,5 +54,7 @@ function _mergeStyles(styles: ITheme, baseTheme: ITheme) {
 }
 
 export default {
+	setStyle,
+	setTheme,
 	extendTheme,
 };
