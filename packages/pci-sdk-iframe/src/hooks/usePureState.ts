@@ -5,7 +5,7 @@ import { Dispatch, useReducer } from 'react';
  *
  * Calling setState with any object will update just the passed fields and leave the previous state as it is.
  *
- * @param initializerArg - The inital state,
+ * @param initializerArg - The initial state,
  */
 export default function usePureState<S>(initializerArg: S) {
 	const [state, dispatch] = useReducer(pureReducer, initializerArg);

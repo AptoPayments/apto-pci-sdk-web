@@ -1,15 +1,15 @@
 import apiClient, { IVerify2FACodeResponse } from 'apiClient';
 import IApplicationState from 'types/IApplicationState';
 import ICardData from 'types/ICardData';
+import { IInitialState } from 'types/IInitialState';
 import IStateFn from 'types/IStateFn';
-import { IStaticState } from 'types/IStaticState';
 import cardDataService from './cardData.service';
 
 interface IVerify2FACodeArgs {
 	secret: string;
 	dispatch: IStateFn;
 	state: IApplicationState;
-	staticState: IStaticState;
+	initialState: IInitialState;
 }
 
 function verify2FACode(args: IVerify2FACodeArgs) {
@@ -23,11 +23,11 @@ interface IOnVerificationReceivedArgs {
 	res: IVerify2FACodeResponse;
 	dispatch: IStateFn;
 	state: IApplicationState;
-	staticState: IStaticState;
+	initialState: IInitialState;
 }
 
 // Callback executed when we receive a verification response from the server.
-function _onVerificationReceived({ res, dispatch, state, staticState }: IOnVerificationReceivedArgs) {
+function _onVerificationReceived({ res, dispatch, state, initialState }: IOnVerificationReceivedArgs) {
 	switch (res.status) {
 		// 2FA token is valid. We are good to get card data using the validated secret
 		case 'passed':
@@ -37,24 +37,24 @@ function _onVerificationReceived({ res, dispatch, state, staticState }: IOnVerif
 
 			if (state.nextStep === 'VIEW_CARD_DATA') {
 				return cardDataService
-					.getCardData({ cardId: staticState.cardId, verificationId: state.verificationId })
+					.getCardData({ cardId: initialState.cardId, verificationId: state.verificationId })
 					.then((cardData) => dispatch({ ...$visible(cardData) }))
-					.catch(() => dispatch({ ...$hidden(staticState.lastFour), message: 'Unexpected error' }));
+					.catch(() => dispatch({ ...$hidden(initialState.lastFour), message: 'Unexpected error' }));
 			}
 
 			throw new Error(`Unexpected next step ${state.nextStep}`);
 
 		// Timeout, we need to start again. TODO: According to the backend spec we should trigger a restart verification but works for some reason ¯\_(ツ)_/¯
 		case 'expired':
-			return dispatch({ ...$hidden(staticState.lastFour), message: staticState.expiredMessage });
+			return dispatch({ ...$hidden(initialState.lastFour), message: initialState.expiredMessage });
 		// Failed means too many attempts ¯\_(ツ)_/¯
 		case 'failed':
-			return dispatch({ ...$hidden(staticState.lastFour), message: staticState.tooManyAttemptsMessage });
+			return dispatch({ ...$hidden(initialState.lastFour), message: initialState.tooManyAttemptsMessage });
 		// Pending means the code is wrong but we can try again  ¯\_(ツ)_/¯
 		case 'pending':
-			return dispatch({ uiStatus: 'OTP_FORM', isLoading: false, message: staticState.failed2FAPrompt });
+			return dispatch({ uiStatus: 'OTP_FORM', isLoading: false, message: initialState.failed2FAPrompt });
 		default:
-			return dispatch({ ...$hidden(staticState.lastFour), message: 'Unexpected error' });
+			return dispatch({ ...$hidden(initialState.lastFour), message: 'Unexpected error' });
 	}
 }
 

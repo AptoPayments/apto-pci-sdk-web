@@ -1,11 +1,11 @@
 import { IThemeName } from 'pages/app/themes';
 import { useState } from 'react';
-import { IStaticState } from 'types/IStaticState';
+import { IInitialState } from 'types/IInitialState';
 
-export default function useStaticState() {
+export default function useInitialState() {
 	const urlParams = new URLSearchParams(window.location.search);
 
-	const [staticState] = useState<IStaticState>(() => ({
+	const [initialState] = useState<IInitialState>(() => ({
 		cardId: (urlParams.get('cardId') as string) || '',
 		codePlaceholderMessage: (urlParams.get('codePlaceholderMessage') as string) || 'Enter the code',
 		enter2FAPrompt: (urlParams.get('enter2FAPrompt') as string) || 'Enter the code we sent you (numbers only).',
@@ -26,7 +26,7 @@ export default function useStaticState() {
 		tooManyAttemptsMessage: (urlParams.get('tooManyAttemptsMessage') as string) || 'Too many attempts. Start again.',
 	}));
 
-	return staticState;
+	return initialState;
 }
 
 function _getIsPCICompliant(value: string | null): boolean | undefined {

@@ -1,11 +1,11 @@
 import useApplicationState from 'hooks/useApplicationState';
-import useStaticState from 'hooks/useStaticState';
+import useInitialState from 'hooks/useInitialState';
 import { useEffect } from 'react';
 import appService from 'services/app.service';
 
 export default function useApp() {
-	const staticState = useStaticState();
-	const { state, dispatch } = useApplicationState(staticState);
+	const initialState = useInitialState();
+	const { state, dispatch } = useApplicationState(initialState);
 
 	// When the sdk is mounted we set a message listener.
 	useEffect(() => {
@@ -17,9 +17,9 @@ export default function useApp() {
 				case 'setTheme':
 					return appService.theme.setTheme({ dispatch, theme: data.theme });
 				case 'showCardData':
-					return appService.cardData.showCardData({ dispatch, ...staticState });
+					return appService.cardData.showCardData({ dispatch, ...initialState });
 				case 'hideCardData':
-					return appService.cardData.hideCardData({ dispatch, lastFour: staticState.lastFour });
+					return appService.cardData.hideCardData({ dispatch, lastFour: initialState.lastFour });
 				case 'isDataVisible':
 					return appService.cardData.isDataVisible({ dispatch, isVisible: state.uiStatus === 'CARD_DATA_VISIBLE' });
 				case 'showSetPinForm':
@@ -33,7 +33,7 @@ export default function useApp() {
 		appService.message.emitMessage({ type: 'apto-iframe-ready' });
 
 		return () => window.removeEventListener('message', _onMessage);
-	}, [dispatch, state, staticState]); // All deps are stable
+	}, [dispatch, state, initialState]); // All deps are stable
 
 	/**
 	 * Callback to be executed when the setPin form is submitted
@@ -45,8 +45,8 @@ export default function useApp() {
 		const pin = (e.target as any).elements['pin'].value as string;
 
 		return appService.pin
-			.setPin({ pin, verificationId: state.verificationId, cardId: staticState.cardId })
-			.then(() => dispatch({ isLoading: false, message: staticState.pinUpdatedMessage }))
+			.setPin({ pin, verificationId: state.verificationId, cardId: initialState.cardId })
+			.then(() => dispatch({ isLoading: false, message: initialState.pinUpdatedMessage }))
 			.catch(() => dispatch({ uiStatus: 'CARD_DATA_HIDDEN', isLoading: false, message: 'Unexpected error' }));
 	}
 
@@ -56,8 +56,8 @@ export default function useApp() {
 		dispatch({ message: '', uiStatus: 'CARD_DATA_HIDDEN', isLoading: true });
 		const secret = (e.target as any).elements['code'].value as string;
 
-		return appService.twoFactorAuth.verify2FACode({ secret, state, staticState, dispatch });
+		return appService.twoFactorAuth.verify2FACode({ secret, state, initialState, dispatch });
 	}
 
-	return { handleCodeSubmit, handlePinSubmit, ...staticState, ...state };
+	return { handleCodeSubmit, handlePinSubmit, ...initialState, ...state };
 }

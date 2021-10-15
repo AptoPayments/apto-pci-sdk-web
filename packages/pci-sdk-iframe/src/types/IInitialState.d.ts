@@ -1,6 +1,6 @@
-import { IThemeName } from '../pages/app/themes';
+import { IThemeName } from '/pages/app/themes';
 
-export interface IStaticState {
+export interface IInitialState {
 	cardId: string;
 	codePlaceholderMessage: string;
 	enter2FAPrompt: string;
