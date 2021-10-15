@@ -1,17 +1,17 @@
 import themes, { IThemeName } from 'pages/app/themes';
 import IApplicationState from 'types/IApplicationState';
-import { IInitialState } from 'types/IInitialState';
+import { IConfigOptions } from 'types/IConfigOptions';
 import usePureState from './usePureState';
 
-export default function useApplicationState(initialState: IInitialState) {
+export default function useApplicationState(configOptions: IConfigOptions) {
 	const { state, dispatch } = usePureState<IApplicationState>({
 		cvv: '•••',
 		exp: '••/••',
 		uiStatus: 'CARD_DATA_HIDDEN',
 		isLoading: false,
 		message: '',
-		pan: `•••• •••• •••• ${initialState.lastFour}`,
-		theme: themes[initialState.theme as IThemeName],
+		pan: `•••• •••• •••• ${configOptions.lastFour}`,
+		theme: themes[configOptions.theme as IThemeName],
 		verificationId: '', // Used to get the 2FA code
 		nextStep: '',
 	});
