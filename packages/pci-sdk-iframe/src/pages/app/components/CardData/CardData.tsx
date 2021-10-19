@@ -1,5 +1,6 @@
 import React from 'react';
-import { ITheme } from '../../../../types/IThemes';
+import { ITheme } from 'types/IThemes';
+import './CardData.css';
 
 interface ICardDataProps {
 	cvv: string;
@@ -12,11 +13,18 @@ interface ICardDataProps {
 	nameOnCard: string;
 	pan: string;
 	theme: ITheme;
+	networkLogoPosition: string;
+	networkLogoSymbol: string;
 }
 
 export default function CardData(props: ICardDataProps) {
 	return (
-		<main id="container" data-testid="card-container" style={{ ...props.theme.container }}>
+		<main
+			id="container"
+			data-testid="card-container"
+			style={{ ...props.theme.container }}
+			className={`Symbol--${props.networkLogoSymbol}`}
+		>
 			<div id="group-name" style={{ ...props.theme.groups, ...props.theme.groupName }}>
 				<label id="label-name" style={{ ...props.theme.labels, ...props.theme.labelName }}>
 					{props.labelName}
@@ -31,7 +39,7 @@ export default function CardData(props: ICardDataProps) {
 					{props.labelPan}
 				</label>
 				<span
-					className={props.isLoading ? 'loading' : ''}
+					className={props.isLoading ? 'CardData__item isLoading' : ''}
 					id="pan"
 					style={{ ...props.theme.shared, ...props.theme.pan }}
 				>
@@ -44,7 +52,7 @@ export default function CardData(props: ICardDataProps) {
 					{props.labelCvv}
 				</label>
 				<span
-					className={props.isLoading ? 'loading' : ''}
+					className={props.isLoading ? 'CardData__item isLoading' : ''}
 					id="cvv"
 					style={{ ...props.theme.shared, ...props.theme.cvv }}
 				>
@@ -57,7 +65,7 @@ export default function CardData(props: ICardDataProps) {
 					{props.labelExp}
 				</label>
 				<span
-					className={props.isLoading ? 'loading' : ''}
+					className={props.isLoading ? 'CardData__item isLoading' : ''}
 					id="exp"
 					style={{ ...props.theme.shared, ...props.theme.exp }}
 				>

@@ -1,0 +1,33 @@
+.CardData__item.isLoading {
+	animation: blink 1.8s linear infinite;
+	border-radius: 2px;
+	background: #cccccc;
+	color: transparent !important;
+}
+
+@keyframes blink {
+	50% {
+		opacity: 0;
+	}
+}
+
+.Symbol--visa-blue {
+	background-image: url('./images/visa-blue.svg');
+	background-repeat: no-repeat;
+	background-position: calc(100% - 3.529vw) calc(100% - 2.941vw);
+	background-size: 22.647vw 7.352vw;
+}
+
+.Symbol--visa-white {
+	background-image: url('./images/visa-white.svg');
+	background-repeat: no-repeat;
+	background-position: calc(100% - 3.529vw) calc(100% - 2.941vw);
+	background-size: 22.647vw 7.352vw;
+}
+
+.Symbol--mastercard {
+	background-image: url('./images/mastercard.svg');
+	background-repeat: no-repeat;
+	background-position: calc(100% - 3.529vw) calc(100% - 2.941vw);
+	background-size: 21.176vw 13.235vw;
+}

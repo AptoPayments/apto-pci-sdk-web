@@ -14,6 +14,8 @@ export interface IConfigOptions {
 	labelPan: string;
 	lastFour: string;
 	nameOnCard: string;
+	networkLogoPosition: string;
+	networkLogoSymbol: string;
 	pinPlaceholderMessage: string;
 	pinUpdatedMessage: string;
 	theme: IThemeName;

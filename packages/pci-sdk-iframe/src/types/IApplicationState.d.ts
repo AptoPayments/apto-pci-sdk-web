@@ -8,6 +8,8 @@ export default interface IApplicationState {
 	exp: string;
 	isLoading: boolean;
 	message: string;
+	networkLogoPosition: string;
+	networkLogoSymbol: string;
 	nextStep: INextStep;
 	pan: string;
 	theme: ITheme;

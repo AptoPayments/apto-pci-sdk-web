@@ -21,6 +21,8 @@ export default function App() {
 		labelPan,
 		message,
 		nameOnCard,
+		networkLogoPosition,
+		networkLogoSymbol,
 		pan,
 		pinPlaceholderMessage,
 		theme,
@@ -42,6 +44,8 @@ export default function App() {
 						labelName={labelName}
 						labelPan={labelPan}
 						nameOnCard={nameOnCard}
+						networkLogoPosition={networkLogoPosition}
+						networkLogoSymbol={networkLogoSymbol}
 						pan={pan}
 						theme={theme}
 					/>
