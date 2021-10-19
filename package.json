@@ -16,7 +16,7 @@
 		"update:deps": "lerna run update:deps --parallel",
 		"postinstall": "lerna bootstrap",
 		"release": "lerna publish --conventional-commits --force-publish --yes --no-verify-access",
-		"start": "lerna run start & http-server -o",
+		"start": "NODE_ENV=development lerna run start & http-server -o",
 		"test:e2e:watch": "start-server-and-test start http://localhost:8080 cy:watch",
 		"test:e2e": "start-server-and-test start http://localhost:8080 cy:run",
 		"test": "lerna run test --parallel"

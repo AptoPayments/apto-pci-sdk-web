@@ -1,6 +1,6 @@
-import { IThemeName } from 'pages/app/themes';
 import { useState } from 'react';
 import { IConfigOptions } from 'types/IConfigOptions';
+import IThemeName from 'types/IThemeName';
 
 export default function useConfigOptions() {
 	const urlParams = new URLSearchParams(window.location.search);
@@ -22,7 +22,7 @@ export default function useConfigOptions() {
 		nameOnCard: (urlParams.get('nameOnCard') as string) || '',
 		pinPlaceholderMessage: (urlParams.get('pinPlaceholderMessage') as string) || 'Enter your new PIN',
 		pinUpdatedMessage: (urlParams.get('pinUpdatedMessage') as string) || 'Pin successfully updated',
-		theme: (urlParams.get('theme') as IThemeName) || 'light',
+		theme: _getTheme(urlParams),
 		tooManyAttemptsMessage: (urlParams.get('tooManyAttemptsMessage') as string) || 'Too many attempts. Start again.',
 	}));
 
@@ -35,4 +35,14 @@ function _getIsPCICompliant(value: string | null): boolean | undefined {
 	}
 
 	return value === 'true';
+}
+
+function _getTheme(urlParams: URLSearchParams): IThemeName {
+	const value = urlParams.get('theme');
+
+	if (value === undefined || value === null) {
+		return 'light';
+	}
+
+	return value as IThemeName;
 }

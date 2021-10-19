@@ -1,4 +1,4 @@
-import { IThemeName } from '/pages/app/themes';
+import IThemeName from 'types/IThemeName';
 
 export interface IConfigOptions {
 	cardId: string;

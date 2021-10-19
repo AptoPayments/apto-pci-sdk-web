@@ -1,4 +1,5 @@
 import { version } from '@apto-payments/pci-sdk-iframe';
+import IThemeName from './types/IThemeName';
 
 export interface InitOptions {
 	auth: IAuthOptions;
@@ -8,7 +9,7 @@ export interface InitOptions {
 	debug?: boolean;
 	element?: HTMLElement;
 	size?: Size;
-	theme?: string;
+	theme?: IThemeName;
 	values?: Values;
 }
 
@@ -113,7 +114,7 @@ export function setStyle(style: PCIStyle) {
 	_sendMessage({ type: 'setStyle', style });
 }
 
-export function setTheme(theme: string) {
+export function setTheme(theme: IThemeName) {
 	_sendMessage({ type: 'setTheme', theme });
 }
 
@@ -181,7 +182,7 @@ function _initIframe(
 	pciElement: HTMLElement | null = document.getElementById('apto-pci-sdk'),
 	size?: Size,
 	values?: Values,
-	theme = '1',
+	theme = 'light',
 	debug?: boolean
 ): Promise<HTMLIFrameElement> {
 	if (!pciElement) {
