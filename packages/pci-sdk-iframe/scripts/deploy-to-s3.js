@@ -1,4 +1,4 @@
-const env = require('dotenv').config();
+require('dotenv').config();
 const fs = require('fs');
 const AWS = require('aws-sdk');
 const path = require('path');

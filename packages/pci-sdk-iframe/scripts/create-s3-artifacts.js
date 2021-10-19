@@ -3,20 +3,20 @@ const path = require('path');
 const { version } = require('../package.json');
 
 const TEMP_DIR = path.join(__dirname, '../tmp');
-const INPATH = path.join(__dirname, '../build');
-const OUTPATH = path.join(__dirname, `../tmp/${version}`);
+const IN_PATH = path.join(__dirname, '../build');
+const OUT_PATH = path.join(__dirname, `../tmp/${version}`);
 
 try {
 	if (!fs.existsSync(TEMP_DIR)) {
 		fs.mkdirSync(TEMP_DIR);
 	}
-	fs.renameSync(INPATH, OUTPATH);
+	fs.renameSync(IN_PATH, OUT_PATH);
 } catch (err) {
 	switch (err.code) {
 		case 'ENOENT':
-			_throwDirectoryNotExistError();
+			return _throwDirectoryNotExistError();
 		case 'ENOTEMPTY':
-			_throwDirectoryNotEmptyError();
+			return _throwDirectoryNotEmptyError();
 		default:
 			throw err;
 	}
@@ -25,7 +25,7 @@ try {
 function _throwDirectoryNotExistError() {
 	const ERR_FILE_NOT_FOUND = `\x1b[31m "build" directory no found.
 
-	Path: ${INPATH}
+	Path: ${IN_PATH}
 
 	Did you remember to run "npm run build"?
 
