@@ -1,6 +1,6 @@
-import { IThemeName } from 'pages/app/themes';
 import { useState } from 'react';
 import { IStaticState } from 'types/IStaticState';
+import IThemeName from 'types/IThemeName';
 
 export default function useStaticState() {
 	const urlParams = new URLSearchParams(window.location.search);

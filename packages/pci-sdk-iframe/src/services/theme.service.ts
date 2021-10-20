@@ -1,5 +1,6 @@
-import themes, { IThemeName } from 'pages/app/themes/index';
+import themes from 'pages/app/themes/index';
 import IStateFn from 'types/IStateFn';
+import IThemeName from 'types/IThemeName';
 import { ITheme } from 'types/IThemes';
 
 interface ISetStyleArgs {
