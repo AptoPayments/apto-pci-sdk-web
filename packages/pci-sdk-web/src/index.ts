@@ -234,7 +234,9 @@ function _initIframe(
 			);
 		}
 
-		params.set('theme', theme.toString());
+		if (theme) {
+			params.set('theme', theme.toString());
+		}
 
 		if (debug) {
 			params.set('debug', 'true');
