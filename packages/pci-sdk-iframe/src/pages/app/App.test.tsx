@@ -281,6 +281,7 @@ describe('<App />', () => {
 
 					await waitFor(() => {
 						expect(screen.queryByTestId('2fa-form')).toBeVisible();
+						expect(screen.queryByText('Unexpected error')).toBeNull();
 					});
 
 					userEvent.type(screen.getByLabelText('2FA code'), '123456');

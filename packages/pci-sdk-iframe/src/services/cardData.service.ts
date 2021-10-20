@@ -68,7 +68,7 @@ function showCardData({ dispatch, cardId, isPCICompliant }: IShowCardDataArgs) {
 			}
 
 			if (_checkRequires2FACodeError(err)) {
-				_handleNoPCICompliant(dispatch);
+				return _handleNoPCICompliant(dispatch);
 			}
 
 			return dispatch({
