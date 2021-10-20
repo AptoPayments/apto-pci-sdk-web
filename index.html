@@ -160,6 +160,14 @@
 					<option value="visa-white">Visa white</option>
 				</select>
 
+				<label for="networkPosition">Network position</label>
+				<select id="networkPosition" name="networkPosition">
+					<option value="bottom-right">Bottom right</option>
+					<option value="bottom-left">Bottom left</option>
+					<option value="top-left">Top left</option>
+					<option value="top-right">Top right</option>
+				</select>
+
 				<label for="debugger">Debugger</label>
 				<select id="debugger" name="debugger">
 					<option value="">Disabled</option>
@@ -230,6 +238,7 @@
 					debug: event.target.elements.debugger.value,
 					networkLogo: {
 						symbol: event.target.elements.networkSymbol.value,
+						position: event.target.elements.networkPosition.value,
 					},
 				});
 			}

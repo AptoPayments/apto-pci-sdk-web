@@ -14,20 +14,30 @@
 .Symbol--visa-blue {
 	background-image: url('./images/visa-blue.svg');
 	background-repeat: no-repeat;
-	background-position: calc(100% - 3.529vw) calc(100% - 2.941vw);
 	background-size: 22.647vw 7.352vw;
 }
 
 .Symbol--visa-white {
 	background-image: url('./images/visa-white.svg');
 	background-repeat: no-repeat;
-	background-position: calc(100% - 3.529vw) calc(100% - 2.941vw);
 	background-size: 22.647vw 7.352vw;
 }
 
 .Symbol--mastercard {
 	background-image: url('./images/mastercard.svg');
 	background-repeat: no-repeat;
-	background-position: calc(100% - 3.529vw) calc(100% - 2.941vw);
 	background-size: 21.176vw 13.235vw;
+}
+
+.Symbol--bottom-right {
+	background-position: calc(100% - 3.529vw) calc(100% - 2.941vw);
+}
+.Symbol--bottom-left {
+	background-position: 3.529vw calc(100% - 2.941vw);
+}
+.Symbol--top-left {
+	background-position: 3.529vw 2.941vw;
+}
+.Symbol--top-right {
+	background-position: calc(100% - 3.529vw) 2.941vw;
 }

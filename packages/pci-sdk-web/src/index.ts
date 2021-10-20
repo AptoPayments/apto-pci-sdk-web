@@ -25,11 +25,7 @@ export interface PCIStyle {} // eslint-disable-line
 
 export interface INetworkLogo {
 	position: 'top-right' | 'bottom-right' | 'bottom-left' | 'top-left';
-	symbol:
-		| 'mastercard-border'
-		| 'mastercard-regular'
-		| 'visa-blue'
-		| 'visa-white';
+	symbol: 'mastercard' | 'visa-blue' | 'visa-white';
 }
 
 export interface Size {

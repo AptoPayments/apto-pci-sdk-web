@@ -23,7 +23,7 @@ export default function CardData(props: ICardDataProps) {
 			id="container"
 			data-testid="card-container"
 			style={{ ...props.theme.container }}
-			className={`Symbol--${props.networkLogoSymbol}`}
+			className={`Symbol--${props.networkLogoSymbol} Symbol--${props.networkLogoPosition}`}
 		>
 			<div id="group-name" style={{ ...props.theme.groups, ...props.theme.groupName }}>
 				<label id="label-name" style={{ ...props.theme.labels, ...props.theme.labelName }}>
