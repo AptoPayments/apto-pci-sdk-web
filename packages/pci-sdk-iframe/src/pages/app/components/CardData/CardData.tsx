@@ -15,16 +15,18 @@ interface ICardDataProps {
 	theme: ITheme;
 	networkLogoPosition: string;
 	networkLogoSymbol: string;
+	networkLogoWidth: string;
+	networkLogoHeight: string;
 }
 
 export default function CardData(props: ICardDataProps) {
 	return (
-		<main
-			id="container"
-			data-testid="card-container"
-			style={{ ...props.theme.container }}
-			className={`Symbol--${props.networkLogoSymbol} Symbol--${props.networkLogoPosition}`}
-		>
+		<main id="container" data-testid="card-container" style={{ ...props.theme.container }}>
+			<div
+				data-testid="card-networkLogo"
+				className={`Symbol Symbol--${props.networkLogoSymbol} Symbol--${props.networkLogoPosition}`}
+				style={{ backgroundSize: `${props.networkLogoWidth} ${props.networkLogoHeight}` }}
+			></div>
 			<div id="group-name" style={{ ...props.theme.groups, ...props.theme.groupName }}>
 				<label id="label-name" style={{ ...props.theme.labels, ...props.theme.labelName }}>
 					{props.labelName}

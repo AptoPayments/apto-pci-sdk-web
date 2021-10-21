@@ -1,3 +1,4 @@
+import { INetworkLogoPosition, INetworkLogoSymbol } from './INetworkLogo';
 import { ITheme } from './IThemes';
 
 type IUIStatus = 'CARD_DATA_VISIBLE' | 'CARD_DATA_HIDDEN' | 'OTP_FORM' | 'SET_PIN_FORM';
@@ -8,8 +9,10 @@ export default interface IApplicationState {
 	exp: string;
 	isLoading: boolean;
 	message: string;
-	networkLogoPosition: string;
-	networkLogoSymbol: string;
+	networkLogoPosition: INetworkLogoPosition;
+	networkLogoSymbol: INetworkLogoSymbol;
+	networkLogoWidth: string;
+	networkLogoHeight: string;
 	nextStep: INextStep;
 	pan: string;
 	theme: ITheme;

@@ -34,9 +34,21 @@
 
 			form {
 				display: flex;
-				flex-direction: column;
+				flex-direction: row;
+				flex-wrap: wrap;
+				justify-content: space-between;
 				padding-bottom: 24px;
 				border-bottom: 1px solid #e2e2e2;
+			}
+
+			.field {
+				display: flex;
+				flex-direction: column;
+				width: 100%;
+			}
+
+			.field--half-width {
+				width: calc(50% - 8px);
 			}
 
 			label {
@@ -80,6 +92,7 @@
 			}
 
 			button[type="submit"] {
+				width: 100%;
 				border: 1px solid #0055ff;
 				background: #0055ff;
 				color: #ffffff;
@@ -137,42 +150,55 @@
 			<h1>Test the Apto PCI SDK</h1>
 
 			<form id="init_form">
-				<label for="userToken">User token</label>
-				<input id="userToken" name="userToken" type="text" />
+				<div class="field">
+					<label for="userToken">User token</label>
+					<input id="userToken" name="userToken" type="text" />
+				</div>
 
-				<label for="cardId">Card ID</label>
-				<input id="cardId" name="cardId" type="text" />
+				<div class="field">
+					<label for="cardId">Card ID</label>
+					<input id="cardId" name="cardId" type="text" />
+				</div>
 
-				<label for="apiKey">Api Key</label>
-				<input id="apiKey" name="apiKey" type="text" />
+				<div class="field">
+					<label for="apiKey">Api Key</label>
+					<input id="apiKey" name="apiKey" type="text" />
+				</div>
 
-				<label for="environment">Environment</label>
-				<select id="environment" name="environment">
-					<option value="sbx">sbx</option>
-					<option value="prd">prd</option>
-				</select>
+				<div class="field field--half-width">
+					<label for="environment">Environment</label>
+					<select id="environment" name="environment">
+						<option value="stg">stg</option>
+						<option value="sbx">sbx</option>
+						<option value="prd">prd</option>
+					</select>
+				</div>
+				<div class="field field--half-width">
+					<label for="networkSymbol">Network symbol</label>
+					<select id="networkSymbol" name="networkSymbol">
+						<option value="">None</option>
+						<option value="mastercard">MasterCard</option>
+						<option value="visa-blue">Visa blue</option>
+						<option value="visa-white">Visa white</option>
+					</select>
+				</div>
+				<div class="field field--half-width">
+					<label for="networkPosition">Network position</label>
+					<select id="networkPosition" name="networkPosition">
+						<option value="bottom-right">Bottom right</option>
+						<option value="bottom-left">Bottom left</option>
+						<option value="top-left">Top left</option>
+						<option value="top-right">Top right</option>
+					</select>
+				</div>
 
-				<label for="networkSymbol">Network symbol</label>
-				<select id="networkSymbol" name="networkSymbol">
-					<option value="">None</option>
-					<option value="mastercard">MasterCard</option>
-					<option value="visa-blue">Visa blue</option>
-					<option value="visa-white">Visa white</option>
-				</select>
-
-				<label for="networkPosition">Network position</label>
-				<select id="networkPosition" name="networkPosition">
-					<option value="bottom-right">Bottom right</option>
-					<option value="bottom-left">Bottom left</option>
-					<option value="top-left">Top left</option>
-					<option value="top-right">Top right</option>
-				</select>
-
-				<label for="debugger">Debugger</label>
-				<select id="debugger" name="debugger">
-					<option value="">Disabled</option>
-					<option value="true">Enabled</option>
-				</select>
+				<div class="field field--half-width">
+					<label for="debugger">Debugger</label>
+					<select id="debugger" name="debugger">
+						<option value="">Disabled</option>
+						<option value="true">Enabled</option>
+					</select>
+				</div>
 
 				<button type="submit">Init</button>
 			</form>

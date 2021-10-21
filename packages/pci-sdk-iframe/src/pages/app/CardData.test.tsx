@@ -4,80 +4,97 @@ import App from './App';
 
 describe('CardData', () => {
 	describe('Card network', () => {
-		it('should show MasterCard network symbol when provided', () => {
-			addUrlParams({
-				symbol: 'mastercard',
-			});
-			render(<App />);
+		describe('symbol', () => {
+			it('should show MasterCard network symbol when provided', () => {
+				addUrlParams({
+					networkLogoSymbol: 'mastercard',
+				});
+				render(<App />);
 
-			expect(screen.getByRole('main')).toHaveClass('Symbol--mastercard');
+				expect(screen.getByTestId('card-networkLogo')).toHaveClass('Symbol--mastercard');
+			});
+
+			it('should show Visa blue network symbol when provided', () => {
+				addUrlParams({
+					networkLogoSymbol: 'visa-blue',
+				});
+				render(<App />);
+
+				expect(screen.getByTestId('card-networkLogo')).toHaveClass('Symbol--visa-blue');
+			});
+
+			it('should show Visa white network symbol when provided', () => {
+				addUrlParams({
+					networkLogoSymbol: 'visa-white',
+				});
+				render(<App />);
+
+				expect(screen.getByTestId('card-networkLogo')).toHaveClass('Symbol--visa-white');
+			});
 		});
 
-		it('should show Visa blue network symbol when provided', () => {
-			addUrlParams({
-				symbol: 'Visa-blue',
-			});
-			render(<App />);
+		describe('position', () => {
+			it('should position the symbol bottom-right when position is not provided', () => {
+				addUrlParams({
+					networkLogoSymbol: 'mastercard',
+				});
+				render(<App />);
 
-			expect(screen.getByRole('main')).toHaveClass('Symbol--Visa-blue');
+				expect(screen.getByTestId('card-networkLogo')).toHaveClass('Symbol--bottom-right');
+			});
+
+			it('should position the symbol bottom-right when position is provided', () => {
+				addUrlParams({
+					networkLogoSymbol: 'mastercard',
+					networkLogoPosition: 'bottom-right',
+				});
+				render(<App />);
+
+				expect(screen.getByTestId('card-networkLogo')).toHaveClass('Symbol--bottom-right');
+			});
+
+			it('should position the symbol bottom-left when position is provided', () => {
+				addUrlParams({
+					networkLogoSymbol: 'mastercard',
+					networkLogoPosition: 'bottom-left',
+				});
+				render(<App />);
+
+				expect(screen.getByTestId('card-networkLogo')).toHaveClass('Symbol--bottom-left');
+			});
+
+			it('should position the symbol top-left when position is provided', () => {
+				addUrlParams({
+					networkLogoSymbol: 'mastercard',
+					networkLogoPosition: 'top-left',
+				});
+				render(<App />);
+
+				expect(screen.getByTestId('card-networkLogo')).toHaveClass('Symbol--top-left');
+			});
+
+			it('should position the symbol top-right when position is provided', () => {
+				addUrlParams({
+					networkLogoSymbol: 'mastercard',
+					networkLogoPosition: 'top-right',
+				});
+				render(<App />);
+
+				expect(screen.getByTestId('card-networkLogo')).toHaveClass('Symbol--top-right');
+			});
 		});
 
-		it('should show Visa white network symbol when provided', () => {
-			addUrlParams({
-				symbol: 'Visa-white',
+		describe('size', () => {
+			it('should add custom CSS style to set the backgroundSize when provided', () => {
+				addUrlParams({
+					networkLogoSymbol: 'mastercard',
+					networkLogoWidth: '20vw',
+					networkLogoHeight: '10vw',
+				});
+				render(<App />);
+
+				expect(screen.getByTestId('card-networkLogo').getAttribute('style')).toBe('background-size: 20vw 10vw;');
 			});
-			render(<App />);
-
-			expect(screen.getByRole('main')).toHaveClass('Symbol--Visa-white');
-		});
-
-		it('should position the symbol bottom-right when position is not provided', () => {
-			addUrlParams({
-				symbol: 'mastercard',
-			});
-			render(<App />);
-
-			expect(screen.getByRole('main')).toHaveClass('Symbol--bottom-right');
-		});
-
-		it('should position the symbol bottom-right when position is provided', () => {
-			addUrlParams({
-				symbol: 'mastercard',
-				position: 'bottom-right',
-			});
-			render(<App />);
-
-			expect(screen.getByRole('main')).toHaveClass('Symbol--bottom-right');
-		});
-
-		it('should position the symbol bottom-left when position is provided', () => {
-			addUrlParams({
-				symbol: 'mastercard',
-				position: 'bottom-left',
-			});
-			render(<App />);
-
-			expect(screen.getByRole('main')).toHaveClass('Symbol--bottom-left');
-		});
-
-		it('should position the symbol top-left when position is provided', () => {
-			addUrlParams({
-				symbol: 'mastercard',
-				position: 'top-left',
-			});
-			render(<App />);
-
-			expect(screen.getByRole('main')).toHaveClass('Symbol--top-left');
-		});
-
-		it('should position the symbol top-right when position is provided', () => {
-			addUrlParams({
-				symbol: 'mastercard',
-				position: 'top-right',
-			});
-			render(<App />);
-
-			expect(screen.getByRole('main')).toHaveClass('Symbol--top-right');
 		});
 	});
 });

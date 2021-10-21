@@ -5,10 +5,13 @@
 	color: transparent !important;
 }
 
-@keyframes blink {
-	50% {
-		opacity: 0;
-	}
+.Symbol {
+	position: absolute;
+	z-index: -1;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
 }
 
 .Symbol--visa-blue {
@@ -40,4 +43,10 @@
 }
 .Symbol--top-right {
 	background-position: calc(100% - 3.529vw) 2.941vw;
+}
+
+@keyframes blink {
+	50% {
+		opacity: 0;
+	}
 }

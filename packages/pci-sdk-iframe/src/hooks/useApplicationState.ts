@@ -11,6 +11,8 @@ export default function useApplicationState(configOptions: IConfigOptions) {
 		message: '',
 		networkLogoPosition: configOptions.networkLogoPosition,
 		networkLogoSymbol: configOptions.networkLogoSymbol,
+		networkLogoWidth: configOptions.networkLogoWidth,
+		networkLogoHeight: configOptions.networkLogoHeight,
 		nextStep: '',
 		pan: `•••• •••• •••• ${configOptions.lastFour}`,
 		theme: themes[configOptions.theme],

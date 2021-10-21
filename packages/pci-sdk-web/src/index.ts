@@ -24,7 +24,8 @@ export interface IAuthOptions {
 export interface PCIStyle {} // eslint-disable-line
 
 export interface INetworkLogo {
-	position: 'top-right' | 'bottom-right' | 'bottom-left' | 'top-left';
+	position?: 'top-right' | 'bottom-right' | 'bottom-left' | 'top-left';
+	size?: Size;
 	symbol: 'mastercard' | 'visa-blue' | 'visa-white';
 }
 
@@ -223,9 +224,16 @@ function _initIframe(
 		const params = new URLSearchParams(authOptions as any);
 
 		if (networkLogo) {
-			Object.keys(networkLogo).forEach((key) =>
-				params.set(key, (networkLogo as any)[key])
-			);
+			params.set('networkLogoSymbol', networkLogo.symbol);
+
+			if (networkLogo.position) {
+				params.set('networkLogoPosition', networkLogo.position);
+			}
+
+			if (networkLogo.size) {
+				params.set('networkLogoWidth', networkLogo.size.width);
+				params.set('networkLogoHeight', networkLogo.size.height);
+			}
 		}
 
 		if (values) {
