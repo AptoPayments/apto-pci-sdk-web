@@ -191,7 +191,7 @@ function _initIframe(
 	networkLogo?: INetworkLogo,
 	size?: Size,
 	values?: Values,
-	theme = 'light',
+	theme?: IThemeName,
 	debug?: boolean
 ): Promise<HTMLIFrameElement> {
 	if (!pciElement) {
