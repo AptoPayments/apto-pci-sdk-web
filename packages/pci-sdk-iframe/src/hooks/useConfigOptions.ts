@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { IConfigOptions } from 'types/IConfigOptions';
+import { INetworkLogoPosition, INetworkLogoSymbol } from 'types/INetworkLogo';
 import IThemeName from 'types/IThemeName';
 
 export default function useConfigOptions() {
@@ -20,6 +21,10 @@ export default function useConfigOptions() {
 		labelPan: (urlParams.get('labelPan') as string) || 'Card number',
 		lastFour: (urlParams.get('lastFour') as string) || '••••',
 		nameOnCard: (urlParams.get('nameOnCard') as string) || '',
+		networkLogoPosition: (urlParams.get('networkLogoPosition') as INetworkLogoPosition) || 'bottom-right',
+		networkLogoSymbol: (urlParams.get('networkLogoSymbol') as INetworkLogoSymbol) || '',
+		networkLogoWidth: (urlParams.get('networkLogoWidth') as string) || '',
+		networkLogoHeight: (urlParams.get('networkLogoHeight') as string) || '',
 		pinPlaceholderMessage: (urlParams.get('pinPlaceholderMessage') as string) || 'Enter your new PIN',
 		pinUpdatedMessage: (urlParams.get('pinUpdatedMessage') as string) || 'Pin successfully updated',
 		theme: _getTheme(urlParams),

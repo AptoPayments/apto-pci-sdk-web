@@ -8,6 +8,7 @@ export interface InitOptions {
 	 */
 	debug?: boolean;
 	element?: HTMLElement;
+	networkLogo?: INetworkLogo;
 	size?: Size;
 	theme?: IThemeName;
 	values?: Values;
@@ -21,6 +22,12 @@ export interface IAuthOptions {
 }
 
 export interface PCIStyle {} // eslint-disable-line
+
+export interface INetworkLogo {
+	position?: 'top-right' | 'bottom-right' | 'bottom-left' | 'top-left';
+	size?: Size;
+	symbol: 'mastercard' | 'visa-blue' | 'visa-white';
+}
 
 export interface Size {
 	width: string;
@@ -94,6 +101,7 @@ export function init(initOptions: InitOptions) {
 	$aptoIframe = _initIframe(
 		initOptions.auth,
 		initOptions.element,
+		initOptions.networkLogo,
 		initOptions.size,
 		initOptions.values,
 		initOptions.theme,
@@ -180,9 +188,10 @@ function _checkInitOptions(initOptions: InitOptions) {
 function _initIframe(
 	authOptions: IAuthOptions,
 	pciElement: HTMLElement | null = document.getElementById('apto-pci-sdk'),
+	networkLogo?: INetworkLogo,
 	size?: Size,
 	values?: Values,
-	theme = 'light',
+	theme?: IThemeName,
 	debug?: boolean
 ): Promise<HTMLIFrameElement> {
 	if (!pciElement) {
@@ -214,13 +223,28 @@ function _initIframe(
 
 		const params = new URLSearchParams(authOptions as any);
 
+		if (networkLogo) {
+			params.set('networkLogoSymbol', networkLogo.symbol);
+
+			if (networkLogo.position) {
+				params.set('networkLogoPosition', networkLogo.position);
+			}
+
+			if (networkLogo.size) {
+				params.set('networkLogoWidth', networkLogo.size.width);
+				params.set('networkLogoHeight', networkLogo.size.height);
+			}
+		}
+
 		if (values) {
 			Object.keys(values).forEach((key) =>
 				params.set(key, (values as any)[key])
 			);
 		}
 
-		params.set('theme', theme.toString());
+		if (theme) {
+			params.set('theme', theme.toString());
+		}
 
 		if (debug) {
 			params.set('debug', 'true');

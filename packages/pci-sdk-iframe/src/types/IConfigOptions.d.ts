@@ -1,4 +1,5 @@
 import IThemeName from 'types/IThemeName';
+import { INetworkLogoPosition, INetworkLogoSymbol } from './INetworkLogo';
 
 export interface IConfigOptions {
 	cardId: string;
@@ -14,6 +15,10 @@ export interface IConfigOptions {
 	labelPan: string;
 	lastFour: string;
 	nameOnCard: string;
+	networkLogoPosition: INetworkLogoPosition;
+	networkLogoSymbol: INetworkLogoSymbol;
+	networkLogoWidth: string;
+	networkLogoHeight: string;
 	pinPlaceholderMessage: string;
 	pinUpdatedMessage: string;
 	theme: IThemeName;
