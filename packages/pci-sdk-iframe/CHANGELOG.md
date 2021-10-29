@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 3.5.0 (2021-10-29)
+
+
+### Features
+
+* Add option to easily display card-network (ACQ-2132) ([#72](https://github.com/AptoPayments/apto-pci-sdk-web/issues/72)) ([d898e5f](https://github.com/AptoPayments/apto-pci-sdk-web/commit/d898e5ff8eb49b7503b33bfd0e234754b6a28d7e))
+
+
+
+
+
 ## 3.4.2 (2021-10-19)
 
 **Note:** Version bump only for package @apto-payments/pci-sdk-iframe
