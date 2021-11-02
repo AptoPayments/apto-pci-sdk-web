@@ -105,6 +105,8 @@ function _getContentType(filename) {
 			return 'text/plain';
 		case 'icon':
 			return 'image/x-icon';
+		case 'svg':
+			return 'image/svg+xml';
 		default:
 			return 'application/octet-stream';
 	}
