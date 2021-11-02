@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.3](https://github.com/AptoPayments/apto-pci-sdk-web/compare/v3.4.2...v3.4.3) (2021-11-02)
+
+
+### Bug Fixes
+
+* Error when no theme is given ([#74](https://github.com/AptoPayments/apto-pci-sdk-web/issues/74)) ([743be7d](https://github.com/AptoPayments/apto-pci-sdk-web/commit/743be7d5dff7e6ac3259b79a0aeaf253a3886b4c))
+
+
+
+
+
 ## 3.4.2 (2021-10-19)
 
 **Note:** Version bump only for package @apto-payments/pci-sdk-web
