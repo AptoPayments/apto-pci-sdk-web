@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 3.5.1 (2021-11-02)
+
+
+### Bug Fixes
+
+* Add right mime type to svg (ACQ-2335) ([#76](https://github.com/AptoPayments/apto-pci-sdk-web/issues/76)) ([7d80d88](https://github.com/AptoPayments/apto-pci-sdk-web/commit/7d80d889116d3481892dc8a1b0940904a81a944f))
+
+
+
+
+
 # 3.5.0 (2021-10-29)
 
 
