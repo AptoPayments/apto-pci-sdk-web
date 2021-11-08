@@ -20,4 +20,7 @@ export interface ITheme {
 	formOTPInput?: CSSProperties;
 	formOTPSubmit?: CSSProperties;
 	notification?: CSSProperties;
+	inlineForm?: CSSProperties;
+	inlineFormInput?: CSSProperties;
+	inlineFormSubmit?: CSSProperties;
 }

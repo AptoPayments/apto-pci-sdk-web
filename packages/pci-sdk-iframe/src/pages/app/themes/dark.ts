@@ -90,6 +90,9 @@ export default {
 		cursor: 'pointer',
 		boxSizing: 'border-box',
 	},
+	inlineForm: {},
+	inlineFormInput: { background: '#1f1f1f', border: '1px solid #757575', borderRight: 'none' },
+	inlineFormSubmit: {},
 	// Notification
 	notification: {
 		position: 'absolute',
