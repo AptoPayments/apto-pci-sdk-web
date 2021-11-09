@@ -128,7 +128,7 @@ describe('<App />', () => {
 				_fireMessage('showCardData');
 
 				await waitFor(() => {
-					expect(screen.queryByTestId('2fa-form')).toBeVisible();
+					expect(screen.queryByTestId('otp-form')).toBeVisible();
 				});
 
 				userEvent.click(screen.getByRole('button'));
@@ -152,7 +152,7 @@ describe('<App />', () => {
 				_fireMessage('showCardData');
 
 				await waitFor(() => {
-					expect(screen.queryByTestId('2fa-form')).toBeVisible();
+					expect(screen.queryByTestId('otp-form')).toBeVisible();
 				});
 
 				userEvent.click(screen.getByRole('button'));
@@ -280,11 +280,11 @@ describe('<App />', () => {
 					_fireMessage('showCardData');
 
 					await waitFor(() => {
-						expect(screen.queryByTestId('2fa-form')).toBeVisible();
+						expect(screen.queryByTestId('otp-form')).toBeVisible();
 						expect(screen.queryByText('Unexpected error')).toBeNull();
 					});
 
-					userEvent.type(screen.getByLabelText('2FA code'), '123456');
+					userEvent.type(screen.getByLabelText('Enter the OTP code'), '123456');
 					userEvent.click(screen.getByRole('button'));
 
 					return waitFor(() =>
@@ -317,10 +317,10 @@ describe('<App />', () => {
 					_fireMessage('showCardData');
 
 					await waitFor(() => {
-						expect(screen.queryByTestId('2fa-form')).toBeVisible();
+						expect(screen.queryByTestId('otp-form')).toBeVisible();
 					});
 
-					userEvent.type(screen.getByLabelText('2FA code'), '000000');
+					userEvent.type(screen.getByLabelText('Enter the OTP code'), '000000');
 					userEvent.click(screen.getByRole('button'));
 
 					await waitFor(() => expect(spy).toHaveBeenCalledTimes(3));
@@ -340,15 +340,15 @@ describe('<App />', () => {
 					_fireMessage('showCardData');
 
 					await waitFor(() => {
-						expect(screen.queryByTestId('2fa-form')).toBeVisible();
+						expect(screen.queryByTestId('otp-form')).toBeVisible();
 					});
 
-					userEvent.type(screen.getByLabelText('2FA code'), '000000');
+					userEvent.type(screen.getByLabelText('Enter the OTP code'), '000000');
 					userEvent.click(screen.getByRole('button'));
 
 					await waitFor(() => {
 						expect(screen.queryByText('Process expired. Start again.')).toBeVisible();
-						expect(screen.queryByTestId('2fa-form')).toBeNull();
+						expect(screen.queryByTestId('otp-form')).toBeNull();
 					});
 				});
 
@@ -364,15 +364,15 @@ describe('<App />', () => {
 					_fireMessage('showCardData');
 
 					await waitFor(() => {
-						expect(screen.queryByTestId('2fa-form')).toBeVisible();
+						expect(screen.queryByTestId('otp-form')).toBeVisible();
 					});
 
-					userEvent.type(screen.getByLabelText('2FA code'), '000000');
+					userEvent.type(screen.getByLabelText('Enter the OTP code'), '000000');
 					userEvent.click(screen.getByRole('button'));
 
 					await waitFor(() => {
 						expect(screen.queryByText('Too many attempts. Start again.')).toBeVisible();
-						expect(screen.queryByTestId('2fa-form')).toBeNull();
+						expect(screen.queryByTestId('otp-form')).toBeNull();
 					});
 				});
 
@@ -386,15 +386,15 @@ describe('<App />', () => {
 					_fireMessage('showCardData');
 
 					await waitFor(() => {
-						expect(screen.queryByTestId('2fa-form')).toBeVisible();
+						expect(screen.queryByTestId('otp-form')).toBeVisible();
 					});
 
-					userEvent.type(screen.getByLabelText('2FA code'), '000000');
+					userEvent.type(screen.getByLabelText('Enter the OTP code'), '000000');
 					userEvent.click(screen.getByRole('button'));
 
 					await waitFor(() => {
 						expect(screen.queryByText('Wrong code. Try again.')).toBeVisible();
-						expect(screen.queryByTestId('2fa-form')).toBeVisible();
+						expect(screen.queryByTestId('otp-form')).toBeVisible();
 					});
 				});
 
@@ -415,10 +415,10 @@ describe('<App />', () => {
 						_fireMessage('showCardData');
 
 						await waitFor(() => {
-							expect(screen.queryByTestId('2fa-form')).toBeVisible();
+							expect(screen.queryByTestId('otp-form')).toBeVisible();
 						});
 
-						userEvent.type(screen.getByLabelText('2FA code'), '123456');
+						userEvent.type(screen.getByLabelText('Enter the OTP code'), '123456');
 						userEvent.click(screen.getByRole('button'));
 
 						await waitFor(() =>
@@ -451,10 +451,10 @@ describe('<App />', () => {
 						_fireMessage('showCardData');
 
 						await waitFor(() => {
-							expect(screen.queryByTestId('2fa-form')).toBeVisible();
+							expect(screen.queryByTestId('otp-form')).toBeVisible();
 						});
 
-						userEvent.type(screen.getByLabelText('2FA code'), '123456');
+						userEvent.type(screen.getByLabelText('Enter the OTP code'), '123456');
 						userEvent.click(screen.getByRole('button'));
 
 						return waitFor(() => {
@@ -520,7 +520,7 @@ describe('<App />', () => {
 			_fireMessage('showSetPinForm');
 
 			return waitFor(() => {
-				expect(screen.queryByTestId('2fa-form')).toBeVisible();
+				expect(screen.queryByTestId('otp-form')).toBeVisible();
 			});
 		});
 
@@ -545,11 +545,11 @@ describe('<App />', () => {
 			_fireMessage('showSetPinForm');
 
 			await waitFor(() => {
-				expect(screen.queryByTestId('2fa-form')).toBeVisible();
+				expect(screen.queryByTestId('otp-form')).toBeVisible();
 			});
 
 			// Fill the 2FA with a valid code
-			userEvent.type(screen.getByLabelText('2FA code'), '123456');
+			userEvent.type(screen.getByLabelText('Enter the OTP code'), '123456');
 			userEvent.click(screen.getByRole('button'));
 
 			return waitFor(() => {
@@ -580,11 +580,11 @@ describe('<App />', () => {
 			_fireMessage('showSetPinForm');
 
 			await waitFor(() => {
-				expect(screen.queryByTestId('2fa-form')).toBeVisible();
+				expect(screen.queryByTestId('otp-form')).toBeVisible();
 			});
 
 			// Fill the 2FA with a valid code
-			userEvent.type(screen.getByLabelText('2FA code'), '123456');
+			userEvent.type(screen.getByLabelText('Enter the OTP code'), '123456');
 			userEvent.click(screen.getByRole('button'));
 
 			await waitFor(() => {
@@ -634,11 +634,11 @@ describe('<App />', () => {
 			_fireMessage('showSetPinForm');
 
 			await waitFor(() => {
-				expect(screen.queryByTestId('2fa-form')).toBeVisible();
+				expect(screen.queryByTestId('otp-form')).toBeVisible();
 			});
 
 			// Fill the 2FA with a valid code
-			userEvent.type(screen.getByLabelText('2FA code'), '123456');
+			userEvent.type(screen.getByLabelText('Enter the OTP code'), '123456');
 			userEvent.click(screen.getByRole('button'));
 
 			await waitFor(() => {

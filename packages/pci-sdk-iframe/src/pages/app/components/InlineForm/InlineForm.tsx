@@ -9,12 +9,18 @@ interface IInlineFormProps {
 	id: string;
 	placeholder: string;
 	required?: boolean;
+	testID?: string;
 	theme: ITheme;
 }
 
 export default function InlineForm(props: IInlineFormProps) {
 	return (
-		<form className="InlineForm" style={props.theme.inlineForm} onSubmit={props.handleSubmit} data-testid="inline-form">
+		<form
+			className="InlineForm"
+			style={props.theme.inlineForm}
+			onSubmit={props.handleSubmit}
+			data-testid={props.testID}
+		>
 			<input
 				className="InlineForm__input"
 				style={props.theme.inlineFormInput}

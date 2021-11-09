@@ -91,7 +91,7 @@ export default {
 		boxSizing: 'border-box',
 	},
 	inlineForm: {},
-	inlineFormInput: { background: '#1f1f1f', border: '1px solid #757575', borderRight: 'none' },
+	inlineFormInput: { background: '#1f1f1f', border: '1px solid #757575', color: '#fff' },
 	inlineFormSubmit: {},
 	// Notification
 	notification: {

@@ -42,7 +42,7 @@ export default function useApp() {
 	function handlePinSubmit(e: React.FormEvent) {
 		e.preventDefault();
 		dispatch({ message: '', uiStatus: 'CARD_DATA_HIDDEN', isLoading: true });
-		const pin = (e.target as any).elements['pin'].value as string;
+		const pin = (e.target as any).elements['pin-input'].value as string;
 
 		return appService.pin
 			.setPin({ pin, verificationId: state.verificationId, cardId: configOptions.cardId })
@@ -54,7 +54,7 @@ export default function useApp() {
 	function handleCodeSubmit(e: React.FormEvent) {
 		e.preventDefault();
 		dispatch({ message: '', uiStatus: 'CARD_DATA_HIDDEN', isLoading: true });
-		const secret = (e.target as any).elements['code'].value as string;
+		const secret = (e.target as any).elements['otp-input'].value as string;
 
 		return appService.twoFactorAuth.verify2FACode({ secret, state, configOptions, dispatch });
 	}

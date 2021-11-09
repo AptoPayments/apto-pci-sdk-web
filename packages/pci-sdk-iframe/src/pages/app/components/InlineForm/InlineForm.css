@@ -20,7 +20,18 @@
 	font-size: 4.118vw; /* 14px */
 }
 
+.InlineForm__input::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  opacity: 1; /* Firefox */
+  color: #757575;
+}
+
+.InlineForm__input::-ms-input-placeholder { /* Microsoft Edge */
+  color: #757575;
+}
+
 .InlineForm__submit {
+	position: relative;
+	left: -1px;
 	box-sizing: border-box;
 	height: 12.941vw; /* 44px */
 	margin: auto;
@@ -34,3 +45,5 @@
 	font-size: 4.118vw; /* 14px */
 	cursor: pointer;
 }
+
+

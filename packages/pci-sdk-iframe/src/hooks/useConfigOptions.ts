@@ -8,7 +8,7 @@ export default function useConfigOptions() {
 
 	const [configOptions] = useState<IConfigOptions>(() => ({
 		cardId: (urlParams.get('cardId') as string) || '',
-		codePlaceholderMessage: (urlParams.get('codePlaceholderMessage') as string) || 'Enter the code',
+		codePlaceholderMessage: (urlParams.get('codePlaceholderMessage') as string) || 'Enter the OTP code',
 		enter2FAPrompt: (urlParams.get('enter2FAPrompt') as string) || 'Enter the code we sent you (numbers only).',
 		expiredMessage: (urlParams.get('expiredMessage') as string) || 'Process expired. Start again.',
 		failed2FAPrompt: (urlParams.get('failed2FAPrompt') as string) || 'Wrong code. Try again.',
