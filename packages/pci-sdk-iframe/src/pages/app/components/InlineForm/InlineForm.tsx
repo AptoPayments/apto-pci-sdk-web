@@ -17,13 +17,13 @@ export default function InlineForm(props: IInlineFormProps) {
 	return (
 		<form
 			className="InlineForm"
-			style={props.theme.inlineForm}
+			style={props.theme.inlineForm?.container}
 			onSubmit={props.handleSubmit}
 			data-testid={props.testID}
 		>
 			<input
 				className="InlineForm__input"
-				style={props.theme.inlineFormInput}
+				style={props.theme.inlineForm?.input}
 				autoComplete={props.autoComplete}
 				required={props.required}
 				id={props.id}
@@ -34,7 +34,7 @@ export default function InlineForm(props: IInlineFormProps) {
 				pattern="\d*"
 				inputMode="numeric"
 			/>
-			<button className="InlineForm__submit" style={props.theme.inlineFormSubmit} type="submit">
+			<button className="InlineForm__submit" style={props.theme.inlineForm?.submit} type="submit">
 				Send
 			</button>
 		</form>

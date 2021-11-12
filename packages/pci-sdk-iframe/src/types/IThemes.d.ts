@@ -16,11 +16,10 @@ export interface ITheme {
 	pan?: CSSProperties;
 	cvv?: CSSProperties;
 	exp?: CSSProperties;
-	formOTP?: CSSProperties;
-	formOTPInput?: CSSProperties;
-	formOTPSubmit?: CSSProperties;
 	notification?: CSSProperties;
-	inlineForm?: CSSProperties;
-	inlineFormInput?: CSSProperties;
-	inlineFormSubmit?: CSSProperties;
+	inlineForm?: {
+		container?: CSSProperties;
+		input?: CSSProperties;
+		submit?: CSSProperties;
+	};
 }
