@@ -87,6 +87,9 @@ export default {
 		cursor: 'pointer',
 		boxSizing: 'border-box',
 	},
+	inlineForm: {},
+	inlineFormInput: { background: '#fff', border: '1px solid #eee' },
+	inlineFormSubmit: {},
 	// Notification
 	notification: {
 		position: 'absolute',

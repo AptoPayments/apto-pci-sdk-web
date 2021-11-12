@@ -1,9 +1,8 @@
 import React from 'react';
 import CardData from './components/CardData/CardData';
 import Debugger from './components/Debugger/Debugger';
-import Form from './components/Form/Form';
 import Info from './components/Info/Info';
-import SetPinForm from './components/SetPinForm/SetPinForm';
+import InlineForm from './components/InlineForm/InlineForm';
 import useApp from './useApp';
 
 export default function App() {
@@ -60,7 +59,16 @@ export default function App() {
 			return (
 				<>
 					{message ? <Info message={message} theme={theme} /> : null}
-					<Form handleSubmit={handleCodeSubmit} placeholder={codePlaceholderMessage} theme={theme} />
+					<InlineForm
+						autoComplete="one-time-code"
+						ariaLabel="Enter the OTP code"
+						handleSubmit={handleCodeSubmit}
+						id="otp-input"
+						placeholder={codePlaceholderMessage}
+						required
+						testID="otp-form"
+						theme={theme}
+					/>
 					{isDebug ? <Debugger /> : null}
 				</>
 			);
@@ -69,7 +77,16 @@ export default function App() {
 			return (
 				<>
 					{message ? <Info message={message} theme={theme} /> : null}
-					<SetPinForm handleSubmit={handlePinSubmit} placeholder={pinPlaceholderMessage} theme={theme} />
+					<InlineForm
+						autoComplete="off"
+						ariaLabel="Set the new pin code"
+						handleSubmit={handlePinSubmit}
+						id="pin-input"
+						placeholder={pinPlaceholderMessage}
+						required
+						testID="set-pin-form"
+						theme={theme}
+					/>
 					{isDebug ? <Debugger /> : null}
 				</>
 			);
