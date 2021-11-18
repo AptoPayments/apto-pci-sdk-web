@@ -51,6 +51,12 @@ const dummy_style_with_theme: ITheme = {
 	cvv: {
 		fontSize: '24px',
 	},
+	inlineForm: {
+		container: {
+			background: 'black',
+			borderRadius: '16px',
+		},
+	},
 };
 
 const dummy_style_default_theme_extended: ITheme = {
@@ -113,39 +119,17 @@ const dummy_style_default_theme_extended: ITheme = {
 	cvv: {
 		fontSize: '24px',
 	},
-	formOTP: {
-		alignContent: 'center',
-		display: 'flex',
-		flexDirection: 'column',
-		height: '92%',
-		justifyContent: 'center',
-		padding: '0 18vw',
-		fontFamily:
-			'-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif',
+	inlineForm: {
+		container: {
+			background: 'black',
+			borderRadius: '16px',
+		},
+		input: {
+			background: '#fff',
+			border: '1px solid #eee',
+		},
+		submit: {},
 	},
-	formOTPInput: {
-		width: '90%',
-		margin: 'auto',
-		padding: '2.35vw 3.52vw', //8px 12px
-		border: '1px solid #ccc',
-		borderRadius: '1.2vw 0 0 1.2vw',
-		fontSize: '4.118vw', // '14px'
-	},
-	formOTPSubmit: {
-		margin: '0',
-		padding: '0 1rem',
-		backgroundColor: '#ccc',
-		border: '1px solid #ccc',
-		borderRadius: '0 1.2vw 1.2vw 0',
-		fontFamily:
-			'-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif',
-		fontSize: '4.118vw', // '14px'
-		cursor: 'pointer',
-		boxSizing: 'border-box',
-	},
-	inlineForm: {},
-	inlineFormInput: { background: '#fff', border: '1px solid #eee' },
-	inlineFormSubmit: {},
 	notification: {
 		position: 'absolute',
 		zIndex: 3,

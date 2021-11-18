@@ -1,4 +1,4 @@
-// TODO: group this with context: `cardData: { ... }, formOTP: { ... }` in the next major release
+// TODO: group this with context: `cardData: { ... },` in the next major release
 export default {
 	// Card Data
 	container: {
@@ -56,40 +56,14 @@ export default {
 	pan: {
 		fontSize: '7.06vw', //24px
 	},
-	// 2FA Form
-	formOTP: {
-		alignContent: 'center',
-		display: 'flex',
-		flexDirection: 'column',
-		height: '92%',
-		justifyContent: 'center',
-		padding: '0 18vw',
-		fontFamily:
-			'-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif',
+	inlineForm: {
+		container: {},
+		input: {
+			background: '#fff',
+			border: '1px solid #eee',
+		},
+		submit: {},
 	},
-	formOTPInput: {
-		width: '90%',
-		margin: 'auto',
-		padding: '2.35vw 3.52vw', //8px 12px
-		border: '1px solid #ccc',
-		borderRadius: '1.2vw 0 0 1.2vw',
-		fontSize: '4.118vw', // '14px'
-	},
-	formOTPSubmit: {
-		margin: '0',
-		padding: '0 1rem',
-		backgroundColor: '#ccc',
-		border: '1px solid #ccc',
-		borderRadius: '0 1.2vw 1.2vw 0',
-		fontFamily:
-			'-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif',
-		fontSize: '4.118vw', // '14px'
-		cursor: 'pointer',
-		boxSizing: 'border-box',
-	},
-	inlineForm: {},
-	inlineFormInput: { background: '#fff', border: '1px solid #eee' },
-	inlineFormSubmit: {},
 	// Notification
 	notification: {
 		position: 'absolute',
