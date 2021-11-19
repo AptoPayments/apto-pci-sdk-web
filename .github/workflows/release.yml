@@ -22,10 +22,10 @@ jobs:
         run: npm config set '//registry.npmjs.org/:_authToken' "${NPM_TOKEN}"
 
       - name: Set git email
-        run: git config user.email "aptobot.fe@aptopayments.com"
+        run: git config user.email "${{ secrets.GIT_EMAIL }}"
 
       - name: Set git name
-        run: git config user.name "AptoBotFe"
+        run: git config user.name "${{ secrets.GIT_NAME }}"
 
       - name: Install
         run: npm ci
@@ -41,4 +41,4 @@ jobs:
 
       - name: Notify JIRA
         run: >-
-          curl -X POST -H 'Content-type: application/json' https://automation.atlassian.com/pro/hooks/15e1659919a45c78db98c5032169343383a79c79
+          curl -X POST -H 'Content-type: application/json' ${{ secrets.AUTOMATION_URL }}
