@@ -1,0 +1,24 @@
+name: ASANA/IN_PROGRESS
+
+on:
+  create:
+    branches:
+      - "**"
+
+jobs:
+  build:
+    name: Update Asana
+    runs-on: ubuntu-latest
+    env:
+      ASANA_API_TOKEN: ${{ secrets.ASANA_TOKEN }}
+    steps:
+      - name: Get Asana Task ID from Github
+        uses: actions-ecosystem/action-regex-match@v2
+        id: regex-match
+        with:
+          text: ${{ github.event.ref }}
+          regex: '\d{16}'
+
+      - name: Update status in Asana if Task ID found
+        if: ${{ steps.regex-match.outputs.match != '' }}
+        run: npx @apto-payments/asana-cli move-task --id=${{ steps.regex-match.outputs.match }} --to=in_progress --yes
