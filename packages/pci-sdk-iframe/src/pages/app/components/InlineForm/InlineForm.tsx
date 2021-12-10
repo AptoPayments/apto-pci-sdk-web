@@ -8,6 +8,7 @@ interface IInlineFormProps {
 	ctaText: string;
 	handleSubmit: (e: React.FormEvent) => void;
 	id: string;
+	maxlength?: number;
 	placeholder: string;
 	required?: boolean;
 	testID?: string;
@@ -30,6 +31,7 @@ export default function InlineForm(props: IInlineFormProps) {
 				id={props.id}
 				name={props.id}
 				type="text"
+				maxLength={props.maxlength}
 				aria-label={props.ariaLabel}
 				placeholder={props.placeholder}
 				pattern="\d*"

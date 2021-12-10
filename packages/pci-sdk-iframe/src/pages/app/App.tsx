@@ -79,6 +79,7 @@ export default function App() {
 						ctaText={labels.setPinSubmitButton}
 						handleSubmit={handlePinSubmit}
 						id="pin-input"
+						maxlength={4}
 						placeholder={labels.pinPlaceholder}
 						required
 						testID="set-pin-form"
