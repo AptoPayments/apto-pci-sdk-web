@@ -2,25 +2,37 @@ import IThemeName from 'types/IThemeName';
 import { INetworkLogoPosition, INetworkLogoSymbol } from './INetworkLogo';
 
 export interface IConfigOptions {
-	cardId: string;
-	codePlaceholderMessage: string;
-	enter2FAPrompt: string;
-	expiredMessage: string;
-	failed2FAPrompt: string;
-	isDebug: boolean;
-	isPCICompliant: boolean | undefined;
-	labelCvv: string;
-	labelExp: string;
-	labelName: string;
-	labelPan: string;
-	lastFour: string;
-	nameOnCard: string;
-	networkLogoPosition: INetworkLogoPosition;
-	networkLogoSymbol: INetworkLogoSymbol;
-	networkLogoWidth: string;
-	networkLogoHeight: string;
-	pinPlaceholderMessage: string;
-	pinUpdatedMessage: string;
-	theme: IThemeName;
-	tooManyAttemptsMessage: string;
+	card: {
+		cardId: string;
+		labelCvv: string;
+		labelExp: string;
+		labelName: string;
+		labelPan: string;
+		lastFour: string;
+		nameOnCard: string;
+		network: {
+			logoPosition: INetworkLogoPosition;
+			logoSymbol: INetworkLogoSymbol;
+			logoWidth: string;
+			logoHeight: string;
+		};
+		theme: IThemeName;
+	};
+	config: {
+		isDebug: boolean;
+		isPCICompliant: boolean | undefined;
+	};
+	labels: {
+		codePlaceholder: string;
+		pinPlaceholder: string;
+		otpSubmitButton: string;
+		setPinSubmitButton: string;
+	};
+	messages: {
+		enter2FA: string;
+		expired2FA: string;
+		failed2FA: string;
+		tooManyAttempts: string;
+		pinUpdated: string;
+	};
 }

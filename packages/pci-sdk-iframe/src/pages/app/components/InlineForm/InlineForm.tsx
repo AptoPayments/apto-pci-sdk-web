@@ -5,6 +5,7 @@ import './InlineForm.css';
 interface IInlineFormProps {
 	ariaLabel: string;
 	autoComplete?: string;
+	ctaText: string;
 	handleSubmit: (e: React.FormEvent) => void;
 	id: string;
 	placeholder: string;
@@ -35,7 +36,7 @@ export default function InlineForm(props: IInlineFormProps) {
 				inputMode="numeric"
 			/>
 			<button className="InlineForm__submit" style={props.theme.inlineForm?.submit} type="submit">
-				Send
+				{props.ctaText}
 			</button>
 		</form>
 	);
