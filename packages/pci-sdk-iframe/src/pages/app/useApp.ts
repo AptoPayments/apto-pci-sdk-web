@@ -46,8 +46,15 @@ export default function useApp() {
 
 		return appService.pin
 			.setPin({ pin, verificationId: state.verificationId, cardId: configOptions.cardId })
-			.then(() => dispatch({ isLoading: false, message: configOptions.pinUpdatedMessage }))
-			.catch(() => dispatch({ uiStatus: 'CARD_DATA_HIDDEN', isLoading: false, message: 'Unexpected error' }));
+			.then(() => dispatch({ isLoading: false, message: configOptions.pinUpdatedMessage, notificationType: 'positive' }))
+			.catch(() =>
+				dispatch({
+					uiStatus: 'CARD_DATA_HIDDEN',
+					isLoading: false,
+					message: 'Unexpected error',
+					notificationType: 'negative',
+				})
+			);
 	}
 
 	// Callback to be executed when the verify OTP form is submitted

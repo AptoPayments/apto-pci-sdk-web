@@ -9,6 +9,7 @@ export default interface IApplicationState {
 	exp: string;
 	isLoading: boolean;
 	message: string;
+	notificationType: 'positive' | 'negative';
 	networkLogoPosition: INetworkLogoPosition;
 	networkLogoSymbol: INetworkLogoSymbol;
 	networkLogoWidth: string;

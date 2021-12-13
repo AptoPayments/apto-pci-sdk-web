@@ -1,0 +1,67 @@
+.Notification {
+	display: flex;
+	position: absolute;
+	z-index: 3;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	align-items: center;
+	justify-content: flex-start;
+	padding: 4.7vw;
+	animation: slide-up 0.6s ease-in;
+	border-radius: 0 0 12px 12px;
+	color: white;
+	font-family: sans-serif;
+	font-size: 4.118vw; /* 14px */
+	font-weight: 600;
+	line-height: 4.7vw;
+	text-align: left;
+}
+
+/* .Notification::before {
+	content: '';
+	display: block;
+	width: 28px;
+	height: 30px;
+	margin-right: 4px;
+} */
+
+.Notification--positive {
+	background-color: #00a96d;
+}
+
+/* .Notification--positive::before {
+	content: '';
+	background-image: url('./images/positive-icon.svg');
+} */
+
+.Notification--negative {
+	background-color: #b94128;
+}
+
+/* .Notification--negative::before {
+	content: '';
+	background-image: url('./images/negative-icon.svg');
+} */
+
+.Notification__icon {
+	width: 28px;
+	height: 30px;
+	margin-right: 4px;
+}
+
+.Notification__icon--positive {
+	background-image: url('./images/positive-icon.svg');
+}
+.Notification__icon--negative {
+	background-image: url('./images/negative-icon.svg');
+}
+
+@keyframes slide-up {
+	from {
+		bottom: -100%;
+	}
+	to {
+		bottom: 0;
+	}
+}

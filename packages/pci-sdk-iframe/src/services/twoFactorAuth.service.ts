@@ -16,7 +16,7 @@ function verify2FACode(args: IVerify2FACodeArgs) {
 	return apiClient
 		.verify2FACode(args.secret, args.state.verificationId)
 		.then((res) => _onVerificationReceived({ res, ...args }))
-		.catch(() => args.dispatch({ isLoading: false, message: 'Unexpected error' }));
+		.catch(() => args.dispatch({ isLoading: false, message: 'Unexpected error', notificationType: 'negative' }));
 }
 
 interface IOnVerificationReceivedArgs {
@@ -39,22 +39,41 @@ function _onVerificationReceived({ res, dispatch, state, configOptions }: IOnVer
 				return cardDataService
 					.getCardData({ cardId: configOptions.cardId, verificationId: state.verificationId })
 					.then((cardData) => dispatch({ ...$visible(cardData) }))
-					.catch(() => dispatch({ ...$hidden(configOptions.lastFour), message: 'Unexpected error' }));
+					.catch(() =>
+						dispatch({ ...$hidden(configOptions.lastFour), message: 'Unexpected error', notificationType: 'negative' })
+					);
 			}
 
 			throw new Error(`Unexpected next step ${state.nextStep}`);
 
 		// Timeout, we need to start again. TODO: According to the backend spec we should trigger a restart verification but works for some reason ¯\_(ツ)_/¯
 		case 'expired':
-			return dispatch({ ...$hidden(configOptions.lastFour), message: configOptions.expiredMessage });
+			return dispatch({
+				...$hidden(configOptions.lastFour),
+				message: configOptions.expiredMessage,
+				notificationType: 'negative',
+			});
 		// Failed means too many attempts ¯\_(ツ)_/¯
 		case 'failed':
-			return dispatch({ ...$hidden(configOptions.lastFour), message: configOptions.tooManyAttemptsMessage });
+			return dispatch({
+				...$hidden(configOptions.lastFour),
+				message: configOptions.tooManyAttemptsMessage,
+				notificationType: 'negative',
+			});
 		// Pending means the code is wrong but we can try again  ¯\_(ツ)_/¯
 		case 'pending':
-			return dispatch({ uiStatus: 'OTP_FORM', isLoading: false, message: configOptions.failed2FAPrompt });
+			return dispatch({
+				uiStatus: 'OTP_FORM',
+				isLoading: false,
+				message: configOptions.failed2FAPrompt,
+				notificationType: 'negative',
+			});
 		default:
-			return dispatch({ ...$hidden(configOptions.lastFour), message: 'Unexpected error' });
+			return dispatch({
+				...$hidden(configOptions.lastFour),
+				message: 'Unexpected error',
+				notificationType: 'negative',
+			});
 	}
 }
 

@@ -9,6 +9,7 @@ export default function useApplicationState(configOptions: IConfigOptions) {
 		exp: '••/••',
 		isLoading: false,
 		message: '',
+		notificationType: 'positive',
 		networkLogoPosition: configOptions.networkLogoPosition,
 		networkLogoSymbol: configOptions.networkLogoSymbol,
 		networkLogoWidth: configOptions.networkLogoWidth,
