@@ -72,6 +72,10 @@ export interface Values {
 	 */
 	nameOnCard?: string;
 	/**
+	 * Text displayed on the OTPForm submit button
+	 */
+	otpSubmitButton?: string;
+	/**
 	 * Placeholder in the change PIN input
 	 */
 	pinPlaceholderMessage?: string;
@@ -79,6 +83,10 @@ export interface Values {
 	 * Message displayed when the PIN is changed
 	 */
 	pinUpdatedMessage?: string;
+	/**
+	 * Text displayed on the SetPinForm submit button
+	 */
+	setPinSubmitButton?: string;
 	/**
 	 * Message displayed when too many OTP attempts are performed
 	 */
