@@ -16,7 +16,9 @@ function verify2FACode(args: IVerify2FACodeArgs) {
 	return apiClient
 		.verify2FACode(args.secret, args.state.verificationId)
 		.then((res) => _onVerificationReceived({ res, ...args }))
-		.catch(() => args.dispatch({ isLoading: false, message: 'Unexpected error', notificationType: 'negative' }));
+		.catch(() =>
+			args.dispatch({ isLoading: false, message: 'Unexpected error. Try again.', notificationType: 'negative' })
+		);
 }
 
 interface IOnVerificationReceivedArgs {
@@ -40,7 +42,11 @@ function _onVerificationReceived({ res, dispatch, state, configOptions }: IOnVer
 					.getCardData({ cardId: configOptions.cardId, verificationId: state.verificationId })
 					.then((cardData) => dispatch({ ...$visible(cardData) }))
 					.catch(() =>
-						dispatch({ ...$hidden(configOptions.lastFour), message: 'Unexpected error', notificationType: 'negative' })
+						dispatch({
+							...$hidden(configOptions.lastFour),
+							message: 'Unexpected error. Try again.',
+							notificationType: 'negative',
+						})
 					);
 			}
 
@@ -71,7 +77,7 @@ function _onVerificationReceived({ res, dispatch, state, configOptions }: IOnVer
 		default:
 			return dispatch({
 				...$hidden(configOptions.lastFour),
-				message: 'Unexpected error',
+				message: 'Unexpected error. Try again.',
 				notificationType: 'negative',
 			});
 	}

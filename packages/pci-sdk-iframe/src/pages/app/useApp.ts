@@ -51,7 +51,7 @@ export default function useApp() {
 				dispatch({
 					uiStatus: 'CARD_DATA_HIDDEN',
 					isLoading: false,
-					message: 'Unexpected error',
+					message: 'Unexpected error. Contact support.',
 					notificationType: 'negative',
 				})
 			);

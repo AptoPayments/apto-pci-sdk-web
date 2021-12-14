@@ -66,11 +66,7 @@ export default {
 	},
 	// Notification
 	notification: {
-		positive: {
-			backgroundColor: 'blue',
-		},
-		negative: {
-			backgroundColor: 'black',
-		},
+		positive: {},
+		negative: {},
 	},
 };

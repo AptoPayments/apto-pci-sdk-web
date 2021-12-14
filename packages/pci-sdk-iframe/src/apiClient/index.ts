@@ -104,11 +104,7 @@ export async function getCardData(cardId: string, auth?: { verificationId: strin
 		case 401:
 			throw new Error(errorMessageParser.parse401(data.code, data.message));
 		case 400:
-			throw new Error(
-				errorMessageParser.parse400(
-					'Invalid request. Are you sure the cardID is correct? https://docs.aptopayments.com/docs/sdks/Web/pci_sdk_web/#optionsobject-properties'
-				)
-			);
+			throw new Error(errorMessageParser.parse400('Invalid cardID. Check the PCI SDK Web docs for more info.'));
 		default:
 			throw new Error(errorMessageParser.parseUnknownError());
 	}
@@ -157,11 +153,7 @@ async function setPin(args: ISetPinArgs) {
 		case 401:
 			throw new Error(errorMessageParser.parse401(data.code, data.message));
 		case 400:
-			throw new Error(
-				errorMessageParser.parse400(
-					'Invalid request. Are you sure the cardID is correct? https://docs.aptopayments.com/docs/sdks/Web/pci_sdk_web/#optionsobject-properties'
-				)
-			);
+			throw new Error(errorMessageParser.parse400('Invalid cardID. Check the PCI SDK Web docs for more info.'));
 		default:
 			throw new Error(errorMessageParser.parseUnknownError());
 	}

@@ -18,33 +18,16 @@
 	text-align: left;
 }
 
-/* .Notification::before {
-	content: '';
-	display: block;
-	width: 28px;
-	height: 30px;
-	margin-right: 4px;
-} */
-
 .Notification--positive {
 	background-color: #00a96d;
 }
-
-/* .Notification--positive::before {
-	content: '';
-	background-image: url('./images/positive-icon.svg');
-} */
 
 .Notification--negative {
 	background-color: #b94128;
 }
 
-/* .Notification--negative::before {
-	content: '';
-	background-image: url('./images/negative-icon.svg');
-} */
-
 .Notification__icon {
+	flex-shrink: 0;
 	width: 28px;
 	height: 30px;
 	margin-right: 4px;

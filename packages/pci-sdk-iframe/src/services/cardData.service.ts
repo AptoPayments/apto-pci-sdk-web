@@ -65,7 +65,7 @@ function showCardData({ dispatch, cardId, isPCICompliant }: IShowCardDataArgs) {
 		.catch((err) => {
 			if (_checkIfInvalidAPIKeyError(err)) {
 				return dispatch({
-					message: 'Invalid API key',
+					message: 'Invalid mobile API key. Refer to the Developer Portal for a valid key.',
 					uiStatus: 'CARD_DATA_HIDDEN',
 					isLoading: false,
 					notificationType: 'negative',
@@ -78,7 +78,7 @@ function showCardData({ dispatch, cardId, isPCICompliant }: IShowCardDataArgs) {
 
 			return dispatch({
 				isLoading: false,
-				message: 'Unexpected error',
+				message: 'Unexpected error. Try again.',
 				notificationType: 'negative',
 				uiStatus: 'CARD_DATA_HIDDEN',
 				verificationId: '',
@@ -107,7 +107,7 @@ async function _handleNoPCICompliant(dispatch: IStateFn) {
 		.catch((err) =>
 			dispatch({
 				isLoading: false,
-				message: 'Unexpected error',
+				message: 'Unexpected error. Contact support.',
 				notificationType: 'negative',
 				uiStatus: 'CARD_DATA_HIDDEN',
 				verificationId: '',
