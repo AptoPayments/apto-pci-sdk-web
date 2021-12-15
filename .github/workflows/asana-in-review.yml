@@ -13,12 +13,9 @@ jobs:
       ASANA_API_TOKEN: ${{ secrets.ASANA_TOKEN }}
     steps:
       - name: Get Asana Task ID from Github
-        uses: actions-ecosystem/action-regex-match@v2
-        id: regex-match
-        with:
-          text: ${{ github.event.pull_request.head.ref }}
-          regex: '\d{16}'
+        id: id-match
+        run: echo "::set-output name=match::$( echo "${{ github.event.pull_request.head.ref }}" | grep -oE '[0-9]{16}' )"
 
       - name: Update status in Asana if Task ID found
-        if: ${{ steps.regex-match.outputs.match != '' }}
-        run: npx @apto-payments/asana-cli move-task --id=${{ steps.regex-match.outputs.match }} --to=in_review --yes
+        if: ${{ steps.id-match.outputs.match != '' }}
+        run: npx @apto-payments/asana-cli move-task --ids=${{ steps.id-match.outputs.match }} --to=in_review --yes
