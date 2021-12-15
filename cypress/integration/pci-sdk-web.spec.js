@@ -158,7 +158,7 @@ describe("AptoPCISdk", () => {
 					.should("not.contain", "4242 4242 4242 4242")
 					.then(AptoPCISdk.showPCIData);
 
-				cy.getAptoIframe().find("#code").type("123456").type("{enter}");
+				cy.getAptoIframe().find("#otp-input").type("123456").type("{enter}");
 
 				cy.getAptoIframe()
 					.find("#pan")
