@@ -130,15 +130,28 @@ describe("AptoPCISdk", () => {
 		});
 
 		it("should display the data when showPCIData is called with an unknown cardholder id and user receives/enters 2FA code", () => {
+			cy.intercept("GET", "/v1/user/accounts/*/details", {
+				statusCode: 401,
+				body: { code: 90263 },
+			});
+
+			cy.intercept("POST", "/v1/verifications/primary/start", {
+				statusCode: 200,
+				body: dummyRequest2FACodeResponse,
+			});
+
+			cy.intercept("POST", "/v1/verifications/*/finish", {
+				statusCode: 200,
+				body: getDummyVerify2FACodeResponse("passed"),
+			});
+
+			cy.intercept("POST", "/v1/user/accounts/*/details", {
+				statusCode: 200,
+				body: dummyGetCardDataResponse,
+			});
+
 			cy.getPCISdk().then(async (AptoPCISdk) => {
 				await AptoPCISdk.init({ auth: dummyAuthData });
-
-				cy.stubMultipleJSONResponses([
-					{ httpStatus: 401, body: { code: 90263 } },
-					{ httpStatus: 200, body: dummyRequest2FACodeResponse },
-					{ httpStatus: 200, body: getDummyVerify2FACodeResponse("passed") },
-					{ httpStatus: 200, body: dummyGetCardDataResponse },
-				]);
 
 				cy.getAptoIframe()
 					.find("#pan")
