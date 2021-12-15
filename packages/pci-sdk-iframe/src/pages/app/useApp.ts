@@ -17,9 +17,13 @@ export default function useApp() {
 				case 'setTheme':
 					return appService.theme.setTheme({ dispatch, theme: data.theme });
 				case 'showCardData':
-					return appService.cardData.showCardData({ dispatch, ...configOptions });
+					return appService.cardData.showCardData({
+						dispatch,
+						cardId: configOptions.card.cardId,
+						isPCICompliant: configOptions.config.isPCICompliant,
+					});
 				case 'hideCardData':
-					return appService.cardData.hideCardData({ dispatch, lastFour: configOptions.lastFour });
+					return appService.cardData.hideCardData({ dispatch, lastFour: configOptions.card.lastFour });
 				case 'isDataVisible':
 					return appService.cardData.isDataVisible({ dispatch, isVisible: state.uiStatus === 'CARD_DATA_VISIBLE' });
 				case 'showSetPinForm':
@@ -45,8 +49,8 @@ export default function useApp() {
 		const pin = (e.target as any).elements['pin-input'].value as string;
 
 		return appService.pin
-			.setPin({ pin, verificationId: state.verificationId, cardId: configOptions.cardId })
-			.then(() => dispatch({ isLoading: false, message: configOptions.pinUpdatedMessage, notificationType: 'positive' }))
+			.setPin({ pin, verificationId: state.verificationId, cardId: configOptions.card.cardId })
+			.then(() => dispatch({ isLoading: false, message: configOptions.messages.pinUpdated, notificationType: 'positive' }))
 			.catch(() =>
 				dispatch({
 					uiStatus: 'CARD_DATA_HIDDEN',

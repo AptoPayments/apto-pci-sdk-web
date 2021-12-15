@@ -114,6 +114,26 @@ describe('<App />', () => {
 				expect(await screen.findByText('Card number')).toBeVisible();
 			});
 
+			it('should show custom text for the 2FA submit button when provided', async () => {
+				addUrlParams({ otpSubmitButton: 'custom_otpSubmitButton' });
+
+				render(<App />);
+
+				stubMultipleJSONResponses([
+					{ httpStatus: 401, body: { code: 90263 } },
+					{ httpStatus: 200, body: dummyRequest2FACodeResponse },
+					{ httpStatus: 200, body: getDummyVerify2FACodeResponse('expired') },
+				]);
+
+				_fireMessage('showCardData');
+
+				await waitFor(() => {
+					expect(screen.queryByTestId('otp-form')).toBeVisible();
+				});
+
+				await waitFor(() => expect(screen.queryByText('custom_otpSubmitButton')).toBeVisible());
+			});
+
 			it('should show custom expiredMessage for 2FA when provided', async () => {
 				addUrlParams({ expiredMessage: 'custom_expiredMessage' });
 
@@ -201,7 +221,7 @@ describe('<App />', () => {
 		it('should display the users data when getCardData is successful and response received', async () => {
 			expect(screen.queryByText('•••• •••• •••• ••••')).toBeVisible();
 
-			stubJSONResponse(dummy_get_card_data_sucessful_response);
+			stubJSONResponse(dummy_get_card_data_successful_response);
 			_fireMessage('showCardData');
 
 			expect(await screen.findByText('1234 1234 1234 1234')).toBeVisible();
@@ -214,7 +234,7 @@ describe('<App />', () => {
 		it('should only make one request when getCardData is successful', async () => {
 			const spy = jest.spyOn(global, 'fetch');
 
-			stubJSONResponse(dummy_get_card_data_sucessful_response);
+			stubJSONResponse(dummy_get_card_data_successful_response);
 			_fireMessage('showCardData');
 
 			await waitFor(() => expect(spy).toHaveBeenCalledTimes(1));
@@ -409,7 +429,7 @@ describe('<App />', () => {
 								httpStatus: 200,
 								body: getDummyVerify2FACodeResponse('passed'),
 							},
-							{ httpStatus: 200, body: dummy_get_card_data_sucessful_response },
+							{ httpStatus: 200, body: dummy_get_card_data_successful_response },
 						]);
 
 						_fireMessage('showCardData');
@@ -445,7 +465,7 @@ describe('<App />', () => {
 								httpStatus: 200,
 								body: getDummyVerify2FACodeResponse('passed'),
 							},
-							{ httpStatus: 200, body: dummy_get_card_data_sucessful_response },
+							{ httpStatus: 200, body: dummy_get_card_data_successful_response },
 						]);
 
 						_fireMessage('showCardData');
@@ -474,7 +494,7 @@ describe('<App />', () => {
 			addUrlParams({ lastFour: '1234' });
 			render(<App />);
 
-			stubJSONResponse(dummy_get_card_data_sucessful_response);
+			stubJSONResponse(dummy_get_card_data_successful_response);
 			_fireMessage('showCardData');
 
 			expect(await screen.findByText('1234 1234 1234 1234')).toBeVisible();
@@ -693,7 +713,7 @@ function getUrl(customParams: Record<string, any>) {
 	return `?${new URLSearchParams(params).toString()}`;
 }
 
-const dummy_get_card_data_sucessful_response = {
+const dummy_get_card_data_successful_response = {
 	card_id: 'dummy_cardId',
 	expiration: '2023-08',
 	cvv: '123',

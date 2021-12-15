@@ -39,11 +39,11 @@ function _onVerificationReceived({ res, dispatch, state, configOptions }: IOnVer
 
 			if (state.nextStep === 'VIEW_CARD_DATA') {
 				return cardDataService
-					.getCardData({ cardId: configOptions.cardId, verificationId: state.verificationId })
+					.getCardData({ cardId: configOptions.card.cardId, verificationId: state.verificationId })
 					.then((cardData) => dispatch({ ...$visible(cardData) }))
 					.catch(() =>
 						dispatch({
-							...$hidden(configOptions.lastFour),
+							...$hidden(configOptions.card.lastFour),
 							message: 'Unexpected error. Try again.',
 							notificationType: 'negative',
 						})
@@ -55,15 +55,15 @@ function _onVerificationReceived({ res, dispatch, state, configOptions }: IOnVer
 		// Timeout, we need to start again. TODO: According to the backend spec we should trigger a restart verification but works for some reason ¯\_(ツ)_/¯
 		case 'expired':
 			return dispatch({
-				...$hidden(configOptions.lastFour),
-				message: configOptions.expiredMessage,
+				...$hidden(configOptions.card.lastFour),
+				message: configOptions.messages.expired2FA,
 				notificationType: 'negative',
 			});
 		// Failed means too many attempts ¯\_(ツ)_/¯
 		case 'failed':
 			return dispatch({
-				...$hidden(configOptions.lastFour),
-				message: configOptions.tooManyAttemptsMessage,
+				...$hidden(configOptions.card.lastFour),
+				message: configOptions.messages.tooManyAttempts,
 				notificationType: 'negative',
 			});
 		// Pending means the code is wrong but we can try again  ¯\_(ツ)_/¯
@@ -71,12 +71,12 @@ function _onVerificationReceived({ res, dispatch, state, configOptions }: IOnVer
 			return dispatch({
 				uiStatus: 'OTP_FORM',
 				isLoading: false,
-				message: configOptions.failed2FAPrompt,
+				message: configOptions.messages.failed2FA,
 				notificationType: 'negative',
 			});
 		default:
 			return dispatch({
-				...$hidden(configOptions.lastFour),
+				...$hidden(configOptions.card.lastFour),
 				message: 'Unexpected error. Try again.',
 				notificationType: 'negative',
 			});
