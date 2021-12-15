@@ -41,6 +41,9 @@ jobs:
       - name: Release
         run: npm run release
 
+     -  name: Go one tag back # We assume the most recent commit is the tag referencing this release, we ignore it to be able to get a clean commit diff for this release.
+        run: git checkout HEAD~1
+
       - name: Get latest tag
         id: latest-tag
         run: echo "::set-output name=tag::$( git describe --tags --abbrev=0 )"
