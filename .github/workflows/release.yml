@@ -12,11 +12,13 @@ jobs:
       S3_BUCKET: ${{ secrets.S3_BUCKET }}
       S3_KEY: ${{ secrets.S3_KEY }}
       S3_SECRET: ${{ secrets.S3_SECRET }}
+      ASANA_API_TOKEN: ${{ secrets.ASANA_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@master
         with:
           token: ${{ secrets.APTO_BOT_TOKEN }}
+          fetch-depth: 0
 
       - name: Set npm token
         run: npm config set '//registry.npmjs.org/:_authToken' "${NPM_TOKEN}"
@@ -39,6 +41,14 @@ jobs:
       - name: Release
         run: npm run release
 
-      - name: Notify JIRA
-        run: >-
-          curl -X POST -H 'Content-type: application/json' ${{ secrets.AUTOMATION_URL }}
+      - name: Get latest tag
+        id: latest-tag
+        run: echo "::set-output name=tag::$( git describe --tags --abbrev=0 )"
+
+      - name: Get Asana tasks IDs list from Git
+        id: asana-ids
+        run: echo "::set-output name=ids::$( git log ${{ steps.latest-tag.outputs.tag }}..HEAD --oneline | grep -oE '[0-9]{16}' | tr '\n' ',' |  awk '{ print substr( $0, 1, length($0)-1 ) }' )"
+
+      - name: Update status in Asana if we have IDs in the Git history
+        if: ${{ steps.asana-ids.outputs.ids != '' }}
+        run: npx @apto-payments/asana-cli move-task --ids=${{ steps.asana-ids.outputs.ids }} --to=deployed_prod --yes

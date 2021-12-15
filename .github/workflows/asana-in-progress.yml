@@ -21,4 +21,4 @@ jobs:
 
       - name: Update status in Asana if Task ID found
         if: ${{ steps.regex-match.outputs.match != '' }}
-        run: npx @apto-payments/asana-cli move-task --id=${{ steps.regex-match.outputs.match }} --to=in_progress --yes
+        run: npx @apto-payments/asana-cli move-task --ids=${{ steps.regex-match.outputs.match }} --to=in_progress --yes
