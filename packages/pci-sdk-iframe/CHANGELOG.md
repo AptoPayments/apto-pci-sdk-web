@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0](https://github.com/AptoPayments/apto-pci-sdk-web/compare/v3.5.1...v4.0.0) (2021-12-15)
+
+
+### Features
+
+* Allow to customize the form button text (1201439445598518) ([#84](https://github.com/AptoPayments/apto-pci-sdk-web/issues/84)) ([6e910ee](https://github.com/AptoPayments/apto-pci-sdk-web/commit/6e910ee7b5abb7120b982e48678a9225390ccbe2)), closes [#81](https://github.com/AptoPayments/apto-pci-sdk-web/issues/81) [#82](https://github.com/AptoPayments/apto-pci-sdk-web/issues/82)
+* Finish InlineForm style changes (ACQ-2377) ([#78](https://github.com/AptoPayments/apto-pci-sdk-web/issues/78)) ([b329ced](https://github.com/AptoPayments/apto-pci-sdk-web/commit/b329ced8f148cd69a01dd45643efdfb9dcbe06e3))
+* New UI for notifications on the PCI SDK Web (1201415348104520) ([#83](https://github.com/AptoPayments/apto-pci-sdk-web/issues/83)) ([9378fb2](https://github.com/AptoPayments/apto-pci-sdk-web/commit/9378fb244f16d30cf114a816dcd8058ee400cd77))
+
+
+### BREAKING CHANGES
+
+* The `notification` in the ITheme object now has a `positive` and a `negative` properties to set the styles for each type of notification. If you were customizing the notifications before, you need to update the theme settings because they will no longer apply, due to some changes we have made. Check the [migration guide](https://docs.aptopayments.com/docs/guides/Migrations/PCI%20SDK%20Web/migration) for more details.
+
+Co-authored-by: Alejandra Arri <aleja@aptopayments.com>
+Co-authored-by: Lluis Agusti <hi@llu.lu>
+Co-authored-by: Clara Toloba <clara@aptopayments.com>
+
+
+
+
+
 ## 3.5.1 (2021-11-02)
 
 

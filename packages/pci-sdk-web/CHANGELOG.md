@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0](https://github.com/AptoPayments/apto-pci-sdk-web/compare/v3.5.1...v4.0.0) (2021-12-15)
+
+
+### Features
+
+* Allow to customize the form button text (1201439445598518) ([#84](https://github.com/AptoPayments/apto-pci-sdk-web/issues/84)) ([6e910ee](https://github.com/AptoPayments/apto-pci-sdk-web/commit/6e910ee7b5abb7120b982e48678a9225390ccbe2)), closes [#81](https://github.com/AptoPayments/apto-pci-sdk-web/issues/81) [#82](https://github.com/AptoPayments/apto-pci-sdk-web/issues/82)
+
+
+
+
+
 ## 3.5.1 (2021-11-02)
 
 
