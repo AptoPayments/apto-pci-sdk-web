@@ -64,7 +64,12 @@ function showCardData({ dispatch, cardId, isPCICompliant }: IShowCardDataArgs) {
 		.then((card) => dispatch({ ...card, isLoading: false, message: '', uiStatus: 'CARD_DATA_VISIBLE' }))
 		.catch((err) => {
 			if (_checkIfInvalidAPIKeyError(err)) {
-				return dispatch({ message: 'Invalid API key', uiStatus: 'CARD_DATA_HIDDEN', isLoading: false });
+				return dispatch({
+					message: 'Invalid mobile API key. Refer to the Developer Portal for a valid key.',
+					uiStatus: 'CARD_DATA_HIDDEN',
+					isLoading: false,
+					notificationType: 'negative',
+				});
 			}
 
 			if (_checkRequires2FACodeError(err)) {
@@ -73,7 +78,8 @@ function showCardData({ dispatch, cardId, isPCICompliant }: IShowCardDataArgs) {
 
 			return dispatch({
 				isLoading: false,
-				message: 'Unexpected error',
+				message: 'Unexpected error. Try again.',
+				notificationType: 'negative',
 				uiStatus: 'CARD_DATA_HIDDEN',
 				verificationId: '',
 			});
@@ -101,7 +107,8 @@ async function _handleNoPCICompliant(dispatch: IStateFn) {
 		.catch((err) =>
 			dispatch({
 				isLoading: false,
-				message: 'Unexpected error',
+				message: 'Unexpected error. Contact support.',
+				notificationType: 'negative',
 				uiStatus: 'CARD_DATA_HIDDEN',
 				verificationId: '',
 			})

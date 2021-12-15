@@ -682,7 +682,7 @@ describe('<App />', () => {
 				});
 			});
 
-			expect(screen.queryByText('Unexpected error')).toBeVisible();
+			expect(screen.queryByText('Unexpected error. Contact support.')).toBeVisible();
 		});
 	});
 });

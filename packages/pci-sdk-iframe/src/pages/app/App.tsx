@@ -1,8 +1,8 @@
 import React from 'react';
 import CardData from './components/CardData/CardData';
 import Debugger from './components/Debugger/Debugger';
-import Info from './components/Info/Info';
 import InlineForm from './components/InlineForm/InlineForm';
+import Notification from './components/Notification/Notification';
 import useApp from './useApp';
 
 export default function App() {
@@ -20,6 +20,7 @@ export default function App() {
 		networkLogoPosition,
 		networkLogoSymbol,
 		networkLogoWidth,
+		notificationType,
 		pan,
 		theme,
 		uiStatus,
@@ -30,7 +31,7 @@ export default function App() {
 		case 'CARD_DATA_VISIBLE':
 			return (
 				<>
-					{message ? <Info message={message} theme={theme} /> : null}
+					{message ? <Notification message={message} type={notificationType} theme={theme} /> : null}
 					<CardData
 						isLoading={isLoading}
 						cvv={cvv}
@@ -53,7 +54,7 @@ export default function App() {
 		case 'OTP_FORM':
 			return (
 				<>
-					{message ? <Info message={message} theme={theme} /> : null}
+					{message ? <Notification message={message} type={notificationType} theme={theme} /> : null}
 					<InlineForm
 						autoComplete="one-time-code"
 						ariaLabel="Enter the OTP code"
@@ -72,7 +73,7 @@ export default function App() {
 		case 'SET_PIN_FORM':
 			return (
 				<>
-					{message ? <Info message={message} theme={theme} /> : null}
+					{message ? <Notification message={message} type={notificationType} theme={theme} /> : null}
 					<InlineForm
 						autoComplete="off"
 						ariaLabel="Set the new pin code"

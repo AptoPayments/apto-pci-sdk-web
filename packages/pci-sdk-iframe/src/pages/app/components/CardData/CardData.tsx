@@ -41,7 +41,7 @@ export default function CardData(props: ICardDataProps) {
 					{props.labelPan}
 				</label>
 				<span
-					className={props.isLoading ? 'CardData__item isLoading' : ''}
+					className={props.isLoading ? 'CardData__item isLoading' : 'CardData__item'}
 					id="pan"
 					style={{ ...props.theme.shared, ...props.theme.pan }}
 				>
@@ -54,7 +54,7 @@ export default function CardData(props: ICardDataProps) {
 					{props.labelCvv}
 				</label>
 				<span
-					className={props.isLoading ? 'CardData__item isLoading' : ''}
+					className={props.isLoading ? 'CardData__item isLoading' : 'CardData__item'}
 					id="cvv"
 					style={{ ...props.theme.shared, ...props.theme.cvv }}
 				>
@@ -67,7 +67,7 @@ export default function CardData(props: ICardDataProps) {
 					{props.labelExp}
 				</label>
 				<span
-					className={props.isLoading ? 'CardData__item isLoading' : ''}
+					className={props.isLoading ? 'CardData__item isLoading' : 'CardData__item'}
 					id="exp"
 					style={{ ...props.theme.shared, ...props.theme.exp }}
 				>

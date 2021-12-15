@@ -67,19 +67,7 @@ export default {
 	},
 	// Notification
 	notification: {
-		position: 'absolute',
-		zIndex: 3,
-		top: '4.706vw',
-		left: '50%',
-		width: '70%',
-		padding: '2vw 4vw',
-		transform: 'translateX(-50%)',
-		borderRadius: '8px',
-		backgroundColor: '#141414',
-		color: '#CBCBCB',
-		fontFamily: 'sans-serif',
-		fontSize: '4.118vw',
-		lineHeight: '1.5',
-		textAlign: 'center',
+		positive: {},
+		negative: {},
 	},
 };

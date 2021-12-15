@@ -1,3 +1,8 @@
+.CardData__item {
+	animation: dissolve 0.4s ease-in;
+	opacity: 1;
+}
+
 .CardData__item.isLoading {
 	animation: blink 1.8s linear infinite;
 	border-radius: 2px;
@@ -48,5 +53,14 @@
 @keyframes blink {
 	50% {
 		opacity: 0;
+	}
+}
+
+@keyframes dissolve {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
 	}
 }
