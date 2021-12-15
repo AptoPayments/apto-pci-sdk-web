@@ -9,23 +9,18 @@ export default function App() {
 	const {
 		handlePinSubmit,
 		handleCodeSubmit,
-		codePlaceholderMessage,
+		card,
+		config,
+		labels,
 		cvv,
 		exp,
-		isDebug,
 		isLoading,
-		labelCvv,
-		labelExp,
-		labelName,
-		labelPan,
 		message,
-		nameOnCard,
 		networkLogoHeight,
 		networkLogoPosition,
 		networkLogoSymbol,
 		networkLogoWidth,
 		pan,
-		pinPlaceholderMessage,
 		theme,
 		uiStatus,
 	} = useApp();
@@ -40,11 +35,11 @@ export default function App() {
 						isLoading={isLoading}
 						cvv={cvv}
 						exp={exp}
-						labelCvv={labelCvv}
-						labelExp={labelExp}
-						labelName={labelName}
-						labelPan={labelPan}
-						nameOnCard={nameOnCard}
+						labelCvv={card.labelCvv}
+						labelExp={card.labelExp}
+						labelName={card.labelName}
+						labelPan={card.labelPan}
+						nameOnCard={card.nameOnCard}
 						networkLogoHeight={networkLogoHeight}
 						networkLogoPosition={networkLogoPosition}
 						networkLogoSymbol={networkLogoSymbol}
@@ -52,7 +47,7 @@ export default function App() {
 						pan={pan}
 						theme={theme}
 					/>
-					{isDebug ? <Debugger /> : null}
+					{config.isDebug ? <Debugger /> : null}
 				</>
 			);
 		case 'OTP_FORM':
@@ -62,14 +57,15 @@ export default function App() {
 					<InlineForm
 						autoComplete="one-time-code"
 						ariaLabel="Enter the OTP code"
+						ctaText={labels.otpSubmitButton}
 						handleSubmit={handleCodeSubmit}
 						id="otp-input"
-						placeholder={codePlaceholderMessage}
+						placeholder={labels.codePlaceholder}
 						required
 						testID="otp-form"
 						theme={theme}
 					/>
-					{isDebug ? <Debugger /> : null}
+					{config.isDebug ? <Debugger /> : null}
 				</>
 			);
 
@@ -80,14 +76,16 @@ export default function App() {
 					<InlineForm
 						autoComplete="off"
 						ariaLabel="Set the new pin code"
+						ctaText={labels.setPinSubmitButton}
 						handleSubmit={handlePinSubmit}
 						id="pin-input"
-						placeholder={pinPlaceholderMessage}
+						maxlength={4}
+						placeholder={labels.pinPlaceholder}
 						required
 						testID="set-pin-form"
 						theme={theme}
 					/>
-					{isDebug ? <Debugger /> : null}
+					{config.isDebug ? <Debugger /> : null}
 				</>
 			);
 	}
