@@ -28,9 +28,11 @@
 
 .Notification__icon {
 	flex-shrink: 0;
-	width: 28px;
-	height: 30px;
+	width: 8.24vw;
+	height: 8.24vw;
 	margin-right: 4px;
+	background-repeat: no-repeat;
+	background-size: contain;
 }
 
 .Notification__icon--positive {
