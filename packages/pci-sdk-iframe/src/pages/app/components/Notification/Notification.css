@@ -42,9 +42,9 @@
 
 @keyframes slide-up {
 	from {
-		bottom: -100%;
+		transform: translateY(100%);
 	}
 	to {
-		bottom: 0;
+		transform: translateY(0);
 	}
 }

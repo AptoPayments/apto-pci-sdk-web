@@ -3,9 +3,9 @@ function parse401(errorCode: number, serverMessage: string): string {
 		case 90263:
 			return 'Cardholder needs to verify their identity. Sending 2FA code to phone or email...';
 		case 3032:
-			return 'Invalid user token. Check the PCI SDK Web docs for more info.';
+			return 'Invalid user token. Contact support.';
 		case 3035:
-			return 'Invalid Mobile API key. Check the PCI SDK Web docs for more info.';
+			return 'Invalid Mobile API key. Contact support.';
 		case 90262:
 			return 'Unexpected error in cardholder verification. Contact support.';
 		case 90000:

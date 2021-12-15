@@ -26,17 +26,13 @@ describe('Notification', () => {
 		it('should style the notification when type is positive and a custom theme is being passed', () => {
 			render(<Notification message="dummy_notification" type="positive" theme={dummy_style_full_custom_positive} />);
 
-			expect((screen.queryByTestId('notification') as HTMLDivElement).getAttribute('style')).toBe(
-				'background-color: green;'
-			);
+			expect(screen.getByTestId('notification').getAttribute('style')).toBe('background-color: green;');
 		});
 
 		it('should style the notification when type is negative and a custom theme is being passed', () => {
 			render(<Notification message="dummy_notification" type="negative" theme={dummy_style_full_custom_negative} />);
 
-			expect((screen.queryByTestId('notification') as HTMLDivElement).getAttribute('style')).toBe(
-				'background-color: red;'
-			);
+			expect(screen.getByTestId('notification').getAttribute('style')).toBe('background-color: red;');
 		});
 	});
 });
