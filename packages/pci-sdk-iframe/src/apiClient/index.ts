@@ -1,10 +1,15 @@
+import credentialsService from 'services/credentials.service';
 import formatterService from '../services/formatter.service';
 import errorMessageParser from './errorMessage.parser';
 
+// We use the userToken to get the the environment (sandbox or production)
 const urlParams = new URLSearchParams(window.location.search);
+// Sensitive credentials are stored & managed by the credentials service
+const auth = credentialsService.getAuth();
+
 const headers = {
-	Authorization: `Bearer ${urlParams.get('userToken')}`,
-	'Api-Key': `Bearer ${urlParams.get('apiKey')}`,
+	Authorization: `Bearer ${auth.userToken}`,
+	'Api-Key': `Bearer ${auth.apiKey}`,
 	'Content-Type': 'application/json',
 	Accept: 'application/json',
 };

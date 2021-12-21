@@ -10,5 +10,8 @@
 	],
 	"typescript.tsdk": "./packages/pci-sdk-iframe/node_modules/typescript/lib",
 	"editor.formatOnSave": true,
-	"cSpell.words": ["apto"]
+	"cSpell.words": [
+		"apto",
+		"stylelint"
+	]
 }
