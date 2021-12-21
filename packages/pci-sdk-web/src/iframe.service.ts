@@ -1,4 +1,4 @@
-import { IAuthOptions, INetworkLogo, Size, Values } from '.';
+import { IAuthOptions, INetworkLogo, Size, Values } from './index';
 import IThemeName from './types/IThemeName';
 
 interface IInitIframeArgs {
@@ -13,7 +13,9 @@ interface IInitIframeArgs {
 	values?: Values;
 }
 
-async function initIframe(args: IInitIframeArgs): Promise<HTMLIFrameElement> {
+export async function initIframe(
+	args: IInitIframeArgs
+): Promise<HTMLIFrameElement> {
 	const pciElement = args.element || document.getElementById('apto-pci-sdk');
 
 	if (!pciElement) {

@@ -1,5 +1,5 @@
 import { version } from '@apto-payments/pci-sdk-iframe';
-import iframeService from './iframe.service';
+import { initIframe } from './iframe.service';
 import IThemeName from './types/IThemeName';
 
 export interface InitOptions {
@@ -107,7 +107,7 @@ const IFRAME_URL =
 
 export function init(initOptions: InitOptions) {
 	_checkInitOptions(initOptions);
-	$aptoIframe = iframeService.initIframe({
+	$aptoIframe = initIframe({
 		allowedCorsDomain: ALLOWED_CORS_DOMAIN,
 		url: IFRAME_URL,
 		...initOptions,

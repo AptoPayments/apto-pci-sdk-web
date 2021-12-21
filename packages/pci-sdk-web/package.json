@@ -8,7 +8,7 @@
 	"scripts": {
 		"build": "webpack",
 		"prepublishOnly": "npm run build && node scripts/check-iframe-version.js",
-		"start": "webpack --watch",
+		"start": "webpack --mode development --watch",
 		"test": "react-scripts test",
 		"update:deps": "npm audit fix && npm update"
 	},
@@ -25,25 +25,25 @@
 		"@apto-payments/pci-sdk-iframe": "^4.0.0"
 	},
 	"devDependencies": {
-		"@testing-library/dom": "^7.31.2",
-		"@testing-library/jest-dom": "^5.14.1",
-		"@testing-library/user-event": "^12.8.3",
-		"@types/jest": "^26.0.23",
-		"@types/node": "^14.17.3",
+		"@testing-library/dom": "^8.11.1",
+		"@testing-library/jest-dom": "^5.16.1",
+		"@testing-library/user-event": "^13.5.0",
+		"@types/jest": "^27.0.3",
+		"@types/node": "^17.0.2",
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-config-typescript": "^3.0.0",
-		"eslint-plugin-react": "^7.24.0",
-		"prettier": "^2.3.1",
-		"react-scripts": "^4.0.3",
-		"stylelint": "^13.13.1",
-		"stylelint-config-css-modules": "^2.2.0",
-		"stylelint-config-prettier": "^8.0.2",
-		"stylelint-config-property-sort-order-smacss": "^7.1.0",
-		"stylelint-config-standard": "^21.0.0",
-		"ts-loader": "^8.3.0",
-		"typescript": "^4.3.2",
-		"webpack": "4.44.2",
-		"webpack-cli": "^4.7.2"
+		"eslint-plugin-react": "^7.27.1",
+		"prettier": "^2.5.1",
+		"react-scripts": "^5.0.0",
+		"stylelint": "^14.2.0",
+		"stylelint-config-css-modules": "^2.3.0",
+		"stylelint-config-prettier": "^9.0.3",
+		"stylelint-config-property-sort-order-smacss": "^8.0.0",
+		"stylelint-config-standard": "^24.0.0",
+		"ts-loader": "^9.2.6",
+		"typescript": "^4.5.4",
+		"webpack": "5.65.0",
+		"webpack-cli": "^4.9.1"
 	},
 	"gitHead": "4cf4bbecec5225158bc55d1e377d17225cc3c6d9"
 }
