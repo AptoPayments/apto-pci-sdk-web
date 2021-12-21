@@ -1,11 +1,10 @@
-const API_KEY_KEY = '__apto__apk__';
-const USER_TOKEN_KEY = '__apto__ust__';
+/**
+ * We store this credentials in memory
+ */
+const auth = { apiKey: '', userToken: '' };
 
 function getAuth() {
-	const apiKey = sessionStorage.getItem(API_KEY_KEY);
-	const userToken = sessionStorage.getItem(USER_TOKEN_KEY);
-
-	return { apiKey, userToken };
+	return auth;
 }
 
 interface ISetAuthArgs {
@@ -14,8 +13,8 @@ interface ISetAuthArgs {
 }
 
 function setAuth(args: ISetAuthArgs) {
-	sessionStorage.setItem(API_KEY_KEY, args.apiKey);
-	sessionStorage.setItem(USER_TOKEN_KEY, args.userToken);
+	auth.apiKey = args.apiKey;
+	auth.userToken = args.userToken;
 }
 
 export default {

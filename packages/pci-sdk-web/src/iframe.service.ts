@@ -2,7 +2,7 @@ import { IAuthOptions, INetworkLogo, Size, Values } from './index';
 import IThemeName from './types/IThemeName';
 
 interface IInitIframeArgs {
-	allowedCorsDomain: string;
+	allowedEventOrigin: string;
 	auth: IAuthOptions;
 	debug?: boolean;
 	networkLogo?: INetworkLogo;
@@ -23,12 +23,12 @@ export async function initIframe(
 	}
 
 	const iframeLoadedPromise = _waitForEvent({
-		cors: args.allowedCorsDomain,
+		allowedEventOrigin: args.allowedEventOrigin,
 		eventType: 'apto-iframe-ready',
 	});
 
 	const iframeStartedPromise = _waitForEvent({
-		cors: args.allowedCorsDomain,
+		allowedEventOrigin: args.allowedEventOrigin,
 		eventType: 'apto-iframe-auth-ready',
 	});
 
@@ -46,7 +46,7 @@ export async function initIframe(
 		userToken: args.auth.userToken,
 		apiKey: args.auth.apiKey,
 	});
-	$aptoIframe.contentWindow?.postMessage(messageEvent, args.allowedCorsDomain);
+	$aptoIframe.contentWindow?.postMessage(messageEvent, args.allowedEventOrigin);
 	// Wait for the iframe auth to be started
 	await iframeStartedPromise;
 	// If we are here, the iframe is loaded and was started.
@@ -54,7 +54,7 @@ export async function initIframe(
 }
 
 interface IWaitForEventArgs {
-	cors: string;
+	allowedEventOrigin: string;
 	eventType: string;
 }
 
@@ -66,7 +66,12 @@ function _waitForEvent(args: IWaitForEventArgs): Promise<void> {
 		window.addEventListener('message', _onMessage, false);
 
 		function _onMessage(event: MessageEvent) {
-			if (!_isMessageAllowed({ event, cors: args.cors })) {
+			if (
+				!_isMessageAllowed({
+					event,
+					allowedEventOrigin: args.allowedEventOrigin,
+				})
+			) {
 				return;
 			}
 
@@ -81,21 +86,21 @@ function _waitForEvent(args: IWaitForEventArgs): Promise<void> {
 
 interface IIsMessageAllowedArgs {
 	event: MessageEvent;
-	cors: string;
+	allowedEventOrigin: string;
 }
 
 /**
  * Returns true if the message is allowed to be received by the window.
  */
 function _isMessageAllowed(args: IIsMessageAllowedArgs): boolean {
-	if (args.cors === '*') {
+	if (args.allowedEventOrigin === '*') {
 		return true;
 	}
-	return args.event.origin === args.cors;
+	return args.event.origin === args.allowedEventOrigin;
 }
 
 interface ICreateIframeArgs {
-	allowedCorsDomain: string;
+	allowedEventOrigin: string;
 	auth: IAuthOptions;
 	debug?: boolean;
 	networkLogo?: INetworkLogo;
@@ -123,8 +128,11 @@ function _createIframe(args: ICreateIframeArgs): HTMLIFrameElement {
 }
 
 interface IBuildUrlParams {
-	allowedCorsDomain: string;
-	auth: IAuthOptions;
+	allowedEventOrigin: string;
+	auth: {
+		cardId: string;
+		environment: 'stg' | 'sbx' | 'prd';
+	};
 	debug?: boolean;
 	networkLogo?: INetworkLogo;
 	element?: HTMLElement;

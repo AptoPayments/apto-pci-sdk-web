@@ -4,7 +4,7 @@ describe('iframe.service', () => {
 	it('should return a promise that is solved when the iframe has loaded and auth was started', async () => {
 		const iframe = iframeService.initIframe({
 			url: 'https://www.apto-pci-iframe.com',
-			allowedCorsDomain: 'https://www.apto-pci-iframe.com',
+			allowedEventOrigin: 'https://www.apto-pci-iframe.com',
 			auth: {
 				apiKey: 'dummy_api_key',
 				cardId: 'dummy_card_id',
@@ -23,7 +23,7 @@ describe('iframe.service', () => {
 		);
 	});
 
-	it('should generate an iframe with the right parameters', () => {});
+	it.todo('should generate an iframe with the right parameters');
 });
 
 /**

@@ -108,7 +108,7 @@ const IFRAME_URL =
 export function init(initOptions: InitOptions) {
 	_checkInitOptions(initOptions);
 	$aptoIframe = initIframe({
-		allowedCorsDomain: ALLOWED_CORS_DOMAIN,
+		allowedEventOrigin: ALLOWED_CORS_DOMAIN,
 		url: IFRAME_URL,
 		...initOptions,
 	});
