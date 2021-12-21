@@ -41,7 +41,13 @@ export default function useApp() {
 		appService.message.emitMessage({ type: 'apto-iframe-ready' });
 
 		return () => window.removeEventListener('message', _onMessage);
-	}, [dispatch, state, configOptions]); // All deps are stable
+	}, [
+		configOptions.card.cardId,
+		configOptions.card.lastFour,
+		configOptions.config.isPCICompliant,
+		dispatch,
+		state.uiStatus,
+	]);
 
 	/**
 	 * Callback to be executed when the setPin form is submitted

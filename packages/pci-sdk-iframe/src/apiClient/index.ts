@@ -7,13 +7,6 @@ const urlParams = new URLSearchParams(window.location.search);
 // Sensitive credentials are stored & managed by the credentials service
 const auth = credentialsService.getAuth();
 
-const headers = {
-	Authorization: `Bearer ${auth.userToken}`,
-	'Api-Key': `Bearer ${auth.apiKey}`,
-	'Content-Type': 'application/json',
-	Accept: 'application/json',
-};
-
 export const BASE_URL = _getBaseUrl();
 export const VAULT_BASE_URL = _getVaultBaseUrl();
 
@@ -26,7 +19,7 @@ interface IRequest2FACodeResponse {
 export async function request2FACode(): Promise<IRequest2FACodeResponse> {
 	const res = await fetch(`${BASE_URL}v1/verifications/primary/start`, {
 		method: 'POST',
-		headers,
+		headers: _getHeaders(),
 		body: JSON.stringify({ show_verification_secret: true }),
 	});
 
@@ -58,7 +51,7 @@ export async function verify2FACode(secret: string, verificationId: string): Pro
 
 	const res = await fetch(`${BASE_URL}v1/verifications/${verificationId}/finish`, {
 		method: 'POST',
-		headers,
+		headers: _getHeaders(),
 		body: JSON.stringify({ secret }),
 	});
 
@@ -92,7 +85,7 @@ export async function getCardData(cardId: string, auth?: { verificationId: strin
 
 	const res = await fetch(`${VAULT_BASE_URL}v1/user/accounts/${cardId}/details`, {
 		method,
-		headers,
+		headers: _getHeaders(),
 		body,
 	});
 
@@ -146,7 +139,7 @@ export interface ISetPinArgs {
 async function setPin(args: ISetPinArgs) {
 	const res = await fetch(`${BASE_URL}v1/user/accounts/${args.cardId}/pci_pin`, {
 		method: 'POST',
-		headers,
+		headers: _getHeaders(),
 		body: JSON.stringify({ pin: args.pin, verification_id: args.verificationId }),
 	});
 
@@ -170,3 +163,12 @@ export default {
 	setPin,
 	verify2FACode,
 };
+
+function _getHeaders() {
+	return {
+		Authorization: `Bearer ${auth.userToken}`,
+		'Api-Key': `Bearer ${auth.apiKey}`,
+		'Content-Type': 'application/json',
+		Accept: 'application/json',
+	};
+}

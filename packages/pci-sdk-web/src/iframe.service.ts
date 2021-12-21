@@ -42,7 +42,7 @@ export async function initIframe(
 	await iframeLoadedPromise;
 	// Send auth data via postMessage
 	const messageEvent = JSON.stringify({
-		type: 'apto-iframe-auth',
+		type: 'setAuth',
 		userToken: args.auth.userToken,
 		apiKey: args.auth.apiKey,
 	});

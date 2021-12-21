@@ -167,6 +167,8 @@ describe("AptoPCISdk", () => {
 				cy.getAptoIframe().find("#exp").should("contain", "08/23");
 
 				cy.getAptoIframe().find("#cvv").should("contain", "123");
+
+				cy.wrap(AptoPCISdk).invoke("getIsDataVisible").should("eq", true);
 			});
 		});
 	});
@@ -175,18 +177,28 @@ describe("AptoPCISdk", () => {
 		it("should return false when the data is not visible", () => {
 			cy.getPCISdk().then(async (AptoPCISdk) => {
 				await AptoPCISdk.init({ auth: dummyAuthData });
-				cy.stubJSONResponse({
-					httpStatus: 200,
-					body: dummyGetCardDataResponse,
-				});
 
 				// By default we expect the visibility to be false
-				cy.wrap(AptoPCISdk)
-					.invoke("getIsDataVisible")
-					.should("eq", false)
-					.then(AptoPCISdk.showPCIData);
+				cy.wrap(AptoPCISdk).invoke("getIsDataVisible").should("eq", false);
+			});
+		});
+	});
 
-				cy.wrap(AptoPCISdk).invoke("getIsDataVisible").should("eq", true);
+	describe("when the client is pci-compatible", () => {
+		describe(".getVisibility", () => {
+			it("should return true when the data is visible", () => {
+				cy.getPCISdk().then(async (AptoPCISdk) => {
+					await AptoPCISdk.init({ auth: dummyAuthData });
+					cy.stubJSONResponse({
+						httpStatus: 200,
+						body: dummyGetCardDataResponse,
+					});
+
+					// By default we expect the visibility to be false
+					cy.wrap(AptoPCISdk).then(AptoPCISdk.showPCIData);
+
+					cy.wrap(AptoPCISdk).invoke("getIsDataVisible").should("eq", true);
+				});
 			});
 		});
 	});
