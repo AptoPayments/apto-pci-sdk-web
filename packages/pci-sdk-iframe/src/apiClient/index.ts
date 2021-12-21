@@ -2,7 +2,7 @@ import credentialsService from 'services/credentials.service';
 import formatterService from '../services/formatter.service';
 import errorMessageParser from './errorMessage.parser';
 
-// We use the userToken to get the the environment (sandbox or production)
+// We use the "userToken" to get the environment (sandbox or production)
 const urlParams = new URLSearchParams(window.location.search);
 // Sensitive credentials are stored & managed by the credentials service
 const auth = credentialsService.getAuth();
