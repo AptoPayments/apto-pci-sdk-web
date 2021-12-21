@@ -3,10 +3,10 @@ import IThemeName from './types/IThemeName';
 
 interface IInitIframeArgs {
 	allowedCorsDomain: string;
-	authOptions: IAuthOptions;
+	auth: IAuthOptions;
 	debug?: boolean;
 	networkLogo?: INetworkLogo;
-	pciElement: HTMLElement | null;
+	element?: HTMLElement;
 	size?: Size;
 	theme?: IThemeName;
 	url: string;
@@ -14,7 +14,7 @@ interface IInitIframeArgs {
 }
 
 async function initIframe(args: IInitIframeArgs): Promise<HTMLIFrameElement> {
-	const pciElement = args.pciElement || document.getElementById('apto-pci-sdk');
+	const pciElement = args.element || document.getElementById('apto-pci-sdk');
 
 	if (!pciElement) {
 		throw new Error('You need to provide an HTML element to init the PCI SDK');
@@ -38,11 +38,15 @@ async function initIframe(args: IInitIframeArgs): Promise<HTMLIFrameElement> {
 	pciElement.appendChild($aptoIframe);
 	// Wait for the iframe to be loaded
 	await iframeLoadedPromise;
-	// TODO: Send auth to message;
-
+	// Send auth data via postMessage
+	const messageEvent = JSON.stringify({
+		type: 'apto-iframe-auth',
+		userToken: args.auth.userToken,
+		apiKey: args.auth.apiKey,
+	});
+	$aptoIframe.contentWindow?.postMessage(messageEvent, args.allowedCorsDomain);
 	// Wait for the iframe auth to be started
 	await iframeStartedPromise;
-
 	// If we are here, the iframe is loaded and was started.
 	return $aptoIframe;
 }
@@ -90,10 +94,10 @@ function _isMessageAllowed(args: IIsMessageAllowedArgs): boolean {
 
 interface ICreateIframeArgs {
 	allowedCorsDomain: string;
-	authOptions: IAuthOptions;
+	auth: IAuthOptions;
 	debug?: boolean;
 	networkLogo?: INetworkLogo;
-	pciElement: HTMLElement | null;
+	element?: HTMLElement;
 	size?: Size;
 	theme?: IThemeName;
 	url: string;
@@ -118,10 +122,10 @@ function _createIframe(args: ICreateIframeArgs): HTMLIFrameElement {
 
 interface IBuildUrlParams {
 	allowedCorsDomain: string;
-	authOptions: IAuthOptions;
+	auth: IAuthOptions;
 	debug?: boolean;
 	networkLogo?: INetworkLogo;
-	pciElement: HTMLElement | null;
+	element?: HTMLElement;
 	size?: Size;
 	theme?: IThemeName;
 	url: string;
@@ -134,8 +138,8 @@ interface IBuildUrlParams {
 function _buildUrlParams(args: IBuildUrlParams): URLSearchParams {
 	const params = new URLSearchParams();
 
-	params.set('cardId', args.authOptions.cardId);
-	params.set('environment', args.authOptions.environment);
+	params.set('cardId', args.auth.cardId);
+	params.set('environment', args.auth.environment);
 
 	if (args.networkLogo) {
 		params.set('networkLogoSymbol', args.networkLogo.symbol);

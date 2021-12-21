@@ -1,4 +1,5 @@
 import { version } from '@apto-payments/pci-sdk-iframe';
+import iframeService from './iframe.service';
 import IThemeName from './types/IThemeName';
 
 export interface InitOptions {
@@ -106,15 +107,11 @@ const IFRAME_URL =
 
 export function init(initOptions: InitOptions) {
 	_checkInitOptions(initOptions);
-	$aptoIframe = _initIframe(
-		initOptions.auth,
-		initOptions.element,
-		initOptions.networkLogo,
-		initOptions.size,
-		initOptions.values,
-		initOptions.theme,
-		initOptions.debug
-	);
+	$aptoIframe = iframeService.initIframe({
+		allowedCorsDomain: ALLOWED_CORS_DOMAIN,
+		url: IFRAME_URL,
+		...initOptions,
+	});
 	return $aptoIframe;
 }
 
@@ -191,81 +188,6 @@ function _checkInitOptions(initOptions: InitOptions) {
 			'You need to provide an environment to init the PCI SDK. Try "sbx" if you are testing: https://docs.aptopayments.com/docs/sdks/Web/pci_sdk_web/#optionsobject-properties'
 		);
 	}
-}
-
-function _initIframe(
-	authOptions: IAuthOptions,
-	pciElement: HTMLElement | null = document.getElementById('apto-pci-sdk'),
-	networkLogo?: INetworkLogo,
-	size?: Size,
-	values?: Values,
-	theme?: IThemeName,
-	debug?: boolean
-): Promise<HTMLIFrameElement> {
-	if (!pciElement) {
-		throw new Error('You need to provide an HTML element to init the PCI SDK');
-	}
-	return new Promise((resolve) => {
-		pciElement.innerHTML = ''; // Reset content
-
-		const $aptoIframe = document.createElement('iframe');
-
-		window.addEventListener(
-			'message',
-			(event) => {
-				if (
-					ALLOWED_CORS_DOMAIN !== '*' &&
-					event.origin !== ALLOWED_CORS_DOMAIN
-				) {
-					return;
-				}
-
-				const message = JSON.parse(event.data);
-
-				if (message.type === 'apto-iframe-ready') {
-					resolve($aptoIframe);
-				}
-			},
-			false
-		);
-
-		const params = new URLSearchParams(authOptions as any);
-
-		if (networkLogo) {
-			params.set('networkLogoSymbol', networkLogo.symbol);
-
-			if (networkLogo.position) {
-				params.set('networkLogoPosition', networkLogo.position);
-			}
-
-			if (networkLogo.size) {
-				params.set('networkLogoWidth', networkLogo.size.width);
-				params.set('networkLogoHeight', networkLogo.size.height);
-			}
-		}
-
-		if (values) {
-			Object.keys(values).forEach((key) =>
-				params.set(key, (values as any)[key])
-			);
-		}
-
-		if (theme) {
-			params.set('theme', theme.toString());
-		}
-
-		if (debug) {
-			params.set('debug', 'true');
-		}
-
-		$aptoIframe.setAttribute('src', `${IFRAME_URL}?${params.toString()}`);
-		$aptoIframe.setAttribute('frameborder', '0');
-		$aptoIframe.setAttribute('height', size?.height || '100%');
-		$aptoIframe.setAttribute('width', size?.width || '100%');
-		$aptoIframe.setAttribute('data-cy', 'pci-sdk-web');
-
-		pciElement.appendChild($aptoIframe);
-	});
 }
 
 function _sendMessage(data: { type: string; theme?: any; style?: any }) {

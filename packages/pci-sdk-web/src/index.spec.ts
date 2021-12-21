@@ -1,6 +1,6 @@
 import aptoPCISdk from './index';
 
-xdescribe('apto-pci-sdk', () => {
+describe('apto-pci-sdk', () => {
 	it('should expose a valid public API', () => {
 		expect(aptoPCISdk.hidePCIData).toBeDefined();
 		expect(aptoPCISdk.init).toBeDefined();
