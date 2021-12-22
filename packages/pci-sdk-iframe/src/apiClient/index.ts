@@ -4,8 +4,6 @@ import errorMessageParser from './errorMessage.parser';
 
 // We use the "userToken" to get the environment (sandbox or production)
 const urlParams = new URLSearchParams(window.location.search);
-// Sensitive credentials are stored & managed by the credentials service
-const auth = credentialsService.getAuth();
 
 export const BASE_URL = _getBaseUrl();
 export const VAULT_BASE_URL = _getVaultBaseUrl();
@@ -165,6 +163,7 @@ export default {
 };
 
 function _getHeaders() {
+	const auth = credentialsService.getAuth();
 	return {
 		Authorization: `Bearer ${auth.userToken}`,
 		'Api-Key': `Bearer ${auth.apiKey}`,
