@@ -2,6 +2,7 @@ import useApplicationState from 'hooks/useApplicationState';
 import useConfigOptions from 'hooks/useConfigOptions';
 import { useEffect } from 'react';
 import appService from 'services/app.service';
+import credentialsService from 'services/credentials.service';
 
 export default function useApp() {
 	const configOptions = useConfigOptions();
@@ -28,6 +29,9 @@ export default function useApp() {
 					return appService.cardData.isDataVisible({ dispatch, isVisible: state.uiStatus === 'CARD_DATA_VISIBLE' });
 				case 'showSetPinForm':
 					return appService.pin.showSetPinForm({ dispatch });
+				case 'setAuth':
+					credentialsService.setAuth(data);
+					return appService.message.emitMessage({ type: 'apto-iframe-auth-ready' });
 				default:
 					break;
 			}
@@ -37,7 +41,13 @@ export default function useApp() {
 		appService.message.emitMessage({ type: 'apto-iframe-ready' });
 
 		return () => window.removeEventListener('message', _onMessage);
-	}, [dispatch, state, configOptions]); // All deps are stable
+	}, [
+		configOptions.card.cardId,
+		configOptions.card.lastFour,
+		configOptions.config.isPCICompliant,
+		dispatch,
+		state.uiStatus,
+	]);
 
 	/**
 	 * Callback to be executed when the setPin form is submitted
@@ -50,7 +60,9 @@ export default function useApp() {
 
 		return appService.pin
 			.setPin({ pin, verificationId: state.verificationId, cardId: configOptions.card.cardId })
-			.then(() => dispatch({ isLoading: false, message: configOptions.messages.pinUpdated, notificationType: 'positive' }))
+			.then(() =>
+				dispatch({ isLoading: false, message: configOptions.messages.pinUpdated, notificationType: 'positive' })
+			)
 			.catch(() =>
 				dispatch({
 					uiStatus: 'CARD_DATA_HIDDEN',

@@ -5,7 +5,8 @@ type IParsedEvent =
 	| ISetThemeEvent
 	| IShowCardDataEvent
 	| IShowSetPinFormEvent
-	| IUnknownEvent;
+	| IUnknownEvent
+	| ISetAuthEvent;
 
 interface ISetStyleEvent {
 	type: 'setStyle';
@@ -34,6 +35,15 @@ interface IShowSetPinFormEvent {
 
 interface IUnknownEvent {
 	type: 'unknown';
+}
+
+/**
+ * Triggered by the host library to pass the auth credentials to the iframe.
+ */
+interface ISetAuthEvent {
+	type: 'setAuth';
+	apiKey: string;
+	userToken: string;
 }
 
 export default IParsedEvent;

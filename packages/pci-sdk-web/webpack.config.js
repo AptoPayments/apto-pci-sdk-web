@@ -2,6 +2,8 @@ const webpack = require('webpack');
 const path = require('path');
 
 module.exports = (env, argv) => {
+	// By default we use production.
+	const mode = argv.mode || 'production';
 	return {
 		entry: {
 			index: path.resolve(__dirname, './src/index.ts'),
@@ -25,13 +27,13 @@ module.exports = (env, argv) => {
 				},
 			],
 		},
-		node: {
-			fs: 'empty',
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js'],
 		},
-		mode: process.env.NODE_ENV === 'development' ? 'development' : 'production',
+		mode,
 		plugins: [
 			new webpack.DefinePlugin({
-				'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+				'process.env.NODE_ENV': JSON.stringify(mode),
 			}),
 		],
 	};

@@ -1,4 +1,5 @@
 import { INetworkLogoPosition, INetworkLogoSymbol } from './INetworkLogo';
+import INotificationType from './INotificationType';
 import { ITheme } from './IThemes';
 
 type IUIStatus = 'CARD_DATA_VISIBLE' | 'CARD_DATA_HIDDEN' | 'OTP_FORM' | 'SET_PIN_FORM';
@@ -9,7 +10,7 @@ export default interface IApplicationState {
 	exp: string;
 	isLoading: boolean;
 	message: string;
-	notificationType: 'positive' | 'negative';
+	notificationType: INotificationType;
 	networkLogoPosition: INetworkLogoPosition;
 	networkLogoSymbol: INetworkLogoSymbol;
 	networkLogoWidth: string;
