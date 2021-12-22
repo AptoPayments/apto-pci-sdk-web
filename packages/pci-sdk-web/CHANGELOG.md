@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1](https://github.com/AptoPayments/apto-pci-sdk-web/compare/v4.0.0...v4.0.1) (2021-12-22)
+
+
+### Bug Fixes
+
+* Use postMessage to pass credentials (1201527824967983) ([#88](https://github.com/AptoPayments/apto-pci-sdk-web/issues/88)) ([50c8ea0](https://github.com/AptoPayments/apto-pci-sdk-web/commit/50c8ea0faacc33cf860b4c9a1d66e897a97b8a09))
+
+
+
+
+
 # [4.0.0](https://github.com/AptoPayments/apto-pci-sdk-web/compare/v3.5.1...v4.0.0) (2021-12-15)
 
 
