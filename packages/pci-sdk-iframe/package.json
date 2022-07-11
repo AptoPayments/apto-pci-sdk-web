@@ -1,6 +1,6 @@
 {
 	"name": "@apto-payments/pci-sdk-iframe",
-	"version": "4.0.1",
+	"version": "4.1.0",
 	"browser": "./dist/umd/apto-pci-sdk-iframe.js",
 	"main": "./dist/esm/index.js",
 	"module": "./dist/esm/index.js",

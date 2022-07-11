@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.1.0](https://github.com/AptoPayments/apto-pci-sdk-web/compare/v4.0.1...v4.1.0) (2022-07-11)
+
+
+### Features
+
+* Update Visa logo with different shade blue (1202246217131057) ([#100](https://github.com/AptoPayments/apto-pci-sdk-web/issues/100)) ([5cf8759](https://github.com/AptoPayments/apto-pci-sdk-web/commit/5cf8759593fae427f3afaf0d821821c59cdfbd52))
+
+
+
+
+
 ## [4.0.1](https://github.com/AptoPayments/apto-pci-sdk-web/compare/v4.0.0...v4.0.1) (2021-12-22)
 
 
