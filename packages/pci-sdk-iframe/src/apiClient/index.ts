@@ -118,13 +118,14 @@ function _getBaseUrl() {
 }
 
 function _getVaultBaseUrl() {
+	// This should be https://vault.sbx.aptopayments.com once we finish testing the new version
 	switch (urlParams.get('environment')?.toLowerCase()) {
 		case 'sbx':
-			return 'https://vault.sbx.aptopayments.com/';
+			return 'https://newvault.sbx.aptopayments.com/';
 		case 'stg':
-			return 'https://vault.stg.aptopayments.com/';
+			return 'https://newvault.stg.aptopayments.com/';
 		case 'prd':
-			return 'https://vault.aptopayments.com/';
+			return 'https://newvault.aptopayments.com/';
 	}
 }
 
