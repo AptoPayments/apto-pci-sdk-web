@@ -1,4 +1,5 @@
 import { version } from '@apto-payments/pci-sdk-iframe';
+import { IFRAME_URL_PRD } from './constants/constants';
 import { initIframe } from './iframe.service';
 import IThemeName from './types/IThemeName';
 
@@ -95,15 +96,10 @@ export interface Values {
 }
 
 let $aptoIframe: Promise<HTMLIFrameElement>;
-const ALLOWED_CORS_DOMAIN =
-	process.env.NODE_ENV === 'development'
-		? '*'
-		: 'https://apto-pci-sdk-iframe.aptopayments.com';
 
-const IFRAME_URL =
-	process.env.NODE_ENV === 'development'
-		? 'http://localhost:3000/'
-		: `https://apto-pci-sdk-iframe.aptopayments.com/${version}/index.html`;
+const ALLOWED_CORS_DOMAIN = _computeCORSDomain();
+
+const IFRAME_URL = _computeIframeURL(version);
 
 export function init(initOptions: InitOptions) {
 	_checkInitOptions(initOptions);
@@ -200,6 +196,34 @@ function _sendMessage(data: { type: string; theme?: any; style?: any }) {
 		const messageEvent = JSON.stringify(data);
 		frame.contentWindow?.postMessage(messageEvent, ALLOWED_CORS_DOMAIN);
 	});
+}
+
+function _computeCORSDomain() {
+	switch (process.env.NODE_ENV) {
+		case 'development':
+			return '*';
+		case 'production':
+			return IFRAME_URL_PRD;
+		default:
+			throw new Error(
+				'Unrecognized NODE_ENV. Check that env variables are set correctly.'
+			);
+	}
+}
+
+function _computeIframeURL(version: string) {
+	return IFRAME_URL_PRD;
+
+	// switch (process.env.NODE_ENV) {
+	// 	case 'development':
+	// 		return IFRAME_URL_STG;
+	// 	case 'production':
+	// 		return `${IFRAME_URL_PRD}/${version}/index.html`;
+	// 	default:
+	// 		throw new Error(
+	// 			'Unrecognized NODE_ENV. Check that env variables are set correctly.'
+	// 		);
+	// }
 }
 
 // This is required!
